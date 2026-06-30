@@ -1,0 +1,68 @@
+/* =========================
+   DARK MODE (Standard)
+   ========================= */
+[data-theme="dark"] {
+  --font-color: #e9e9e9;
+  --background: #0b0d18;
+  --surface: #15171f;
+  --surface-light: #1d2028;
+  --surface-hover: #252934;
+
+  --card-bg: #1b1d24;
+  --card-active-bg: #d9ebff;
+
+  --text-primary: #ffffff;
+  --text-secondary: #b4b7c0;
+  --text-muted: #7d8089;
+
+  --accent-1: #9ecefa;
+  --accent-2: #c3e0fb;
+  --accent-up: #b4cbe197;
+  --accent-hover-1: #b8dbff;
+  --accent-hover-2: #b8dbff;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: rgba(0, 0, 0, 0.35);
+
+  --map-bg: #1a1b22;
+
+  --chart-bar: #cfe8ff;
+  --chart-grid: rgba(255, 255, 255, 0.08);
+
+  --sun-yellow: #ffcb45;
+  --sun-orange: #ff9f43;
+  --rain-blue: #7fb6ff;
+}
+
+/* =========================
+   LIGHT MODE
+   ========================= */
+[data-theme="light"] {
+  --background: #f4f7fb;
+  --surface: #ffffff;
+  --surface-light: #eef3f9;
+  --surface-hover: #e5ebf3;
+
+  --card-bg: #ffffff;
+  --card-active-bg: #d9ebff;
+
+  --text-primary: #1d2330;
+  --text-secondary: #5d6677;
+  --text-muted: #8c94a3;
+
+  --accent-1: #9ecefa;
+  --accent: #b8dbff;
+  --accent-hover: #a7d0ff;
+
+  --border: rgba(0, 0, 0, 0.08);
+  --shadow: rgba(0, 0, 0, 0.12);
+
+  --map-bg: #e8edf3;
+
+  --chart-bar: #8bbcff;
+  --chart-grid: rgba(0, 0, 0, 0.08);
+
+  --sun-yellow: #ffcb45;
+  --sun-orange: #ff9f43;
+  --rain-blue: #5a9cff;
+}

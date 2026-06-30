@@ -1,0 +1,29 @@
+body {
+  background-color: var(--background);
+  color: var(--font-color);
+}
+
+:root {
+  --spalten-grid: 7;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(var(--spalten-grid), 1fr);
+  gap: 10px;
+}
+
+.container-calender {
+  padding: 5px;
+  border-radius: 5%;
+  width: calc(100hw / var(--spalten-grid));
+  min-height: 100px;
+  background-color: var(--card-bg);
+}
+
+h2 {
+  font-family: sans-serif;
+  display: flex;
+  justify-content: end;
+  margin-top: -2px;
+}

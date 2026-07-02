@@ -5,8 +5,13 @@ function createEvent(container) {
 
   const template = document.getElementById("Event");
   const klon = template.content.cloneNode(true);
+
   const event_color = klon.querySelector(".event-color");
-  const event_content = klon.querySelector("event-content");
+  const event_content = klon.querySelector(".event-content");
+
+  event_content.textContent = "Test Event";
+
+  content.appendChild(klon);
 }
 
 function getDaysInMonth(jahr, month) {
@@ -28,6 +33,12 @@ while (month_count <= max_month_days) {
   calender_day.textContent = month_count;
 
   document.getElementById("grid-container").appendChild(klon);
+  createEvent(container_calender);
+  createEvent(container_calender);
+  if (month_count == 5) {
+    createEvent(container_calender);
+    createEvent(container_calender);
+  }
 }
 
 console.log(getDaysInMonth(2026, 3));

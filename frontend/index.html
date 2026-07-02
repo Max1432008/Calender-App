@@ -6,9 +6,25 @@
     <title>Document</title>
     <link rel="stylesheet" href="color.css" />
     <link rel="stylesheet" href="styles.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <h1 id="Hallo">Hallo</h1>
+    <nav class="nav">
+      <button>
+        <img src="/img/calender.svg" alt="" />
+      </button>
+      <button>
+        <img src="/img/Plus.svg" alt="" />
+      </button>
+      <button><img src="/img/search.svg" alt="" /></button>
+    </nav>
 
     <div class="grid-container" id="grid-container"></div>
 
@@ -20,8 +36,10 @@
     </template>
 
     <template id="Event">
-      <div class="event-color"></div>
-      <span class="event-content"></span>
+      <button class="event">
+        <div class="event-color"></div>
+        <span class="event-content"></span>
+      </button>
     </template>
 
     <script src="script.js"></script>

@@ -1,11 +1,20 @@
 body {
   background-color: var(--background);
-  color: var(--font-color);
+  color: var(--text-primary);
+}
+
+* {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
 }
 
 :root {
   --spalten-grid: 7;
 }
+
+/** Nav */
 
 .grid-container {
   display: grid;
@@ -15,15 +24,46 @@ body {
 
 .container-calender {
   padding: 5px;
-  border-radius: 5%;
-  width: calc(100hw / var(--spalten-grid));
+  border-radius: 10px;
   min-height: 100px;
-  background-color: var(--card-bg);
+  background-color: var(--border);
 }
 
 h2 {
-  font-family: sans-serif;
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+
   display: flex;
   justify-content: end;
   margin-top: -2px;
+}
+
+/** Event */
+
+.event {
+  /*button settings*/
+  border: none;
+  background: none;
+
+  color: var(--text-primary);
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  margin-bottom: 5px;
+}
+
+.event-color {
+  width: 5px;
+  height: 20px;
+  border-radius: 15px;
+  display: inline-block;
+  font-family: "Roboto", sans-serif;
+  margin-right: 5px;
+  background-color: var(--entry-1);
+}
+
+.event-content {
+  font-size: 14px;
 }

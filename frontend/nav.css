@@ -1,0 +1,79 @@
+/** Nav */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  background-color: var(--border);
+  padding: 5px 10px;
+  border-radius: 25px;
+  gap: 10px;
+}
+
+nav button {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 50%;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+nav button:hover {
+  background-color: var(--surface-hover);
+  border-radius: 25px;
+}
+
+nav button > img {
+  --svg-size: 25px;
+  width: var(--svg-size);
+  height: var(--svg-size);
+}
+
+.calender-look {
+  font-family: "Roboto", sans-serif;
+  background-color: var(--border);
+  padding: 8px 10px;
+  border-radius: 25px;
+}
+
+.calender-look > button {
+  z-index: 2;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 20px;
+  cursor: pointer;
+  margin: 0 15px;
+}
+
+#view-content {
+  z-index: -1;
+  position: absolute;
+  width: 80px;
+  height: 35px;
+  background-color: var(--view-content);
+  border-radius: 20px;
+  translate: -50% -91%;
+  left: 54%;
+}
+
+input[type="search"] {
+  outline: none;
+  border: none;
+  background-color: var(--border);
+  color: var(--text-primary);
+  font-size: 16px;
+  border: none;
+  padding: 10px 15px;
+  height: 45px;
+
+  border-radius: 25px;
+  width: 200px;
+}

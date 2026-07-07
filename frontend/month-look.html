@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="color.css" />
+    <link rel="stylesheet" href="month-look.css" />
+    <link rel="stylesheet" href="nav.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-left">
+        <button>
+          <img src="/img/calender.svg" alt="" />
+        </button>
+        <button>
+          <img src="/img/Plus.svg" alt="" />
+        </button>
+      </div>
+
+      <div class="calender-look">
+        <button id="day-view">Tag</button><button id="week-view">Woche</button
+        ><button id="month-view">Monat</button
+        ><button id="year-view">Jahr</button>
+        <div id="view-content"></div>
+      </div>
+
+      <input type="search" placeholder="Suche..." />
+    </nav>
+
+    <div class="under-nav">
+      <h1>Juni 2026</h1>
+      <div>
+        <button><img src="" alt="" /></button>
+        <button><img src="" alt="" /></button>
+        <button><img src="" alt="" /></button>
+      </div>
+    </div>
+
+    <div class="grid-container" id="grid-container">
+      <div class="Week-day">Montag</div>
+      <div class="Week-day">Dienstag</div>
+      <div class="Week-day">Mittwoch</div>
+      <div class="Week-day">Donnerstag</div>
+      <div class="Week-day">Freitag</div>
+      <div class="Week-day">Samstag</div>
+      <div class="Week-day">Sonntag</div>
+    </div>
+
+    <template id="calender-day">
+      <div class="container-calender">
+        <h2 class="date-headline">date</h2>
+        <div class="content"></div>
+      </div>
+    </template>
+
+    <template id="Event">
+      <button class="event">
+        <div class="event-color"></div>
+        <span class="event-content"></span>
+      </button>
+    </template>
+
+    <script src="month-look.js"></script>
+  </body>
+</html>

@@ -1,5 +1,3 @@
-document.getElementById("Hallo").textContent = "Was geht ab";
-
 function createEvent(container) {
   const content = container.querySelector(".content");
 
@@ -31,6 +29,11 @@ while (month_count <= max_month_days) {
   const container_calender = klon.querySelector(".container-calender");
   const calender_day = container_calender.querySelector(".date-headline");
   calender_day.textContent = month_count;
+
+  if (month_count % 7 == 0 || month_count % 7 == 6) {
+    console.log("Wochenende");
+    container_calender.style.backgroundColor = "var(--border-weekend)";
+  }
 
   document.getElementById("grid-container").appendChild(klon);
   createEvent(container_calender);

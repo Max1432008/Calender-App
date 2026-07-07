@@ -4,15 +4,18 @@
 [data-theme="dark"] {
   --background: #0b0d18;
   --surface: #15171f;
-  --surface-hover: #252934;
+  --surface-hover: rgba(255, 255, 255, 0.15);
 
   --text-primary: #eeeeee;
   --text-secondary: #b4b7c0;
   --text-muted: #7d8089;
 
   --accent: #9ecefa;
+  --view-content: #1d2330f6;
 
   --border: rgba(255, 255, 255, 0.08);
+
+  --border-weekend: rgba(255, 255, 255, 0.15);
   --shadow: rgba(0, 0, 0, 0.35);
 
   /* Kalender Einträge */
@@ -43,6 +46,7 @@
   --accent: #b8dbff;
 
   --border: rgba(0, 0, 0, 0.08);
+  --border-weekend: rgba(0, 0, 0, 0.15);
   --shadow: rgba(0, 0, 0, 0.12);
 
   /* Kalender Einträge – etwas dunkler für Lesbarkeit auf hellem Hintergrund */

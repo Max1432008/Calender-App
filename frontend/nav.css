@@ -16,6 +16,13 @@ nav {
   gap: 10px;
 }
 
+.nav-right {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 25px;
+}
+
 nav button {
   background: none;
   border: none;
@@ -28,6 +35,7 @@ nav button {
 nav button:hover {
   background-color: var(--surface-hover);
   border-radius: 25px;
+  transition: background-color 0.2s ease-in-out;
 }
 
 nav button > img {
@@ -64,7 +72,16 @@ nav button > img {
   left: 54%;
 }
 
+.search-container {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 25px;
+  gap: 5px;
+}
+
 input[type="search"] {
+  z-index: 1;
   outline: none;
   border: none;
   background-color: var(--border);
@@ -76,4 +93,198 @@ input[type="search"] {
 
   border-radius: 25px;
   width: 200px;
+}
+
+/* Search Button */
+
+#search-button {
+  background-color: var(--border);
+  border: none;
+  padding: 8px;
+  border-radius: 25px;
+  cursor: pointer;
+  visibility: hidden;
+  transform: translateX(60px);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Search Icon */
+
+#search-button > img {
+  --svg-size: 25px;
+  width: var(--svg-size);
+  height: var(--svg-size);
+}
+
+/* Zustand wenn Input aktiv ist */
+
+.search-input-focus {
+  transform: translateX(0px);
+  visibility: visible;
+}
+/* Kleine Klick-Animation */
+
+@keyframes search-click {
+  0% {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  50% {
+    transform: translateX(-20px) scale(1.02);
+    visibility: visible;
+  }
+
+  100% {
+    transform: translateX(0px);
+    visibility: visible;
+  }
+}
+
+.search-click-animation {
+  visibility: visible;
+
+  animation: search-click 0.3s ease-in-out forwards;
+}
+
+/** Next and bevor button **/
+
+.under-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.nav-button {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--border);
+  border: none;
+  color: var(--text-primary);
+  font-size: 16px;
+  padding: 10px 15px;
+  height: 45px;
+  border-radius: 25px;
+}
+
+.nav-button > img {
+  --svg-size: 30px;
+  width: var(--svg-size);
+  height: var(--svg-size);
+}
+
+.nav-button:hover {
+  background-color: var(--surface-hover);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+@keyframes move-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(-8px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes move-right {
+  0% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(8px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes move-today {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.nav-button-moveLeft {
+  animation: move-left 0.2s ease-in-out;
+}
+
+.nav-button-moveRight {
+  animation: move-right 0.2s ease-in-out;
+}
+
+.nav-button-moveToday {
+  animation: move-today 0.2s ease-in-out;
+}
+
+/** Profil Settings */
+
+#profil-button:hover {
+  background-color: transparent;
+}
+
+.profile-avatar {
+  --avatar-size: 50px;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  background-color: var(--border);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Kopf */
+.profile-avatar::before {
+  content: "";
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  translate: -50% 0;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background-color: var(--text-secondary);
+}
+
+/* Schultern */
+.profile-avatar::after {
+  content: "";
+  position: absolute;
+  bottom: -15%;
+  left: 50%;
+  translate: -50% 0;
+  width: 75%;
+  height: 55%;
+  border-radius: 50% 50% 0 0;
+  background-color: var(--text-secondary);
 }

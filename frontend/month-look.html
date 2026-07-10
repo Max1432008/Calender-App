@@ -33,15 +33,29 @@
         <div id="view-content"></div>
       </div>
 
-      <input type="search" placeholder="Suche..." />
+      <div class="nav-right">
+        <div class="search-container">
+          <button id="search-button">
+            <img class="search-icon" src="/img/search.svg" alt="" />
+          </button>
+          <input id="search-input" type="search" placeholder="Suche..." />
+        </div>
+        <button id="profil-button">
+          <div class="profile-avatar"></div>
+        </button>
+      </div>
     </nav>
 
     <div class="under-nav">
-      <h1>Juni 2026</h1>
-      <div>
-        <button><img src="" alt="" /></button>
-        <button><img src="" alt="" /></button>
-        <button><img src="" alt="" /></button>
+      <h1 id="month-title">Juni 2026</h1>
+      <div class="nav-buttons">
+        <button id="prev-month" class="nav-button">
+          <img src="/img/links_pfeil.svg" alt="" />
+        </button>
+        <button id="today" class="nav-button">Heute</button>
+        <button id="next-month" class="nav-button">
+          <img src="/img/rechts_pfeil.svg" alt="" />
+        </button>
       </div>
     </div>
 
@@ -70,5 +84,6 @@
     </template>
 
     <script src="month-look.js"></script>
+    <script src="nav.js"></script>
   </body>
 </html>

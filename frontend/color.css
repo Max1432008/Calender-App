@@ -1,3 +1,24 @@
+:root {
+  --profile-1: #8b3a3a;
+  --profile-2: #7a6040;
+  --profile-3: #3a8080;
+  --profile-4: #7a6040;
+  --profile-5: #8b3a3a;
+  --profile-6: #b0a080;
+  --profile-7: #7a3a7a;
+  --profile-8: #7a7a30;
+  --profile-9: #3a7a50;
+  --profile-10: #507a30;
+  --profile-11: #c080c0;
+  --profile-12: #50a070;
+  --profile-13: #3a6080;
+  --profile-14: #303080;
+  --profile-15: #7030a0;
+  --profile-16: #903060;
+  --profile-17: #8090c0;
+  --profile-18: #c07070;
+}
+
 /* =========================
    DARK MODE (Standard)
    ========================= */

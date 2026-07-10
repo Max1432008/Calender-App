@@ -54,8 +54,8 @@ body {
 
 .container-calender:hover {
   cursor: pointer;
-  transform: scale(1.04);
-  transition: transform 0.2s ease-in-out;
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
 }
 
 h2 {

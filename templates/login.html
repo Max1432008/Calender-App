@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anmelden</title>
+
+    <link rel="stylesheet" href="/static/css/login.css" />
+  </head>
+  <body>
+    <div class="login-box">
+      <h1>Anmelden</h1>
+
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required />
+
+        <input type="email" id="email" placeholder="E-Mail" required />
+
+        <input type="text" id="password" placeholder="Passwort" required />
+
+        <button type="submit">Anmelden</button>
+      </form>
+
+      <p id="message"></p>
+    </div>
+
+    <div class="login-box">
+      <h1>Registrieren</h1>
+      <form id="registerForm">
+        <input
+          type="text"
+          id="username-register"
+          placeholder="Username"
+          required
+        />
+        <input type="email" id="email-register" placeholder="E-Mail" required />
+
+        <input
+          type="text"
+          id="password-register"
+          placeholder="Passwort"
+          required
+        />
+        <input
+          type="text"
+          id="password-confirm-register"
+          placeholder="Passwort bestätigen"
+          required
+        />
+
+        <button type="submit">Registeren</button>
+        <p id="message-register"></p>
+      </form>
+    </div>
+
+    <script src="/static/js/login.js"></script>
+  </body>
+</html>

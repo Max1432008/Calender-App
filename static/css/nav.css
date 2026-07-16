@@ -36,6 +36,7 @@ nav button:hover {
   background-color: var(--surface-hover);
   border-radius: 25px;
   transition: background-color 0.2s ease-in-out;
+  transform: scale(1.05);
 }
 
 nav button > img {
@@ -64,12 +65,17 @@ nav button > img {
 #view-content {
   z-index: -1;
   position: absolute;
-  width: 80px;
-  height: 35px;
+  width: 100px;
+  height: 40px;
   background-color: var(--view-content);
   border-radius: 20px;
-  translate: -50% -91%;
+  translate: -80% -91%;
   left: 54%;
+}
+
+.calender-look > button:hover {
+  background-color: transparent;
+  transform: scale(1);
 }
 
 .search-container {

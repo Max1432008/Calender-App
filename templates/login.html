@@ -17,20 +17,39 @@
     <div class="login-wrapper" id="div-anmelde-wrapper">
       <div class="login-box" id="div-anmeldung">
         <h1>Welcome Back</h1>
+        <h2>Dein Kalender, ganz nach deinem Rhythmus.</h2>
 
         <div class="postion">
           <form id="loginForm">
-            <input type="text" id="username" placeholder="Username" required />
-
-            <input type="email" id="email" placeholder="E-Mail" required />
-
-            <input type="text" id="password" placeholder="Passwort" required />
+            <div class="form-content-row">
+              <div class="input-column">
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="Username"
+                  required
+                />
+                <input type="email" id="email" placeholder="E-Mail" required />
+                <input
+                  type="text"
+                  id="password"
+                  placeholder="Passwort"
+                  required
+                />
+              </div>
+              <span class="content">
+                Schön, dass du wieder da bist. Melde dich an und behalte den
+                Überblick über deine Termine.
+              </span>
+            </div>
 
             <span>
               Noch kein Acount?
               <a class="register-link" id="register-link">Jetzt Registrieren</a>
             </span>
-            <button type="submit">Anmelden</button>
+            <div class="btn-pos">
+              <button type="submit">Anmelden</button>
+            </div>
           </form>
         </div>
         <p id="message"></p>

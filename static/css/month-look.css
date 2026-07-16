@@ -48,7 +48,7 @@ body {
   padding: 5px;
   border-radius: 10px;
   min-height: 100px;
-  background-color: var(--border);
+  background-color: var(--calender-day);
   box-shadow: 0px 0px 10px var(--shadow);
 }
 
@@ -94,5 +94,98 @@ h2 {
 }
 
 .event-content {
+  padding: 2px;
   font-size: 14px;
+}
+
+.event-content:hover {
+  background-color: var(--entry-1);
+  border-radius: 5px;
+}
+
+/**!  Darstellung von den Kalender Settings **/
+
+.more-trenner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  backdrop-filter: blur(25px);
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+.more-header-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.trenner {
+  border: none;
+  height: 2px;
+  background: #41414190;
+  margin: 10px 0;
+  border-radius: 2px;
+}
+
+#more-calender-day {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  position: absolute;
+  top: 200px;
+  padding: 15px;
+  border-radius: 15px;
+  backdrop-filter: blur(3px);
+  background-color: var(--calender-day);
+  width: 400px;
+}
+
+#more-calender-day input[type="text"],
+textarea {
+  outline: none;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  background-color: transparent;
+  border: none;
+  padding: 2px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.label {
+  color: #9d9d9d;
+  text-align: right;
+  padding-right: 20px;
+}
+
+.datetime {
+  display: flex;
+  gap: 10px;
+}
+
+.datetime input,
+.repeat-select {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  outline: none;
+}
+
+.datetime input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.textarea-more {
+  width: 100%;
+  height: 100%;
+  min-width: 100px;
 }

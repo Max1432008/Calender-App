@@ -23,7 +23,7 @@
    DARK MODE (Standard)
    ========================= */
 [data-theme="dark"] {
-  --background: linear-gradient(135deg, #0b0d18, #131629);
+  --background: linear-gradient(135deg, #0b0d18, #0f111f);
 
   --surface: #15171f;
   --surface-hover: rgba(255, 255, 255, 0.15);
@@ -36,8 +36,9 @@
   --view-content: #1d2330f6;
 
   --border: rgba(255, 255, 255, 0.08);
-
-  --border-weekend: rgba(255, 255, 255, 0.15);
+  --calender-day: rgba(99, 99, 99, 0.147);
+  --more-calender-day: rgba(155, 152, 152, 0.147);
+  --border-weekend: rgba(255, 255, 255, 0.137);
   --shadow: rgba(0, 0, 0, 0.35);
 
   /* Kalender Einträge */

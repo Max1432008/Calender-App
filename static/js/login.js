@@ -23,6 +23,8 @@ loginForm.addEventListener("submit", async (e) => {
   }
 });
 
+//!   Animation von switch Regs. & Anmelden
+
 const registerLink = document.getElementById("register-link");
 const div_anmeldung = document.getElementById("div-anmelde-wrapper");
 
@@ -38,4 +40,11 @@ registerLink.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
   div_anmeldung.classList.remove("move-up");
   div_anmeldung.classList.add("move-down");
+});
+
+//!   Kopieren verhindern
+const password = document.getElementById("password");
+
+password.addEventListener("copy", (event) => {
+  event.preventDefault();
 });

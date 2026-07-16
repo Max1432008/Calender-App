@@ -23,7 +23,8 @@
    DARK MODE (Standard)
    ========================= */
 [data-theme="dark"] {
-  --background: #0b0d18;
+  --background: linear-gradient(135deg, #0b0d18, #131629);
+
   --surface: #15171f;
   --surface-hover: rgba(255, 255, 255, 0.15);
 

@@ -28,18 +28,44 @@ body {
   height: 100vh;
 }
 
+.login-box {
+  padding: 50px 100px;
+  background: rgba(20, 25, 35, 0.25);
+  backdrop-filter: blur(5px);
+
+  min-height: 700px;
+  height: auto;
+
+  border: 1px solid rgba(158, 206, 250, 0.15);
+  border-radius: 25px;
+
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.506),
+    0 0 40px rgba(196, 223, 249, 0.156);
+
+  transition: transform 0.2s ease;
+}
+
 .login-box h1 {
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 8px;
   font-size: 3.5rem;
+}
+
+.login-box h2 {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
 }
 
 form {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 100px;
-  gap: 50px;
+  margin-top: 40px;
+  gap: 40px;
 }
 
 input {
@@ -58,6 +84,11 @@ input:focus {
   border-color: #4f46e5;
 }
 
+.btn-pos {
+  display: flex;
+  justify-content: center;
+}
+
 button {
   padding: 14px;
   border: none;
@@ -67,15 +98,15 @@ button {
   font-size: 16px;
   cursor: pointer;
   transition: 0.2s;
+  font-size: 17px;
+  width: 200px;
 }
 
-button:hover {
-  background: #4338ca;
-}
-
-#btn-registrieren {
-  background-color: transparent;
-  font-size: 1.5rem;
+button[type="submit"]:hover {
+  background: #5a53e2;
+  box-shadow:
+    0 10px 20px #5e58d188,
+    0 0 20px #4e46e57b;
 }
 
 #message {
@@ -99,6 +130,7 @@ button:hover {
 }
 
 span {
+  margin-top: 70px;
   font-size: 1.5rem;
 }
 
@@ -110,4 +142,29 @@ span {
 .register-link:hover {
   color: var(--accent);
   text-decoration: underline;
+}
+
+.form-content-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+}
+
+.input-column {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.content {
+  width: 300px;
+  margin: 0 auto;
+  text-align: center;
+
+  font-size: 1.5rem;
+  line-height: 2;
+  color: rgba(255, 255, 255, 0.75);
+
+  letter-spacing: 0.3px;
 }

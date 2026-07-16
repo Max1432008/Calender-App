@@ -69,6 +69,76 @@
       <div class="Week-day">Sonntag</div>
     </div>
 
+    <h1>hallo</h1>
+    <div id="more-calender-day">
+      <div class="more-trenner">
+        <div class="more-header-top">
+          <input type="text" placeholder="Name" />
+
+          <select id="fach">
+            <option>
+              <div>Hallo</div>
+              Mathe
+            </option>
+            <option>Deutsch</option>
+            <option>Englisch</option>
+            <option>Informatik</option>
+          </select>
+        </div>
+        <hr class="trenner" />
+        <input type="text" placeholder="Standort" />
+      </div>
+      <div class="more-trenner">
+        <div class="event-card">
+          <div class="row">
+            <span class="label">Ganztägig:</span>
+            <label class="switch">
+              <input type="checkbox" />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="row">
+            <span class="label">Startet:</span>
+
+            <div class="datetime">
+              <input type="date" value="2026-07-15" />
+              <input type="time" value="15:30" />
+            </div>
+          </div>
+
+          <div class="row">
+            <span class="label">Endet:</span>
+
+            <div class="datetime">
+              <input type="date" value="2026-07-15" />
+              <input type="time" value="16:30" />
+            </div>
+          </div>
+
+          <div class="row">
+            <span class="label">Wiederholen:</span>
+
+            <select class="repeat-select">
+              <option>Nie</option>
+              <option>Täglich</option>
+              <option>Wöchentlich</option>
+              <option>Monatlich</option>
+              <option>Jährlich</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="more-trenner">
+        <textarea
+          name="Notizen"
+          title="Notizen"
+          class="textarea-more"
+          placeholder="Notizen hinzufügen..."
+        ></textarea>
+      </div>
+    </div>
+
     <template id="calender-day">
       <div class="container-calender">
         <h2 class="date-headline">date</h2>

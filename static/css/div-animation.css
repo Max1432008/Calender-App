@@ -4,6 +4,8 @@ span {
 
 .register-link,
 .anmelde-link {
+  color: #4f46e5;
+  font-weight: bold;
   cursor: pointer;
   transition: color 0.2s ease;
 }
@@ -24,6 +26,7 @@ span {
   backdrop-filter: blur(5px);
 
   height: 700px;
+  width: 900px;
 
   border: 1px solid rgba(158, 206, 250, 0.15);
   border-radius: 25px;

@@ -17,38 +17,25 @@ loginForm.addEventListener("submit", async (e) => {
 
   const data = await response.json();
   if (data.success) {
-    window.location.href = "/dashboard";
+    window.location.href = "/month-look";
   } else {
     message.textContent = data.error;
   }
 });
 
-registerForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const username = document.getElementById("username-register").value;
-  const eMail = document.getElementById("email-register").value;
-  const password = document.getElementById("password-register").value;
-  const password_Confirm = document.getElementById(
-    "password-confirm-register",
-  ).value;
+const registerLink = document.getElementById("register-link");
+const div_anmeldung = document.getElementById("div-anmelde-wrapper");
 
-  const response = await fetch("/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      username,
-      eMail,
-      password,
-      password_Confirm,
-      Status: "registrieren",
-    }),
-  });
+registerLink.addEventListener("click", () => {
+  div_anmeldung.classList.remove("move-down");
+  div_anmeldung.classList.add("move-up");
 
-  const data = await response.json();
-  if (data.success) {
-    console.log("ALL CORREKT");
-    window.location.href = "/month-look";
-  } else {
-    message_register.textContent = data.error;
-  }
+  setTimeout(() => {
+    window.location.href = "/register";
+  }, 300); // 300 ms warten
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  div_anmeldung.classList.remove("move-up");
+  div_anmeldung.classList.add("move-down");
 });

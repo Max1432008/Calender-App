@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registrieren</title>
+
+    <link rel="stylesheet" href="/static/css/register.css" />
+    <link rel="stylesheet" href="/static/css/div-animation.css" />
+
+    <link rel="stylesheet" href="/static/css/color.css" />
+  </head>
+
+  <body>
+    <canvas id="background"></canvas>
+
+    <div class="login-wrapper" id="div-registrieren-wrapper">
+      <div class="login-box" id="div-registrieren">
+        <h1>Registrieren</h1>
+        <form id="registerForm">
+          <div class="form-content-row">
+            <div class="input-column">
+              <input
+                type="text"
+                id="username-register"
+                placeholder="Username"
+                required
+              />
+              <input
+                type="email"
+                id="email-register"
+                placeholder="E-Mail"
+                required
+              />
+
+              <input
+                type="text"
+                id="password-register"
+                placeholder="Passwort"
+                required
+              />
+              <input
+                type="text"
+                id="password-confirm-register"
+                placeholder="Passwort bestätigen"
+                required
+              />
+            </div>
+            <span class="content">
+              Behalte den Überblick über dein Leben. Dein Kalender, ganz nach
+              deinem Rhythmus.
+            </span>
+          </div>
+          <span>
+            Noch kein Acount?
+            <a class="anmelde-link" id="anmelde-link">Jetzt Registrieren</a>
+          </span>
+
+          <button type="submit">Registeren</button>
+          <p id="message-register"></p>
+        </form>
+      </div>
+    </div>
+
+    <script src="/static/js/register.js"></script>
+    <script src="/static/js/bg.js"></script>
+  </body>
+</html>

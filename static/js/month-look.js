@@ -1,5 +1,89 @@
-const JAHR = 2026;
-const MONAT = 12;
+function updatePopupPosition(popup, event) {
+  const rect = event.getBoundingClientRect();
+
+  // Platz unter dem Event
+  const spaceBottom = window.innerHeight - rect.bottom;
+  const spaceRight = window.innerWidth - rect.right;
+
+  // Platz über dem Event
+  const spaceTop = rect.top;
+  const spaceLeft = rect.left;
+
+  if (spaceBottom < popup.offsetHeight && spaceTop > popup.offsetHeight) {
+    popup.classList.add("up-popup");
+  } else {
+    popup.classList.remove("up-popup");
+  }
+
+  if (spaceRight < popup.offsetWidth && spaceLeft > popup.offsetWidth) {
+    popup.classList.add("left-popup");
+  } else {
+    popup.classList.remove("left-popup");
+  }
+
+  if (
+    spaceRight < popup.offsetWidth &&
+    spaceLeft > popup.offsetWidth &&
+    spaceBottom < popup.offsetHeight &&
+    spaceTop > popup.offsetHeight
+  ) {
+    popup.classList.add("left-up-popup");
+  } else {
+    popup.classList.remove("left-up-popup");
+  }
+}
+
+function setupPopup(popup, container) {
+  document.addEventListener("click", function closePopup(event) {
+    if (!popup.contains(event.target)) {
+      popup.style.display = "none";
+
+      container.classList.remove("active");
+
+      openPopup = null;
+      openContainer = null;
+
+      document.removeEventListener("click", closePopup);
+    }
+  });
+}
+
+let openPopup = null;
+let openContainer = null;
+function create_More(klon_event, container) {
+  const append_more = klon_event.querySelector(".append-more");
+  const event = klon_event.querySelector(".event");
+
+  event.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    // Falls schon ein Popup offen ist
+    if (openPopup) {
+      openPopup.style.display = "none";
+      openContainer.classList.remove("active");
+    }
+
+    append_more.innerHTML = "";
+    container.classList.add("active");
+
+    const template = document.getElementById("More-Envent-Info");
+    const klon = template.content.cloneNode(true);
+
+    append_more.appendChild(klon);
+
+    const popup = append_more.querySelector("#more-calender-day");
+
+    const rect = e.currentTarget.getBoundingClientRect();
+
+    updatePopupPosition(popup, event);
+
+    // Aktuelles Popup merken
+    openPopup = popup;
+    openContainer = container;
+
+    setupPopup(popup, container);
+  });
+}
 
 function createEvent(container) {
   const content = container.querySelector(".content");
@@ -12,79 +96,6 @@ function createEvent(container) {
 
   event_content.textContent = "Mein Geburtstag";
 
+  create_More(klon, container);
   content.appendChild(klon);
 }
-
-function getDaysInMonth(jahr, month) {
-  const tage = new Date(jahr, month, 0).getDate();
-  let firstDay = new Date(jahr, month - 1, 1).getDay(); // 0 = Sonntag, 1 = Montag, ..., 6 = Samstag
-  firstDay = (firstDay + 6) % 7; // Umwandlung: 0 = Montag, 1 = Dienstag, ..., 6 = Sonntag
-  console.log("Erster Tag des Monats: " + firstDay);
-
-  return { tage, firstDay };
-}
-
-function updateMonthTitle(jahr, month) {
-  const monthNames = [
-    "Januar",
-    "Februar",
-    "März",
-    "April",
-    "Mai",
-    "Juni",
-    "Juli",
-    "August",
-    "September",
-    "Oktober",
-    "November",
-    "Dezember",
-  ];
-  const monthTitle = document.getElementById("month-title");
-  monthTitle.textContent = `${monthNames[month - 1]} ${jahr}`;
-}
-
-let month_count = 0;
-const { tage: max_month_days, firstDay } = getDaysInMonth(JAHR, MONAT);
-updateMonthTitle(JAHR, MONAT);
-
-let start = 0;
-while (start < firstDay) {
-  const placeholder = document.createElement("div");
-  placeholder.classList.add("empty-day");
-  document.getElementById("grid-container").appendChild(placeholder);
-  start += 1;
-}
-
-while (month_count <= max_month_days - 1) {
-  // -1, da month_count bei 0 startet
-  month_count += 1;
-  console.log(month_count);
-
-  const template = document.getElementById("calender-day");
-  const klon = template.content.cloneNode(true);
-  const container_calender = klon.querySelector(".container-calender");
-  const calender_day = container_calender.querySelector(".date-headline");
-  calender_day.textContent = month_count;
-
-  /*
-  if (month_count % 7 == 0 || month_count % 7 == 6) {
-    console.log("Wochenende");
-    container_calender.style.backgroundColor = "var(--border-weekend)";
-  }*/
-  const WochenendPosition = (firstDay + month_count - 1) % 7;
-  if (WochenendPosition == 5 || WochenendPosition == 6) {
-    console.log("Wochenende");
-    console.log("WochenendPosition: " + WochenendPosition);
-    container_calender.style.backgroundColor = "var(--border-weekend)";
-  }
-
-  document.getElementById("grid-container").appendChild(klon);
-  createEvent(container_calender);
-  createEvent(container_calender);
-  if (month_count == 5) {
-    createEvent(container_calender);
-    createEvent(container_calender);
-  }
-}
-
-console.log(getDaysInMonth(JAHR, MONAT));

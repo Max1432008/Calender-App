@@ -1,5 +1,5 @@
 const JAHR = 2026;
-const MONAT = 2;
+const MONAT = 1;
 
 const prevMonthButton = document.getElementById("prev-month");
 const nextMonthButton = document.getElementById("next-month");
@@ -115,7 +115,7 @@ function updateMonthTitle(jahr, month) {
 
   const monthName = document.querySelector(".month-name");
 
-  monthName.textContent = `${monthNames[month - 1]} ${JAHR}`;
+  monthName.textContent = `${monthNames[month - 1]}`;
 }
 
 let month_count = 0;
@@ -157,3 +157,71 @@ while (month_count <= max_month_days - 1) {
 console.log(getDaysInMonth(JAHR, MONAT));
 
 //!         ––––––––––– */
+const yearList = document.getElementById("yearList");
+
+const currentYear = JAHR;
+
+for (let i = currentYear - 50; i <= currentYear + 50; i++) {
+  let year = document.createElement("div");
+
+  year.className = "year";
+  year.textContent = i;
+
+  yearList.appendChild(year);
+}
+
+// aktuelles Jahr in die Mitte scrollen
+const current = [...document.querySelectorAll(".year")].find(
+  (y) => y.textContent == currentYear,
+);
+
+const monthList = document.getElementById("monthList");
+
+if (monthList) {
+  const months = [
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember",
+  ];
+
+  months.forEach((month) => {
+    const element = document.createElement("div");
+
+    element.className = "month";
+    element.textContent = month;
+
+    monthList.appendChild(element);
+  });
+}
+
+current.scrollIntoView({
+  block: "center",
+});
+
+// Auswahl ändern
+yearList.addEventListener("scroll", () => {
+  let years = document.querySelectorAll(".year");
+
+  years.forEach((year) => {
+    let rect = year.getBoundingClientRect();
+    let parent = yearList.getBoundingClientRect();
+
+    let center = parent.top + parent.height / 2;
+
+    if (Math.abs(rect.top + rect.height / 2 - center) < 15) {
+      years.forEach((y) => y.classList.remove("selected"));
+      year.classList.add("selected");
+
+      console.log("Ausgewählt:", year.textContent);
+    }
+  });
+});

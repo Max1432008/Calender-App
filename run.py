@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, session, redirect
 from auth import auth
 
 app = Flask(__name__)
@@ -12,12 +12,26 @@ def index():
 
 @app.route("/register")
 def registrieren():
+
+
     return render_template("register.html")
 
 
 @app.route("/month-look")
 def Calender_app():
+    if "user_id" not in session:
+        return redirect(url_for("index"))
+
     return render_template("month-look.html")
+
+
+@app.route("/logout")
+
+def logout():
+
+    session.pop("user_id", None)  # Löscht die user_id aus der Session
+
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

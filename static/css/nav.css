@@ -46,6 +46,7 @@ nav button > img {
 }
 
 .calender-look {
+  position: relative;
   font-family: "Roboto", sans-serif;
   background-color: var(--border);
   padding: 8px 10px;
@@ -65,12 +66,14 @@ nav button > img {
 #view-content {
   z-index: -1;
   position: absolute;
-  width: 100px;
-  height: 40px;
   background-color: var(--view-content);
   border-radius: 20px;
-  translate: -80% -91%;
-  left: 54%;
+  padding: 2px;
+  transition:
+    left 0.3s ease,
+    top 0.3s ease,
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .calender-look > button:hover {
@@ -252,7 +255,8 @@ input[type="search"] {
   animation: move-today 0.2s ease-in-out;
 }
 
-/** Profil Settings */
+/**       _________     Profil Settings     __________*/
+/*  TODO  Profil Hintergrund Bentzer Defeniert machen*/
 
 #profil-button:hover {
   background-color: transparent;
@@ -293,4 +297,9 @@ input[type="search"] {
   height: 55%;
   border-radius: 50% 50% 0 0;
   background-color: var(--text-secondary);
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
 }

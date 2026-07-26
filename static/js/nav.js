@@ -156,4 +156,27 @@ while (month_count <= max_month_days - 1) {
 
 console.log(getDaysInMonth(JAHR, MONAT));
 
-//!         ––––––––––– */
+//*     –––––         Ansicht von der Switchbar oben  –––––––
+
+const viewContent = document.getElementById("view-content");
+const calenderLook = document.querySelector(".calender-look");
+const viewButtons = document.querySelectorAll(".calender-look > button");
+
+function moveViewContent(button) {
+  const btnRect = button.getBoundingClientRect();
+  const parentRect = calenderLook.getBoundingClientRect();
+
+  viewContent.style.width = btnRect.width + "px";
+  viewContent.style.height = btnRect.height + "px";
+  viewContent.style.left = btnRect.left - parentRect.left + "px";
+  viewContent.style.top = btnRect.top - parentRect.top + "px";
+}
+
+viewButtons.forEach((btn) => {
+  btn.addEventListener("click", () => moveViewContent(btn));
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const month_view = document.getElementById("month-view");
+  moveViewContent(month_view);
+});

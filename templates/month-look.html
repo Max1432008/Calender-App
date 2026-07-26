@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/color.css" />
     <link rel="stylesheet" href="/static/css/month-look.css" />
     <link rel="stylesheet" href="/static/css/nav.css" />
+    <link rel="stylesheet" href="/static/css/sidebar.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,69 +16,145 @@
       rel="stylesheet"
     />
   </head>
-  <body>
-    <nav class="nav">
-      <div class="nav-left">
-        <button>
-          <img src="/static/img/calender.svg" alt="" />
-        </button>
-        <button>
-          <img src="/static/img/Plus.svg" alt="" />
-        </button>
-      </div>
+    <div class="app-layout">
+      <aside class="sidebar" id="Kalender-sidbar">
+        <div class="sidebar-section">
+          <h3>Navigation</h3>
 
-      <div class="calender-look">
-        <button id="day-view">Tag</button><button id="week-view">Woche</button
-        ><button id="month-view">Monat</button
-        ><button id="year-view">Jahr</button>
-        <div id="view-content"></div>
-      </div>
-
-      <div class="nav-right">
-        <div class="search-container">
-          <button id="search-button">
-            <img class="search-icon" src="/static/img/search.svg" alt="" />
-          </button>
-          <input id="search-input" type="search" placeholder="Suche..." />
-        </div>
-        <button id="profil-button">
-          <div class="profile-avatar"></div>
-        </button>
-      </div>
-    </nav>
-
-    <div class="under-nav">
-      <div id="month-title">
-        <h1 class="month-name">Januar</h1>
-
-        <div class="month-picker">
-          <div class="month-list" id="monthList"></div>
+          <button class="sidebar-item">📅 Kalender</button>
+          <button class="sidebar-item">📝 Aufgaben</button>
+          <button class="sidebar-item">👤 Profil</button>
+          <button class="sidebar-item">⚙ Einstellungen</button>
         </div>
 
-        <div class="year-picker">
-          <div class="year-list" id="yearList"></div>
+        <div class="sidebar-section">
+          <div class="kalender-headline">
+            <h3>Kalender</h3>
+            <div id="add-kalender-container">
+              <button id="add-kalender">
+                <img src="/static/img/Plus.svg" alt="" />
+              </button>
+                <div class="sheet" id="sheet">
+                      <div class="top-bar">
+<button class="icon-btn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+    <line x1="6" y1="6" x2="18" y2="18"/>
+    <line x1="18" y1="6" x2="6" y2="18"/>
+  </svg>
+</button>
+<h1>Hinzufügen</h1>
+<button class="icon-btn check">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+</button>
+</div>
+<div id="sheet-append">
+
+</div>
+
+                </div>
+
+
+            </div>
+            
+          </div>
+          <div id="calendar-list">
+            <button class="sidebar-item">🔵 Schule</button>
+            <button class="sidebar-item">🟢 Privat</button>
+            <button class="sidebar-item">🔴 Arbeit</button>
+            <button class="sidebar-item">
+              <label class="custom-checkbox">
+                <input type="checkbox" />
+                <span class="checkmark"></span>
+                <span class="text">Familie</span>
+              </label>
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="nav-buttons">
-        <button id="prev-month" class="nav-button">
-          <img src="/static/img/links_pfeil.svg" alt="" />
-        </button>
-        <button id="today" class="nav-button">Heute</button>
-        <button id="next-month" class="nav-button">
-          <img src="/static/img/rechts_pfeil.svg" alt="" />
-        </button>
+      </aside>
+
+      <div class="main-content">
+        <nav class="nav">
+          <div class="nav-left">
+            <button id="Kalender-siebar-btn">
+              <img src="/static/img/calender.svg" alt="" />
+            </button>
+            <button><img src="/static/img/Plus.svg" alt="" /></button>
+          </div>
+
+          <div class="calender-look">
+            <button id="day-view">Tag</button
+            ><button id="week-view">Woche</button
+            ><button id="month-view">Monat</button
+            ><button id="year-view">Jahr</button>
+            <div id="view-content"></div>
+          </div>
+
+          <div class="nav-right">
+            <div class="search-container">
+              <button id="search-button">
+                <img class="search-icon" src="/static/img/search.svg" alt="" />
+              </button>
+              <input id="search-input" type="search" placeholder="Suche..." />
+            </div>
+            <button id="profil-button">
+              <div class="profile-avatar"></div>
+            </button>
+          </div>
+        </nav>
+
+        <div class="under-nav">
+          <div id="month-title">
+            <h1 class="month-name">Januar</h1>
+            <div class="month-picker">
+              <div class="month-list" id="monthList"></div>
+            </div>
+            <div class="year-picker">
+              <div class="year-list" id="yearList"></div>
+            </div>
+          </div>
+          <div class="nav-buttons">
+            <button id="prev-month" class="nav-button">
+              <img src="/static/img/links_pfeil.svg" alt="" />
+            </button>
+            <button id="today" class="nav-button">Heute</button>
+            <button id="next-month" class="nav-button">
+              <img src="/static/img/rechts_pfeil.svg" alt="" />
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-container" id="grid-container">
+          <div class="Week-day">Montag</div>
+          <div class="Week-day">Dienstag</div>
+          <div class="Week-day">Mittwoch</div>
+          <div class="Week-day">Donnerstag</div>
+          <div class="Week-day">Freitag</div>
+          <div class="Week-day">Samstag</div>
+          <div class="Week-day">Sonntag</div>
+        </div>
       </div>
     </div>
 
-    <div class="grid-container" id="grid-container">
-      <div class="Week-day">Montag</div>
-      <div class="Week-day">Dienstag</div>
-      <div class="Week-day">Mittwoch</div>
-      <div class="Week-day">Donnerstag</div>
-      <div class="Week-day">Freitag</div>
-      <div class="Week-day">Samstag</div>
-      <div class="Week-day">Sonntag</div>
-    </div>
+
+ 
+ 
+ 
+
+
+    <!-- Template für die Kalender Typen-->
+    <template id="calender-item-template">
+      <button class="sidebar-item" data-color="1">
+        <label class="custom-checkbox">
+          <input type="checkbox" checked />
+          <span class="checkmark"></span>
+          <span class="text"></span>
+        </label>
+      </button>
+    </template>
+
+    <!-- Templates Kalender TAGE -->
 
     <template id="calender-day">
       <button class="calender-day-button">
@@ -88,6 +165,8 @@
       </button>
     </template>
 
+    <!-- Templates Das EVENT bei Kalender TAGE -->
+
     <template id="Event">
       <button class="event">
         <div class="event-color"></div>
@@ -96,12 +175,13 @@
       <div class="append-more"></div>
     </template>
 
+    <!-- Templates GENAUERE INFOS und NEUE Events -->
+
     <template id="More-Envent-Info">
       <div id="more-calender-day">
         <div class="more-trenner">
           <div class="more-header-top">
             <input type="text" placeholder="Name" />
-
             <div class="select-container">
               <div class="circle"></div>
               <select id="fach">
@@ -119,32 +199,24 @@
           <div class="event-card">
             <div class="row">
               <span class="label">Ganztägig:</span>
-              <label class="switch">
-                <input type="checkbox" />
-              </label>
+              <label class="switch"><input type="checkbox" /></label>
             </div>
-
             <div class="row">
               <span class="label">Startet:</span>
-
               <div class="datetime">
                 <input type="date" value="2026-07-15" />
                 <input type="time" value="15:30" />
               </div>
             </div>
-
             <div class="row">
               <span class="label">Endet:</span>
-
               <div class="datetime">
                 <input type="date" value="2026-07-15" />
                 <input type="time" value="16:30" />
               </div>
             </div>
-
             <div class="row">
               <span class="label">Wiederholen:</span>
-
               <select class="repeat-select">
                 <option>Nie</option>
                 <option>Täglich</option>
@@ -166,7 +238,48 @@
       </div>
     </template>
 
+    <!-- Templates NEUEN KALENDER erstellen-->
+
+    <template id="template-new-kalender-side">
+<div class="section-label">Kalender Name</div>
+<div class="row ">
+      <input type="text" placeholder="Kalendername" autofocus />
+    </div>
+
+
+  <div class="section-label">Geteilt mit</div>
+    <div class="row link">
+      <div class="left">
+        <svg class="person-icon" viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="1.8">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+        </svg>
+       <input type="text" placeholder="Neue Person">
+      </div>
+    </div>
+ 
+    <div class="section-label">Farbe</div>
+      <button class="buton-color">
+        <div class="row-left">
+          <span class="dot"></span>
+          <span>Rot</span>
+        </div>
+          <span class="chevron">›</span>
+    </button>
+
+    </template>
+
+
+    <!-- Templates FARNAUSWAHL für neuen Klender-->
+    <template id="new-kalender-color">
+      <button>
+        <div class="circle"></div>
+        <span class="color-name"></span>
+      </button>
+    </template>
+
     <script src="/static/js/month-look.js"></script>
     <script src="/static/js/nav.js"></script>
+    <script src="/static/js/Kalender-sidbar.js"></script>
   </body>
 </html>

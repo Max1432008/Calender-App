@@ -149,6 +149,7 @@ body {
   position: absolute;
 
   padding: 15px;
+  border: 1px solid var(--border);
   border-radius: 15px;
   backdrop-filter: blur(5px);
   background-color: var(--more-calender-day);

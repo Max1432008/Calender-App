@@ -16,6 +16,7 @@
       rel="stylesheet"
     />
   </head>
+  <body>
     <div class="app-layout">
       <aside class="sidebar" id="Kalender-sidbar">
         <div class="sidebar-section">
@@ -34,31 +35,63 @@
               <button id="add-kalender">
                 <img src="/static/img/Plus.svg" alt="" />
               </button>
-                <div class="sheet" id="sheet">
-                      <div class="top-bar">
-<button class="icon-btn">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
-    <line x1="6" y1="6" x2="18" y2="18"/>
-    <line x1="18" y1="6" x2="6" y2="18"/>
-  </svg>
-</button>
-<h1>Hinzufügen</h1>
-<button class="icon-btn check">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="20 6 9 17 4 12"/>
-  </svg>
-</button>
-</div>
-<div id="sheet-append">
 
-</div>
+              <div class="sheet" id="sheet">
+                <div class="top-bar">
+                  <div class="top-bar-left">
+                    <button class="icon-btn close-sheet-btn">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#fff"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                      </svg>
+                    </button>
+                    <button
+                      id="back-button"
+                      class="icon-btn"
+                      aria-label="Zurück"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="#fff"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M15 18l-6-6 6-6" />
+                      </svg>
+                    </button>
+                  </div>
 
+                  <h1>Hinzufügen</h1>
+
+                  <button class="icon-btn check-btn">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#fff"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </button>
                 </div>
 
-
+                <div id="sheet-append"></div>
+              </div>
             </div>
-            
           </div>
+
           <div id="calendar-list">
             <button class="sidebar-item">🔵 Schule</button>
             <button class="sidebar-item">🟢 Privat</button>
@@ -137,13 +170,7 @@
       </div>
     </div>
 
-
- 
- 
- 
-
-
-    <!-- Template für die Kalender Typen-->
+    <!-- Template für die Kalender Typen -->
     <template id="calender-item-template">
       <button class="sidebar-item" data-color="1">
         <label class="custom-checkbox">
@@ -155,7 +182,6 @@
     </template>
 
     <!-- Templates Kalender TAGE -->
-
     <template id="calender-day">
       <button class="calender-day-button">
         <div class="container-calender">
@@ -166,7 +192,6 @@
     </template>
 
     <!-- Templates Das EVENT bei Kalender TAGE -->
-
     <template id="Event">
       <button class="event">
         <div class="event-color"></div>
@@ -176,7 +201,6 @@
     </template>
 
     <!-- Templates GENAUERE INFOS und NEUE Events -->
-
     <template id="More-Envent-Info">
       <div id="more-calender-day">
         <div class="more-trenner">
@@ -238,46 +262,52 @@
       </div>
     </template>
 
-    <!-- Templates NEUEN KALENDER erstellen-->
-
+    <!-- Templates NEUEN KALENDER erstellen -->
     <template id="template-new-kalender-side">
-<div class="section-label">Kalender Name</div>
-<div class="row ">
-      <input type="text" placeholder="Kalendername" autofocus />
-    </div>
-
-
-  <div class="section-label">Geteilt mit</div>
-    <div class="row link">
-      <div class="left">
-        <svg class="person-icon" viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="1.8">
-          <circle cx="12" cy="8" r="4"/>
-          <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
-        </svg>
-       <input type="text" placeholder="Neue Person">
+      <div class="section-label">Kalender Name</div>
+      <div class="row">
+        <input type="text" placeholder="Kalendername" autofocus />
       </div>
-    </div>
- 
-    <div class="section-label">Farbe</div>
-      <button class="buton-color">
+
+      <div class="section-label">Geteilt mit</div>
+      <div class="row link">
+        <div class="left">
+          <svg
+            class="person-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#ff3b30"
+            stroke-width="1.8"
+          >
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+          </svg>
+          <input type="text" placeholder="Neue Person" />
+        </div>
+      </div>
+
+      <div class="section-label">Farbe</div>
+      <button class="button-color">
         <div class="row-left">
           <span class="dot"></span>
-          <span>Rot</span>
+          <span class="write-color">Rot</span>
         </div>
-          <span class="chevron">›</span>
-    </button>
-
-    </template>
-
-
-    <!-- Templates FARNAUSWAHL für neuen Klender-->
-    <template id="new-kalender-color">
-      <button>
-        <div class="circle"></div>
-        <span class="color-name"></span>
+        <span class="chevron">›</span>
       </button>
     </template>
 
+    <!-- Templates FARBAUSWAHL für neuen Kalender -->
+    <template id="new-kalender-color">
+      <button class="color-btn">
+        <div class="circle"></div>
+        <span class="color-name">Grün</span>
+      </button>
+      <div class="hr-container">
+        <hr class="color-hr" />
+      </div>
+    </template>
+
+    <script src="/static/js/calendar-colors.js"></script>
     <script src="/static/js/month-look.js"></script>
     <script src="/static/js/nav.js"></script>
     <script src="/static/js/Kalender-sidbar.js"></script>

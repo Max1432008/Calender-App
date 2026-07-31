@@ -145,15 +145,30 @@
 /**         ––––––––         Neu Kalender           ––––––––*/
 
 .sheet {
+  border: 1px solid var(--border);
   opacity: 0;
   z-index: 200;
   position: absolute;
+  height: 400px;
   width: 375px;
   background: var(--more-calender-day);
   backdrop-filter: blur(14px);
   border-radius: 20px;
   padding: 20px;
   color: #fff;
+}
+
+.top-bar-left {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#sheet-append {
+  overflow-y: auto;
+  height: 350px;
 }
 
 .top-bar {
@@ -209,7 +224,7 @@
 }
 
 .row,
-.buton-color {
+.button-color {
   background: #2c2c2e67;
   border-radius: 12px;
   padding: 14px 16px;
@@ -246,7 +261,7 @@
   letter-spacing: 0.3px;
 }
 
-.buton-color {
+.button-color {
   width: 100%;
   gap: 20px;
   border: none;
@@ -257,7 +272,7 @@
   font-size: 17px;
 }
 
-.buton-color:hover {
+.button-color:hover {
   filter: brightness(1.3);
 }
 
@@ -288,4 +303,33 @@
 .person-icon {
   width: 26px;
   height: 26px;
+}
+
+/** Template FARBAUSWAHL*/
+
+.color-btn {
+  color: var(--text-primary);
+  font-size: 1.2em;
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 20px;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+}
+
+.hr-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 15px;
+}
+
+.color-hr {
+  width: 88%;
+  border: none;
+  height: 1px;
+  background: #444;
+  margin: 16px 0;
 }

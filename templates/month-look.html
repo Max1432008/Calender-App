@@ -62,7 +62,7 @@
                         height="24"
                         fill="none"
                         stroke="#fff"
-                        stroke-width="2.5"
+                        stroke-width="5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
                       >
@@ -73,7 +73,7 @@
 
                   <h1>Hinzufügen</h1>
 
-                  <button class="icon-btn check-btn">
+                  <button class="icon-btn check-btn" id="save-btn">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -93,9 +93,6 @@
           </div>
 
           <div id="calendar-list">
-            <button class="sidebar-item">🔵 Schule</button>
-            <button class="sidebar-item">🟢 Privat</button>
-            <button class="sidebar-item">🔴 Arbeit</button>
             <button class="sidebar-item">
               <label class="custom-checkbox">
                 <input type="checkbox" />
@@ -266,7 +263,12 @@
     <template id="template-new-kalender-side">
       <div class="section-label">Kalender Name</div>
       <div class="row">
-        <input type="text" placeholder="Kalendername" autofocus />
+        <input
+          type="text"
+          class="kalender-input kalender-name"
+          placeholder="Kalendername"
+          autofocus
+        />
       </div>
 
       <div class="section-label">Geteilt mit</div>
@@ -282,7 +284,11 @@
             <circle cx="12" cy="8" r="4" />
             <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
           </svg>
-          <input type="text" placeholder="Neue Person" />
+          <input
+            class="kalender-input shared-with"
+            type="text"
+            placeholder="Neue Person"
+          />
         </div>
       </div>
 
@@ -298,7 +304,7 @@
 
     <!-- Templates FARBAUSWAHL für neuen Kalender -->
     <template id="new-kalender-color">
-      <button class="color-btn">
+      <button class="color-btn kalender-btn">
         <div class="circle"></div>
         <span class="color-name">Grün</span>
       </button>

@@ -1,5 +1,5 @@
 # models.py
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, create_engine
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, create_engine,Table
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime, timezone
@@ -50,14 +50,22 @@ class Event(Base):
     user = relationship("User", back_populates="events")
 
 
+# Zwischentabelle
+calender_shared = Table(
+    "calender_shared",
+    Base.metadata,
+    Column("calender_typ_id", Integer, ForeignKey("Calender_typ.id")),
+    Column("user_id", Integer, ForeignKey("users.id"))
+
+)
 
 
 class Calender_typ(Base):
     __tablename__ = "Calender_typ"
     id = Column(Integer, primary_key=True)
     titel = Column(String(200), nullable=False)
-    color = Column(String(7), nullable=False)   # echte Spalte, z.B. "#4e8ef7"
-
+    color = Column(String(20), nullable=False)   # echte Spalte, z.B. "#4e8ef7"
+    shared_with = relationship("User", secondary=calender_shared)
     events = relationship("Event", back_populates="calender_typ")
 
 

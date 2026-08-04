@@ -1,10 +1,12 @@
 from flask import Flask, render_template, url_for, session, redirect
 from auth import auth
+from kalender import kalender
 
 app = Flask(__name__)
 app.secret_key = "dev"
 
 app.register_blueprint(auth)
+app.register_blueprint(kalender)
 
 @app.route("/")
 def index():
@@ -26,7 +28,6 @@ def Calender_app():
 
 
 @app.route("/logout")
-
 def logout():
 
     session.pop("user_id", None)  # Löscht die user_id aus der Session

@@ -156,6 +156,13 @@
   border-radius: 20px;
   padding: 20px;
   color: #fff;
+  top: 300px;
+  left: var(--sidebar-width);
+  pointer-events: none;
+}
+
+.sheet[style*="opacity: 1"] {
+  pointer-events: auto;
 }
 
 .top-bar-left {
@@ -185,8 +192,8 @@
 }
 
 .icon-btn {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   background: #464649;
   border: none;
@@ -194,6 +201,16 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.icon-btn-img {
+  width: 25px;
+  height: 25px;
+  display: block;
+}
+
+.img-back {
+  margin-left: 3px;
 }
 
 .icon-btn.check {

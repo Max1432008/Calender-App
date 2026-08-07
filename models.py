@@ -1,5 +1,5 @@
 # models.py
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, create_engine,Table
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, create_engine, Table, Boolean
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime, timezone
@@ -18,6 +18,11 @@ class User(Base):
     name = Column(String(50), unique=True, nullable=False)
 
     email = Column(String(120), unique=True, nullable=False)
+    confirmation_token= Column(String(6), unique=True, nullable=False)
+    email_confirmed = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=False)
+    
+
     password_hash = Column(String(128), nullable=False)
     color_theme = Column(String(20), default="dark")
     profil_cover = Column(Text)

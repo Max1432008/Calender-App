@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 from add_user import create_user
 #! Email bestätigung ist noch nicht implementiert, daher wird die Funktion hier auskommentiert
-#from send_mail import send_confirmation_email
+from send_mail import send_confirmation_email
 
 auth = Blueprint("auth", __name__)
 
@@ -52,7 +52,7 @@ def Registrierungsprozess(password, password_Confirm, eMail, username):
     user = created["user"]
 
     #! Email bestätigung ist noch nicht implementiert, daher wird die Funktion hier auskommentiert
-    #send_confirmation_email(user.email, user.confirmation_token)
+    send_confirmation_email(user["email"], user["confirmation_token"])
 
     return {
         "ok": True,

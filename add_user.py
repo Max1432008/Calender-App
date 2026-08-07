@@ -3,10 +3,19 @@ from models import engine, User, Event
 from sqlalchemy.orm import sessionmaker
 from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import IntegrityError
+import secrets
 
 
 
 
+def confirm_code():
+    confirm_code_Array = []
+    for i in range(6):
+        number =  secrets.choice("0123456789")
+        confirm_code_Array.append(number)
+    dein_generierter_code = "".join(confirm_code_Array)
+
+    return dein_generierter_code
 
 
 
@@ -28,10 +37,12 @@ def create_user(username, email, password):
             print(f"✗ E-Mail '{email}' existiert bereits.")
             return {"ok": False, "error": "E-Mail existiert bereits"}
 
+
         new_user = User(
             username=username,
             name=username,
             email=email,
+            confirmation_token=confirm_code(),
             password_hash=generate_password_hash(password)
         )
         session.add(new_user)
@@ -41,6 +52,7 @@ def create_user(username, email, password):
             "id": new_user.id,
             "username": new_user.username,
             "email": new_user.email,
+            "confirmation_token": new_user.confirmation_token,
         }
         print(f"✓ Benutzer '{username}' erstellt.")
         return {"ok": True, "user": user_data}

@@ -1,3 +1,5 @@
+const message_register = document.getElementById("message-register");
+
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const username = document.getElementById("username-register").value;
@@ -22,7 +24,7 @@ registerForm.addEventListener("submit", async (e) => {
   const data = await response.json();
   if (data.success) {
     console.log("ALL CORREKT");
-    window.location.href = "/month-look";
+    //window.location.href = "/month-look";
   } else {
     message_register.textContent = data.error;
   }

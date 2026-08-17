@@ -146,7 +146,7 @@ body {
 #more-calender-day {
   z-index: 999;
   font-size: 1.2rem;
-  color: var(--text-primary);
+  color: var(--text-muted);
   position: absolute;
 
   padding: 15px;
@@ -181,7 +181,7 @@ textarea {
 }
 
 .label {
-  color: #9d9d9d;
+  color: var(--text-muted);
   text-align: right;
   padding-right: 20px;
 }
@@ -266,13 +266,13 @@ textarea {
 [data-theme="light"] #more-calender-day input[type="text"]::placeholder,
 [data-theme="light"] #more-calender-day textarea::placeholder,
 .label {
-  color: rgb(45, 45, 45);
+  color: var(--text-secondary);
 }
 
 [data-theme="dark"] #more-calender-day input[type="text"]::placeholder,
 [data-theme="dark"] #more-calender-day textarea::placeholder,
 .label {
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
 [data-theme="light"] .datetime > input {

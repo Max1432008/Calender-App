@@ -1,18 +1,31 @@
 .confirm-icon {
-  width: 80px;
-  height: 80px;
+  width: 140px;
+  height: 140px;
   margin-bottom: 20px;
+  margin-top: 50px;
+
+  filter: brightness(0) saturate(100%) invert(56%) sepia(72%) saturate(450%)
+    hue-rotate(85deg) brightness(95%) contrast(90%);
+}
+
+#div-confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  text-align: start;
+  gap: 20px;
 }
 
 #div-confirm h1 {
-  font-size: 28px;
+  font-size: 30px;
   margin: 10px 0;
-  color: #222;
+  color: #f7f0f0;
 }
 
 #div-confirm p {
-  font-size: 16px;
-  color: #666;
+  font-size: 21px;
+  color: #f7f0f0;
   margin-bottom: 30px;
 }
 
@@ -21,15 +34,15 @@
   align-items: center;
   justify-content: center;
 
-  width: 200px;
-  height: 45px;
+  width: 220px;
+  height: 60px;
 
   background: #4caf50;
   color: white;
   text-decoration: none;
 
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
 
   transition: 0.2s ease;
@@ -40,18 +53,18 @@
   transform: translateY(-2px);
 }
 
-.btn-pos-link:active {
-  transform: translateY(0);
+#div-confirm:has(.btn-pos-link:hover) .confirm-icon {
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(70px) scale(0.8) rotate(20deg);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1) rotate(0);
   }
 }

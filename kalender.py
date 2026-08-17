@@ -1,11 +1,15 @@
-from flask import Blueprint, request, jsonify
-from models import session, Calender_typ
+from flask import Blueprint, request, jsonify, session as flask_session
+from models import Session, Calender_typ
 
 kalender = Blueprint("kalender", __name__)
 
 
 @kalender.route("/save-new-kalender", methods=["POST"])
 def save_new_kalender():
+    user_id = flask_session.get("user_id")
+    db_session = Session()
+
+
     data = request.get_json(silent=True) or {}
 
     print("REGISTER:", data)
@@ -20,14 +24,16 @@ def save_new_kalender():
 
 
     neuer_kalender = Calender_typ(
+        user_id = user_id, 
         titel=kalender_data["name"],
         color=kalender_data["color"],
         #shared_with=kalender_data["shared_with"]
     )
 
 
-    session.add(neuer_kalender)
-    session.commit()
+    db_session.add(neuer_kalender)
+    db_session.commit()
+    db_session.close()
 
 
     return jsonify({
@@ -37,7 +43,9 @@ def save_new_kalender():
 
 @kalender.route("/get-kalneder-typen")
 def get_kaender():
-    kalender = session.query(Calender_typ).all()
+    user_id = flask_session.get("user_id")
+    db_session = Session()
+    kalender = db_session.query(Calender_typ).filter_by(user_id=user_id).all()
 
     daten = []
 
@@ -48,6 +56,9 @@ def get_kaender():
             "color": k.color
         })
 
+    db_session.close()
+
+    
     return jsonify({
         "success": True,
         "message": daten

@@ -180,3 +180,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const month_view = document.getElementById("month-view");
   moveViewContent(month_view);
 });
+
+const add_Event_btn = document.getElementById("add-Event");
+const append_Event = document.getElementById("append-Event");
+
+const More_Envent_Info = document.getElementById("More-Envent-Info");
+
+add_Event_btn.addEventListener("click", () => {
+  console.log("neuer add_Event_btn");
+
+  if (!append_Event.hasChildNodes()) {
+    const klon = More_Envent_Info.content.cloneNode(true);
+    append_Event.appendChild(klon);
+  }
+
+  append_Event.style.opacity = 1;
+});
+
+document.addEventListener("click", (event) => {
+  if (
+    !append_Event.contains(event.target) &&
+    !add_Event_btn.contains(event.target)
+  ) {
+    hidden_sheet(append_Event, append_Event);
+  }
+});

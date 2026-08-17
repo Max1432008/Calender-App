@@ -18,7 +18,7 @@ class User(Base):
     name = Column(String(50), unique=True, nullable=False)
 
     email = Column(String(120), unique=True, nullable=False)
-    confirmation_token= Column(String(6), unique=True, nullable=False)
+    confirmation_token= Column(String(6), unique=True, nullable=True)
     email_confirmed = Column(Boolean, default=False)
     is_active = Column(Boolean, default=False)
     
@@ -30,6 +30,7 @@ class User(Base):
     # Beziehung zu Events
 
     events = relationship("Event", back_populates="user")
+    kalender_typen = relationship("Calender_typ", secondary="calender_shared", back_populates="shared_with")
 
 
 class Event(Base):
@@ -70,8 +71,10 @@ class Calender_typ(Base):
     id = Column(Integer, primary_key=True)
     titel = Column(String(200), nullable=False)
     color = Column(String(20), nullable=False)   # echte Spalte, z.B. "#4e8ef7"
-    shared_with = relationship("User", secondary=calender_shared)
+    shared_with = relationship("User", secondary="calender_shared", back_populates="kalender_typen")
     events = relationship("Event", back_populates="calender_typ")
+    user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship("User", back_populates="kalender_typen")
 
 
 

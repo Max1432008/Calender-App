@@ -64,10 +64,10 @@ function local_save() {
   localStorage.setItem("kalender", JSON.stringify(give_save_data()));
 }
 
-function hidden_sheet() {
+function hidden_sheet(append_objekt, objekt) {
   sheet_out = false;
-  sheet_append.replaceChildren(); // löscht alle Items in sheet
-  sheet.style.opacity = 0;
+  append_objekt.replaceChildren(); // löscht alle Items in sheet
+  objekt.style.opacity = 0;
 }
 
 function Back_btn() {
@@ -206,13 +206,13 @@ function see_sheet() {
   create_tmp_kalender_side();
 
   close_sheet_btn.addEventListener("click", () => {
-    hidden_sheet();
+    hidden_sheet(sheet_append, sheet);
   });
 
   check_btn.addEventListener("click", () => {
     save_Kalender().then(() => {
       upload_kalender_typen();
-      hidden_sheet();
+      hidden_sheet(sheet_append, sheet);
     });
   });
 }
@@ -221,7 +221,7 @@ add_kalender.addEventListener("click", () => {
   if (!sheet_out) {
     see_sheet();
   } else {
-    hidden_sheet();
+    hidden_sheet(sheet_append, sheet);
   }
 
   sheet_out = sheet_out ? false : true;
@@ -229,7 +229,7 @@ add_kalender.addEventListener("click", () => {
 
 document.addEventListener("click", (event) => {
   if (!sheet.contains(event.target) && !add_kalender.contains(event.target)) {
-    hidden_sheet();
+    hidden_sheet(sheet_append, sheet);
   }
 });
 

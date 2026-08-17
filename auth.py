@@ -67,6 +67,7 @@ def Registrierungsprozess(password, password_Confirm, eMail, username):
 def Anmeldeprozess(username, password, eMail):
     print(f"Anmeldeprozess: {username}, {eMail}")
     result = benutzer_abfragen(username, password, eMail)
+
     if result["ok"]:
         print(f"✓ Anmeldung erfolgreich für {username}")
         return {"ok": True, "message": "Anmeldung erfolgreich", "user": result}
@@ -91,12 +92,16 @@ def register():
     data = request.get_json(silent=True) or {}
     print("REGISTER:", data)
 
+
     username = data.get("username")
     password = data.get("password")
     password_Confirm = data.get("password_Confirm")
     Status = data.get("Status") or data.get("Stutus")
     eMail = data.get("eMail")
     is_register = (Status or "").lower() == "registrieren"
+
+
+
 
     if not username or not password:
         return jsonify(error="Fehlende Daten, Füllen sie bitte alle Felder aus"), 400
@@ -110,7 +115,10 @@ def register():
     if is_register and password != password_Confirm:
         kommentar = f"Passwörter stimmen nicht überein, verseuchen sie es erneut"
         return jsonify(error="Passwörter stimmen nicht überein", kommentar=kommentar), 400
+
+
     
+
     print(f"✓ Registrierung OK: {username} - {Status}")
     result = Statusüberprüfung(Status, password, password_Confirm, eMail, username)
     if not result["ok"]:
@@ -118,15 +126,17 @@ def register():
 
     
 
-    # Login-Status in Flask-Session speichern, damit geschützte Routen funktionieren
+# Login-Status in Flask-Session speichern, damit geschützte Routen funktionieren
     user_data = result.get("user") or {}
     user_id = user_data.get("id") or result.get("user_id")
     user_name = user_data.get("username") or result.get("username") or username
     if user_id:
         session["user_id"] = user_id
         session["username"] = user_name
+        session.permanent = True
 
     return jsonify(success=True, message=result.get("message", "OK"), data=result)
+
 
 
 @auth.route("/login", methods=["POST"])
@@ -146,6 +156,9 @@ def login():
     user = result["user"]
     session["user_id"] = user["id"]
     session["username"] = user["username"]
+
+    session.permanent = True
+    session["user_id"] = user["id"]
 
     return jsonify(success=True, message=result["message"])
 

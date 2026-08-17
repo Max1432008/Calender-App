@@ -4,10 +4,12 @@ from models import User, engine
 from kalender import kalender
 from send_mail import send_mail
 from sqlalchemy.orm import sessionmaker
+from datetime import timedelta
 Session = sessionmaker(bind=engine)
 
 app = Flask(__name__)
 app.secret_key = "dev"
+app.permanent_session_lifetime = timedelta(hours=1)
 
 app.register_blueprint(auth)
 app.register_blueprint(kalender)

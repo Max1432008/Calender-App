@@ -21,7 +21,7 @@ def confirm_email(token):
         return "Ungültiger Bestätigungslink", 400
     user.email_confirmed = True
     user.is_active = True
-    user.confirmation_token = True
+    user.confirmation_token = None
 
     session.commit()
     session.close()

@@ -40,6 +40,12 @@ registerLink.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
   div_anmeldung.classList.remove("move-up");
   div_anmeldung.classList.add("move-down");
+
+  const welcomeText = document.getElementById("welcome-text");
+  const loginH2 = document.getElementById("login-h2");
+  const loginContent = document.getElementById("login-content");
+  typeText(welcomeText, "Welcome Back", 50);
+  typeText(loginH2, "Dein Kalender, ganz nach deinem Rhythmus.", 40);
 });
 
 //!   Kopieren verhindern

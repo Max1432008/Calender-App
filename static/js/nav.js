@@ -190,25 +190,74 @@ const More_Envent_Info = document.getElementById("More-Envent-Info");
 
 function select_sheet() {}
 
+function upload_kalender_color(select_append) {
+  fetch("/get-kalneder-typen")
+    .then((response) => response.json())
+    .then((data) => {
+      select_append.innerHTML = "";
+      data.message.forEach((kalender) => {
+        const color_klon = new_kalender_color.content.cloneNode(true);
+
+        color_klon.querySelector(".color-name").textContent = kalender.titel;
+
+        const farbe = calendarColors.find(
+          (color) => color.name.trim() === kalender.color.trim(),
+        );
+
+        const circle = color_klon.querySelector(".circle");
+
+        circle.dataset.color = farbe.id;
+        circle.style.background = `var(${farbe.var})`;
+
+        const color_hr = color_klon.querySelector(".color-hr");
+        color_hr.style.display = "none";
+        const kalender_btn = color_klon.querySelector(".kalender-btn");
+        kalender_btn.style.margin_left = 20 + "px";
+
+        select_append.appendChild(color_klon);
+      });
+    });
+}
+
 function select_sheet_create(sheet, container) {
   const select_button = sheet.querySelector(".select-button");
   const select_append = sheet.querySelector(".select-append");
+  const moreInfo = sheet.querySelector("#more-calender-day");
 
   const new_kalender_color = document.getElementById("new-kalender-color");
 
   select_button.addEventListener("click", (event) => {
     event.stopPropagation();
-    console.log("crate_select_sheet");
-    select_append.style.display = "block";
 
-    const color_klon = new_kalender_color.content.cloneNode(true);
-    select_append.appendChild(color_klon);
+    console.log("crate_select_sheet");
+
+    const offsetHeight_div = moreInfo.offsetTop;
+
+    console.log("Höhe:", offsetHeight_div);
+
+    select_append.style.display = "block";
+    select_append.style.top = -15 + "px";
+
+    upload_kalender_color(select_append);
+  });
+
+  document.addEventListener("click", (event) => {
+    console.log("Document Click");
+    console.log("Target:", event.target);
+
+    if (
+      !select_append.contains(event.target) &&
+      !select_button.contains(event.target)
+    ) {
+      console.log("Außerhalb geklickt");
+      hidden_sheet(select_append, select_append);
+    }
   });
 }
 
-add_Event_btn.addEventListener("click", () => {
+add_Event_btn.addEventListener("click", (event) => {
+  event.stopPropagation();
   console.log("neuer add_Event_btn");
-
   if (!append_Event.hasChildNodes()) {
     const klon = More_Envent_Info.content.cloneNode(true);
 

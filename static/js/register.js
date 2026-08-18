@@ -48,6 +48,12 @@ document.addEventListener("DOMContentLoaded", () => {
   div_Registrierung.classList.remove("move-up");
   div_Registrierung.classList.add("move-down");
 
+  const welcomeText = document.getElementById("register-h1");
+  const registerH2 = document.getElementById("register-h2");
+  const registerContent = document.getElementById("register-content");
+  typeText(welcomeText, "Willkommen", 50);
+  typeText(registerH2, "Dein Kalender, ganz nach deinem Rhythmus.", 40);
+
   //!     Kopieren verhindern
 
   const password_confirm_register = document.getElementById(

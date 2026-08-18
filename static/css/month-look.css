@@ -143,9 +143,10 @@ body {
   border-radius: 2px;
 }
 
-#more-calender-day {
+#more-calender-day,
+.select-append {
   z-index: 999;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--text-muted);
   position: absolute;
 
@@ -297,6 +298,12 @@ select {
   color: var(--text-primary);
   border: none;
   outline: none;
+}
+
+.select-append {
+  position: absolute;
+  width: 100%;
+  display: none;
 }
 
 .up-popup {

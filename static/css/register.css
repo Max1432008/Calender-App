@@ -123,8 +123,7 @@ button {
   font-size: 1.5rem;
 }
 
-#message {
-  margin-top: 20px;
+#message-register {
   text-align: center;
   color: red;
 }

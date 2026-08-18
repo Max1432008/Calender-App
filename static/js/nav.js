@@ -156,8 +156,10 @@ while (month_count <= max_month_days - 1) {
 
 console.log(getDaysInMonth(JAHR, MONAT));
 
+//*
+//*
 //*     –––––         Ansicht von der Switchbar oben  –––––––
-
+//*
 const viewContent = document.getElementById("view-content");
 const calenderLook = document.querySelector(".calender-look");
 const viewButtons = document.querySelectorAll(".calender-look > button");
@@ -186,11 +188,31 @@ const append_Event = document.getElementById("append-Event");
 
 const More_Envent_Info = document.getElementById("More-Envent-Info");
 
+function select_sheet() {}
+
+function select_sheet_create(sheet, container) {
+  const select_button = sheet.querySelector(".select-button");
+  const select_append = sheet.querySelector(".select-append");
+
+  const new_kalender_color = document.getElementById("new-kalender-color");
+
+  select_button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    console.log("crate_select_sheet");
+    select_append.style.display = "block";
+
+    const color_klon = new_kalender_color.content.cloneNode(true);
+    select_append.appendChild(color_klon);
+  });
+}
+
 add_Event_btn.addEventListener("click", () => {
   console.log("neuer add_Event_btn");
 
   if (!append_Event.hasChildNodes()) {
     const klon = More_Envent_Info.content.cloneNode(true);
+
+    select_sheet_create(klon, append_Event);
     append_Event.appendChild(klon);
   }
 

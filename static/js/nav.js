@@ -164,6 +164,8 @@ const viewContent = document.getElementById("view-content");
 const calenderLook = document.querySelector(".calender-look");
 const viewButtons = document.querySelectorAll(".calender-look > button");
 
+let draftKalender_event = { name: "", shared_with: "", color: "" };
+
 function moveViewContent(button) {
   const btnRect = button.getBoundingClientRect();
   const parentRect = calenderLook.getBoundingClientRect();
@@ -188,9 +190,34 @@ const append_Event = document.getElementById("append-Event");
 
 const More_Envent_Info = document.getElementById("More-Envent-Info");
 
-function select_sheet() {}
+function update_selet_btn(sheet, draftKalender_event) {
+  console.log(sheet);
+  console.log(sheet.children);
+  const select_button = sheet.querySelector(".select-button");
+  const circle = sheet.querySelector(".circle");
 
-function upload_kalender_color(select_append) {
+  select_button.textContent = draftKalender_event.name;
+  const farbe = calendarColors.find(
+    (color) => color.name.trim() === draftKalender_event.color.trim(),
+  );
+  circle.style.background = `var(${farbe.var})`;
+  circle.dataset.color = farbe.id;
+}
+
+function color_button_click(sheet, kalender_btn, kalender) {
+  // Implementation for color button click
+  kalender_btn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    console.log("Color button clicked for:", kalender.titel, kalender.color);
+    draftKalender_event.color = kalender.color;
+    draftKalender_event.name = kalender.titel;
+    draftKalender_event.shared_with = kalender.shared_with;
+    // Additional logic for handling the color button click can be added here
+    update_selet_btn(sheet, draftKalender_event);
+  });
+}
+
+function upload_kalender_color(sheet, select_append) {
   fetch("/get-kalneder-typen")
     .then((response) => response.json())
     .then((data) => {
@@ -212,7 +239,10 @@ function upload_kalender_color(select_append) {
         const color_hr = color_klon.querySelector(".color-hr");
         color_hr.style.display = "none";
         const kalender_btn = color_klon.querySelector(".kalender-btn");
+
         kalender_btn.style.margin_left = 20 + "px";
+
+        color_button_click(sheet, kalender_btn, kalender);
 
         select_append.appendChild(color_klon);
       });
@@ -223,8 +253,6 @@ function select_sheet_create(sheet, container) {
   const select_button = sheet.querySelector(".select-button");
   const select_append = sheet.querySelector(".select-append");
   const moreInfo = sheet.querySelector("#more-calender-day");
-
-  const new_kalender_color = document.getElementById("new-kalender-color");
 
   select_button.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -237,8 +265,9 @@ function select_sheet_create(sheet, container) {
 
     select_append.style.display = "block";
     select_append.style.top = -15 + "px";
+    select_append.style.opacity = 1;
 
-    upload_kalender_color(select_append);
+    upload_kalender_color(sheet, select_append);
   });
 
   document.addEventListener("click", (event) => {

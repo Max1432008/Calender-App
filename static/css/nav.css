@@ -91,7 +91,7 @@ nav button > img {
 }
 
 input[type="search"] {
-  z-index: 1;
+  z-index: 2;
   outline: none;
   border: none;
   background-color: var(--border);
@@ -108,6 +108,7 @@ input[type="search"] {
 /* Search Button */
 
 #search-button {
+  z-index: 2;
   background-color: var(--border);
   border: none;
   padding: 8px;
@@ -155,6 +156,44 @@ input[type="search"] {
   visibility: visible;
 
   animation: search-click 0.3s ease-in-out forwards;
+}
+
+#search-append {
+  position: absolute;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 250px;
+  top: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 25px;
+  width: 250px;
+  transform: translateX(-5%) translateY(0%);
+}
+
+.search-append-out {
+  position: absolute;
+  z-index: 1;
+  background-color: var(--border);
+  backdrop-filter: blur(5px);
+  border: 1px solid var(--border);
+  top: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 25px;
+  width: 250px;
+  transform: translateX(-5%) translateY(0%);
+  animation: search-height 0.2s ease-in-out forwards;
+}
+
+@keyframes search-height {
+  0% {
+    height: 0;
+  }
+
+  100% {
+    height: 300px;
+  }
 }
 
 /** Next and bevor button **/

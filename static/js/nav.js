@@ -1,27 +1,9 @@
-const JAHR = 2026;
-const MONAT = 2;
+let JAHR = 2026;
+let MONAT = 2;
 
 const prevMonthButton = document.getElementById("prev-month");
 const nextMonthButton = document.getElementById("next-month");
 const todayButton = document.getElementById("today");
-
-prevMonthButton.addEventListener("click", () => {
-  // Logic to go to the previous month
-  console.log("Previous month button clicked");
-  prevMonthButton.classList.add("nav-button-moveLeft");
-});
-
-nextMonthButton.addEventListener("click", () => {
-  // Logic to go to the next month
-  console.log("Next month button clicked");
-  nextMonthButton.classList.add("nav-button-moveRight");
-});
-
-todayButton.addEventListener("click", () => {
-  // Logic to go to today's date
-  console.log("Today button clicked");
-  todayButton.classList.add("nav-button-moveToday");
-});
 
 //* Add event listeners for animation end to remove the animation classes
 
@@ -38,9 +20,9 @@ todayButton.addEventListener("animationend", () => {
 //*
 //*
 //*    Search input      */
-
 const searchInput = document.getElementById("search-input");
 const searchButton = document.getElementById("search-button");
+const search_append = document.getElementById("search-append");
 
 let clickingButton = false;
 
@@ -48,11 +30,15 @@ let clickingButton = false;
 
 function searchButtonShow() {
   searchButton.classList.add("search-input-focus");
+  console.log("hier ist der klick");
+  search_append.classList.toggle("search-append-out");
 }
 
 function searchButtonHide() {
   searchButton.classList.remove("search-input-focus");
   searchButton.classList.remove("search-click-animation");
+  search_append.classList.remove("search-append-out");
+  search_append.innerHTML = "";
 }
 
 function searchButtonClickAnimation() {
@@ -62,6 +48,8 @@ function searchButtonClickAnimation() {
 // --- Event Listener: Input ---
 
 searchInput.addEventListener("focus", () => {
+  console.log("hier ist der klick");
+
   searchButtonShow();
   searchButtonClickAnimation();
 });
@@ -119,42 +107,108 @@ function updateMonthTitle(jahr, month) {
 }
 
 let month_count = 0;
-const { tage: max_month_days, firstDay } = getDaysInMonth(JAHR, MONAT);
 updateMonthTitle(JAHR, MONAT);
-
 let start = 0;
-while (start < firstDay) {
-  const placeholder = document.createElement("div");
-  placeholder.classList.add("empty-day");
-  document.getElementById("grid-container").appendChild(placeholder);
-  start += 1;
-}
 
-while (month_count <= max_month_days - 1) {
-  // -1, da month_count bei 0 startet
-  month_count += 1;
-
-  const template = document.getElementById("calender-day");
-  const klon = template.content.cloneNode(true);
-  const container_calender = klon.querySelector(".container-calender");
-  const calender_day = container_calender.querySelector(".date-headline");
-  calender_day.textContent = month_count;
-
-  const WochenendPosition = (firstDay + month_count - 1) % 7;
-  if (WochenendPosition == 5 || WochenendPosition == 6) {
-    container_calender.style.backgroundColor = "var(--border-weekend)";
+function create_calender_day() {
+  start = 0;
+  month_count = 0;
+  let { tage: max_month_days, firstDay } = getDaysInMonth(JAHR, MONAT);
+  const grid = document.getElementById("grid-container");
+  while (grid.children.length > 7) {
+    grid.removeChild(grid.lastElementChild);
   }
+  while (start < firstDay) {
+    const placeholder = document.createElement("div");
+    placeholder.classList.add("empty-day");
+    document.getElementById("grid-container").appendChild(placeholder);
+    start += 1;
+  }
+  while (month_count <= max_month_days - 1) {
+    // -1, da month_count bei 0 startet
+    month_count += 1;
 
-  document.getElementById("grid-container").appendChild(klon);
-  createEvent(container_calender);
-  createEvent(container_calender);
-  if (month_count == 5) {
+    const template = document.getElementById("calender-day");
+    const klon = template.content.cloneNode(true);
+    const container_calender = klon.querySelector(".container-calender");
+    const calender_day = container_calender.querySelector(".date-headline");
+    calender_day.textContent = month_count;
+
+    const WochenendPosition = (firstDay + month_count - 1) % 7;
+    if (WochenendPosition == 5 || WochenendPosition == 6) {
+      container_calender.style.backgroundColor = "var(--border-weekend)";
+    }
+
+    document.getElementById("grid-container").appendChild(klon);
     createEvent(container_calender);
     createEvent(container_calender);
+    if (month_count == 5) {
+      createEvent(container_calender);
+      createEvent(container_calender);
+    }
   }
 }
+create_calender_day();
 
 console.log(getDaysInMonth(JAHR, MONAT));
+
+function next_month() {
+  MONAT += 1;
+  if (MONAT >= 12) {
+    MONAT = 1;
+    JAHR += 1;
+  }
+  updateMonthTitle(JAHR, MONAT);
+  create_calender_day();
+}
+
+function prev_month() {
+  MONAT -= 1;
+  if (MONAT <= 1) {
+    MONAT = 12;
+    JAHR -= 1;
+  }
+  updateMonthTitle(JAHR, MONAT);
+  create_calender_day();
+}
+
+function today_month() {
+  const heute = new Date();
+
+  const aktuellerMonat = heute.getMonth() + 1;
+  const aktuellesJahr = heute.getFullYear();
+
+  MONAT = aktuellerMonat;
+  JAHR = aktuellesJahr;
+  console.log(aktuellerMonat);
+  console.log(aktuellesJahr);
+  updateMonthTitle(JAHR, MONAT);
+  create_calender_day();
+}
+
+prevMonthButton.addEventListener("click", () => {
+  // Logic to go to the previous month
+  console.log("Previous month button clicked");
+  prevMonthButton.classList.add("nav-button-moveLeft");
+
+  prev_month();
+});
+
+nextMonthButton.addEventListener("click", () => {
+  // Logic to go to the next month
+  console.log("Next month button clicked");
+  nextMonthButton.classList.add("nav-button-moveRight");
+
+  next_month();
+});
+
+todayButton.addEventListener("click", () => {
+  // Logic to go to today's date
+  console.log("Today button clicked");
+  todayButton.classList.add("nav-button-moveToday");
+
+  today_month();
+});
 
 //*
 //*
@@ -271,9 +325,6 @@ function select_sheet_create(sheet, container) {
   });
 
   document.addEventListener("click", (event) => {
-    console.log("Document Click");
-    console.log("Target:", event.target);
-
     if (
       !select_append.contains(event.target) &&
       !select_button.contains(event.target)

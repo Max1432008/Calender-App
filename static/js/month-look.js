@@ -94,7 +94,7 @@ function createEvent(container) {
   const event_color = klon.querySelector(".event-color");
   const event_content = klon.querySelector(".event-content");
 
-  event_content.textContent = "Mein Geburtstag";
+  event_content.textContent = "Termin";
 
   create_More(klon, container);
   content.appendChild(klon);

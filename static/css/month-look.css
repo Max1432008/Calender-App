@@ -126,9 +126,9 @@ body {
   flex-direction: column;
   justify-content: center;
   backdrop-filter: blur(10px);
-  padding: 15px;
+  padding: 10px;
   border-radius: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .more-header-top {
@@ -151,12 +151,23 @@ body {
   color: var(--text-muted);
   position: absolute;
 
-  padding: 15px;
+  padding: 10px;
   border: 1px solid var(--border);
   border-radius: 15px;
   backdrop-filter: blur(5px);
   background-color: var(--more-calender-day);
   width: 400px;
+}
+
+.select-append {
+  position: absolute;
+  transform: translateX(100%);
+  margin-left: -20px;
+  width: 200px;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: none;
+  backdrop-filter: blur(20px);
 }
 
 #more-calender-day:hover {
@@ -166,20 +177,22 @@ body {
 #more-calender-day input[type="text"],
 textarea {
   outline: none;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--text-primary);
   background-color: transparent;
   border: none;
   padding: 2px;
   border-radius: 10px;
   width: 300px;
+  min-width: 100px;
+  margin-bottom: 10px;
 }
 
 .row {
   display: grid;
   grid-template-columns: 180px 1fr;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 .label {
@@ -198,7 +211,7 @@ textarea {
   background: transparent;
   border: none;
   color: white;
-  font-size: 18px;
+  font-size: 12px;
   outline: none;
 }
 
@@ -285,6 +298,12 @@ textarea {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.select-container:hover {
+  background-color: var(--surface-hover);
 }
 
 .circle {
@@ -294,21 +313,23 @@ textarea {
   background-color: var(--entry-1);
 }
 
+.select-button {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin-left: 10px;
+}
+
+.select-button:hover {
+  background: none;
+}
+
 select {
   background-color: transparent;
   color: var(--text-primary);
   border: none;
   outline: none;
-}
-
-.select-append {
-  position: absolute;
-  transform: translateX(100%);
-  margin-left: -20px;
-  width: 200px;
-  padding-left: 20px;
-  padding-right: 20px;
-  display: none;
 }
 
 .up-popup {

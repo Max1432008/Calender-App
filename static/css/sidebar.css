@@ -3,14 +3,39 @@
 .sidebar {
   --sidebar-width: 200px;
   width: var(--sidebar-width);
-  flex-shrink: 1;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+
   background-color: var(--surface);
   padding: 15px;
   display: flex;
   flex-direction: column;
   border-radius: 20px;
   gap: 20px;
-  transition: all 0.5s ease-in-out;
+  height: 98vh;
+
+  overflow-x: hidden;
+
+  transition:
+    width 0.4s ease-in-out,
+    padding 0.4s ease-in-out,
+    opacity 0.4s ease-in-out;
+}
+
+.sidebar-out {
+  width: var(--sidebar-width);
+  padding: 15px;
+  opacity: 1;
+}
+
+.sidebar-in {
+  width: 0;
+  min-width: 0;
+  padding: 15px 0;
+  opacity: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .kalender-headline {
@@ -65,20 +90,6 @@
   flex: 1;
   min-width: 0;
   padding: 10px 20px;
-}
-
-.sidebar-out {
-  width: var(--sidebar-width);
-  overflow: hidden;
-  transition:
-    width 0.2s ease,
-    padding 0.2s ease-in;
-}
-
-.sidebar-in {
-  width: 0;
-  padding: 15px 0;
-  opacity: 0;
 }
 
 /**        ______ Checkbox _______ */
@@ -159,6 +170,11 @@
   top: 300px;
   left: var(--sidebar-width);
   pointer-events: none;
+  box-sizing: border-box;
+  display: flex;
+
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .sheet[style*="opacity: 1"] {
@@ -174,8 +190,13 @@
 }
 
 #sheet-append {
-  overflow-y: auto;
-  height: 350px;
+  flex: 1 1 0;
+  height: 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .top-bar {

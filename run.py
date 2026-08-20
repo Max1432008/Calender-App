@@ -3,6 +3,7 @@ from auth import auth
 from models import User, engine
 from kalender import kalender
 from send_mail import send_mail
+from profil import profil
 from sqlalchemy.orm import sessionmaker
 from datetime import timedelta
 Session = sessionmaker(bind=engine)
@@ -13,6 +14,7 @@ app.permanent_session_lifetime = timedelta(hours=1)
 
 app.register_blueprint(auth)
 app.register_blueprint(kalender)
+app.register_blueprint(profil)
 app.register_blueprint(send_mail)
 
 @app.route("/")

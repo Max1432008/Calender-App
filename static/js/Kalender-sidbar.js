@@ -47,6 +47,30 @@ const Save_button = document.getElementById("save-btn");
 let sheet_out = false;
 let draftKalender = { name: "", shared_with: "", color: "" };
 
+const close_sheet_btn = document.querySelector(".close-sheet-btn");
+const check_btn = document.querySelector(".check-btn");
+
+close_sheet_btn.addEventListener("click", () => {
+  hidden_sheet(sheet_append, sheet);
+});
+
+check_btn.addEventListener("click", () => {
+  if (
+    !draftKalender.name ||
+    draftKalender.name.trim() === "" ||
+    !draftKalender.color ||
+    draftKalender.color.trim() === ""
+  ) {
+    alert("Bitte geben Sie einen Namen und eine Farbe für den Kalender ein.");
+    return;
+  } else {
+    save_Kalender().then(() => {
+      upload_kalender_typen();
+      hidden_sheet(sheet_append, sheet);
+    });
+  }
+});
+
 function give_save_data() {
   const name_input = document.querySelector(".kalender-name");
   const write_color = document.querySelector(".write-color");
@@ -109,6 +133,8 @@ function color_kalender() {
       // Farbe setzen
       const write_color = document.querySelector(".write-color");
       const dot = document.querySelector(".dot");
+
+      draftKalender.color = color.name;
 
       if (write_color) {
         write_color.textContent = color.name;
@@ -199,26 +225,12 @@ function save_Kalender() {
 }
 
 function see_sheet() {
-  const close_sheet_btn = document.querySelector(".close-sheet-btn");
-  const check_btn = document.querySelector(".check-btn");
-
   sheet.style.opacity = 1;
   create_tmp_kalender_side();
-
-  close_sheet_btn.addEventListener("click", () => {
-    hidden_sheet(sheet_append, sheet);
-  });
-
-  check_btn.addEventListener("click", () => {
-    save_Kalender().then(() => {
-      upload_kalender_typen();
-      hidden_sheet(sheet_append, sheet);
-    });
-  });
 }
 
 add_kalender.addEventListener("click", () => {
-  if (!sheet_out) {
+  if (!sheet_out || !sheet_append.hasChildNodes()) {
     see_sheet();
   } else {
     hidden_sheet(sheet_append, sheet);

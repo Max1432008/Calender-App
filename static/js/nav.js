@@ -1,5 +1,10 @@
-let JAHR = 2026;
-let MONAT = 2;
+const DATE = new Date();
+const DAY = DATE.getDate();
+const TODAY_MONAT = DATE.getMonth() + 1;
+const TODAY_JAHR = DATE.getFullYear();
+
+let JAHR = DATE.getFullYear();
+let MONAT = DATE.getMonth() + 1;
 
 const prevMonthButton = document.getElementById("prev-month");
 const nextMonthButton = document.getElementById("next-month");
@@ -139,6 +144,10 @@ function create_calender_day() {
       container_calender.style.backgroundColor = "var(--border-weekend)";
     }
 
+    if (month_count == DAY && MONAT == TODAY_MONAT && JAHR == TODAY_JAHR) {
+      container_calender.style.backgroundColor = "var(--today-bg)";
+    }
+
     document.getElementById("grid-container").appendChild(klon);
     createEvent(container_calender);
     createEvent(container_calender);
@@ -245,6 +254,8 @@ const append_Event = document.getElementById("append-Event");
 const More_Envent_Info = document.getElementById("More-Envent-Info");
 
 function update_selet_btn(sheet, draftKalender_event) {
+  console.log("update_selet_btn");
+  console.log(draftKalender_event);
   console.log(sheet);
   console.log(sheet.children);
   const select_button = sheet.querySelector(".select-button");
@@ -306,7 +317,7 @@ function upload_kalender_color(sheet, select_append) {
 function select_sheet_create(sheet, container) {
   const select_button = sheet.querySelector(".select-button");
   const select_append = sheet.querySelector(".select-append");
-  const moreInfo = sheet.querySelector("#more-calender-day");
+  const moreInfo = sheet;
 
   select_button.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -340,9 +351,10 @@ add_Event_btn.addEventListener("click", (event) => {
   console.log("neuer add_Event_btn");
   if (!append_Event.hasChildNodes()) {
     const klon = More_Envent_Info.content.cloneNode(true);
-
-    select_sheet_create(klon, append_Event);
     append_Event.appendChild(klon);
+
+    const echtesElement = append_Event.querySelector("#more-calender-day"); // dann das echte Element im DOM holen
+    select_sheet_create(echtesElement, append_Event);
   }
 
   append_Event.style.opacity = 1;

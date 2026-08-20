@@ -298,8 +298,26 @@ input[type="search"] {
 /**       _________     Profil Settings     __________*/
 /*  TODO  Profil Hintergrund Bentzer Defeniert machen*/
 
+#profil-button {
+  margin-right: -20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
 #profil-button:hover {
   background-color: transparent;
+}
+
+.profile-name {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.profile-name-visible {
+  display: block;
 }
 
 .profile-avatar {

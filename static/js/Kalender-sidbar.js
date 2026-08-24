@@ -88,12 +88,6 @@ function local_save() {
   localStorage.setItem("kalender", JSON.stringify(give_save_data()));
 }
 
-function hidden_sheet(append_objekt, objekt) {
-  sheet_out = false;
-  append_objekt.replaceChildren(); // löscht alle Items in sheet
-  objekt.style.opacity = 0;
-}
-
 function Back_btn() {
   local_save();
   sheet_append.innerHTML = "";
@@ -200,8 +194,6 @@ function upload_kalender_typen() {
     .then((data) => {
       calendar_list.innerHTML = "";
       data.message.forEach((kalender) => {
-        console.log(kalender.titel);
-        console.log(kalender.color);
         const farbe = calendarColors.find(
           (color) => color.name.trim() === kalender.color.trim(),
         );

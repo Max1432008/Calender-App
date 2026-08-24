@@ -1,224 +1,3 @@
-const DATE = new Date();
-const DAY = DATE.getDate();
-const TODAY_MONAT = DATE.getMonth() + 1;
-const TODAY_JAHR = DATE.getFullYear();
-
-let JAHR = DATE.getFullYear();
-let MONAT = DATE.getMonth() + 1;
-
-const prevMonthButton = document.getElementById("prev-month");
-const nextMonthButton = document.getElementById("next-month");
-const todayButton = document.getElementById("today");
-
-//* Add event listeners for animation end to remove the animation classes
-
-prevMonthButton.addEventListener("animationend", () => {
-  prevMonthButton.classList.remove("nav-button-moveLeft");
-});
-nextMonthButton.addEventListener("animationend", () => {
-  nextMonthButton.classList.remove("nav-button-moveRight");
-});
-todayButton.addEventListener("animationend", () => {
-  todayButton.classList.remove("nav-button-moveToday");
-});
-
-//*
-//*
-//*    Search input      */
-const searchInput = document.getElementById("search-input");
-const searchButton = document.getElementById("search-button");
-const search_append = document.getElementById("search-append");
-
-let clickingButton = false;
-
-// --- Sichtbarkeit des Such-Buttons ---
-
-function searchButtonShow() {
-  searchButton.classList.add("search-input-focus");
-  console.log("hier ist der klick");
-  search_append.classList.toggle("search-append-out");
-}
-
-function searchButtonHide() {
-  searchButton.classList.remove("search-input-focus");
-  searchButton.classList.remove("search-click-animation");
-  search_append.classList.remove("search-append-out");
-  search_append.innerHTML = "";
-}
-
-function searchButtonClickAnimation() {
-  searchButton.classList.add("search-click-animation");
-}
-
-// --- Event Listener: Input ---
-
-searchInput.addEventListener("focus", () => {
-  console.log("hier ist der klick");
-
-  searchButtonShow();
-  searchButtonClickAnimation();
-});
-
-searchInput.addEventListener("focusout", () => {
-  if (clickingButton) {
-    // Klick auf den Button war der Grund für den Fokusverlust -> nicht verstecken
-    clickingButton = false;
-    return;
-  }
-  searchButtonHide();
-});
-
-// --- Event Listener: Button ---
-
-// mousedown feuert VOR focusout, deshalb setzen wir hier das Flag
-searchButton.addEventListener("mousedown", () => {
-  clickingButton = true;
-});
-
-searchButton.addEventListener("click", () => {
-  searchButtonShow();
-  searchButtonClickAnimation();
-  searchInput.focus(); // optional: Fokus zurück ins Suchfeld
-});
-
-//!!!       ––––––––
-function getDaysInMonth(jahr, month) {
-  const tage = new Date(jahr, month, 0).getDate();
-  let firstDay = new Date(jahr, month - 1, 1).getDay(); // 0 = Sonntag, 1 = Montag, ..., 6 = Samstag
-  firstDay = (firstDay + 6) % 7; // Umwandlung: 0 = Montag, 1 = Dienstag, ..., 6 = Sonntag
-
-  return { tage, firstDay };
-}
-
-function updateMonthTitle(jahr, month) {
-  const monthNames = [
-    "Januar",
-    "Februar",
-    "März",
-    "April",
-    "Mai",
-    "Juni",
-    "Juli",
-    "August",
-    "September",
-    "Oktober",
-    "November",
-    "Dezember",
-  ];
-
-  const monthName = document.querySelector(".month-name");
-
-  monthName.textContent = `${monthNames[month - 1]} ${JAHR}`;
-}
-
-let month_count = 0;
-updateMonthTitle(JAHR, MONAT);
-let start = 0;
-
-function create_calender_day() {
-  start = 0;
-  month_count = 0;
-  let { tage: max_month_days, firstDay } = getDaysInMonth(JAHR, MONAT);
-  const grid = document.getElementById("grid-container");
-  while (grid.children.length > 7) {
-    grid.removeChild(grid.lastElementChild);
-  }
-  while (start < firstDay) {
-    const placeholder = document.createElement("div");
-    placeholder.classList.add("empty-day");
-    document.getElementById("grid-container").appendChild(placeholder);
-    start += 1;
-  }
-  while (month_count <= max_month_days - 1) {
-    // -1, da month_count bei 0 startet
-    month_count += 1;
-
-    const template = document.getElementById("calender-day");
-    const klon = template.content.cloneNode(true);
-    const container_calender = klon.querySelector(".container-calender");
-    const calender_day = container_calender.querySelector(".date-headline");
-    calender_day.textContent = month_count;
-
-    const WochenendPosition = (firstDay + month_count - 1) % 7;
-    if (WochenendPosition == 5 || WochenendPosition == 6) {
-      container_calender.style.backgroundColor = "var(--border-weekend)";
-    }
-
-    if (month_count == DAY && MONAT == TODAY_MONAT && JAHR == TODAY_JAHR) {
-      container_calender.style.backgroundColor = "var(--today-bg)";
-    }
-
-    document.getElementById("grid-container").appendChild(klon);
-    createEvent(container_calender);
-    createEvent(container_calender);
-    if (month_count == 5) {
-      createEvent(container_calender);
-      createEvent(container_calender);
-    }
-  }
-}
-create_calender_day();
-
-console.log(getDaysInMonth(JAHR, MONAT));
-
-function next_month() {
-  MONAT += 1;
-  if (MONAT >= 12) {
-    MONAT = 1;
-    JAHR += 1;
-  }
-  updateMonthTitle(JAHR, MONAT);
-  create_calender_day();
-}
-
-function prev_month() {
-  MONAT -= 1;
-  if (MONAT <= 1) {
-    MONAT = 12;
-    JAHR -= 1;
-  }
-  updateMonthTitle(JAHR, MONAT);
-  create_calender_day();
-}
-
-function today_month() {
-  const heute = new Date();
-
-  const aktuellerMonat = heute.getMonth() + 1;
-  const aktuellesJahr = heute.getFullYear();
-
-  MONAT = aktuellerMonat;
-  JAHR = aktuellesJahr;
-  console.log(aktuellerMonat);
-  console.log(aktuellesJahr);
-  updateMonthTitle(JAHR, MONAT);
-  create_calender_day();
-}
-
-prevMonthButton.addEventListener("click", () => {
-  // Logic to go to the previous month
-  console.log("Previous month button clicked");
-  prevMonthButton.classList.add("nav-button-moveLeft");
-
-  prev_month();
-});
-
-nextMonthButton.addEventListener("click", () => {
-  // Logic to go to the next month
-  console.log("Next month button clicked");
-  nextMonthButton.classList.add("nav-button-moveRight");
-
-  next_month();
-});
-
-todayButton.addEventListener("click", () => {
-  // Logic to go to today's date
-  console.log("Today button clicked");
-  todayButton.classList.add("nav-button-moveToday");
-
-  today_month();
-});
-
 //*
 //*
 //*     –––––         Ansicht von der Switchbar oben  –––––––
@@ -227,7 +6,81 @@ const viewContent = document.getElementById("view-content");
 const calenderLook = document.querySelector(".calender-look");
 const viewButtons = document.querySelectorAll(".calender-look > button");
 
-let draftKalender_event = { name: "", shared_with: "", color: "" };
+let draftKalender_event = {
+  name: "",
+  calender_typ_id: null,
+  shared_with: "",
+  color: "",
+};
+let Event_save = {
+  title: "",
+  place: "",
+  hole_day: false,
+  day_start: "",
+  day_end: "",
+  time_start: "",
+  time_end: "",
+  content: "",
+  color: "",
+};
+
+function upload_event(Event_save) {
+  fetch("/save-event", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(Event_save),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Erfolgreich gespeichert:", data);
+      // Hier können Sie weitere Aktionen durchführen, z.B. eine Erfolgsmeldung anzeigen
+    })
+    .catch((error) => {
+      console.error("Fehler beim Speichern:", error);
+      // Hier können Sie Fehlerbehandlung durchführen, z.B. eine Fehlermeldung anzeigen
+    });
+}
+
+function saveDraftKalenderEvent(sheet, draftKalender_event) {
+  console.log("saveDraftKalenderEvent");
+  // Hier können Sie den Code hinzufügen, um das draftKalender_event zu speichern
+
+  const titleInput = sheet.querySelector(".title-input");
+  const placeInput = sheet.querySelector(".place-input");
+  const holeDayCheckbox = sheet.querySelector(".hole-day-checkbox");
+  const dayStartInput = sheet.querySelector(".day-start-input");
+  const dayEndInput = sheet.querySelector(".day-end-input");
+  const timeStartInput = sheet.querySelector(".time-start-input");
+  const timeEndInput = sheet.querySelector(".time-end-input");
+  const contentTextarea = sheet.querySelector(".textarea-more");
+
+  if (
+    titleInput.value === "" ||
+    dayStartInput.value === "" ||
+    dayEndInput.value === "" ||
+    timeStartInput.value === "" ||
+    timeEndInput.value === ""
+  ) {
+    console.error("Ein oder mehrere Eingabefelder wurden nicht gefunden.");
+    return;
+  }
+
+  Event_save.title = titleInput.value;
+  Event_save.place = placeInput.value;
+  Event_save.hole_day = holeDayCheckbox.checked;
+  Event_save.day_start = dayStartInput.value;
+  Event_save.day_end = dayEndInput.value;
+  Event_save.time_start = timeStartInput.value;
+  Event_save.time_end = timeEndInput.value;
+  Event_save.calender_typ_id = draftKalender_event.calender_typ_id;
+  Event_save.content = contentTextarea.value;
+  Event_save.color = draftKalender_event.name;
+
+  console.log("Event_save:", Event_save);
+  return Event_save;
+}
 
 function moveViewContent(button) {
   const btnRect = button.getBoundingClientRect();
@@ -254,12 +107,9 @@ const append_Event = document.getElementById("append-Event");
 const More_Envent_Info = document.getElementById("More-Envent-Info");
 
 function update_selet_btn(sheet, draftKalender_event) {
-  console.log("update_selet_btn");
-  console.log(draftKalender_event);
-  console.log(sheet);
-  console.log(sheet.children);
   const select_button = sheet.querySelector(".select-button");
   const circle = sheet.querySelector(".circle");
+  const hole_day_checkbox = sheet.querySelector(".hole-day-checkbox");
 
   select_button.textContent = draftKalender_event.name;
   const farbe = calendarColors.find(
@@ -267,13 +117,14 @@ function update_selet_btn(sheet, draftKalender_event) {
   );
   circle.style.background = `var(${farbe.var})`;
   circle.dataset.color = farbe.id;
+  hole_day_checkbox.style.backgroundColor = `var(${farbe.var})`;
 }
 
 function color_button_click(sheet, kalender_btn, kalender) {
   // Implementation for color button click
   kalender_btn.addEventListener("click", (event) => {
     event.stopPropagation();
-    console.log("Color button clicked for:", kalender.titel, kalender.color);
+    draftKalender_event.calender_typ_id = kalender.id;
     draftKalender_event.color = kalender.color;
     draftKalender_event.name = kalender.titel;
     draftKalender_event.shared_with = kalender.shared_with;
@@ -311,22 +162,22 @@ function upload_kalender_color(sheet, select_append) {
 
         select_append.appendChild(color_klon);
       });
+      console.log("NACH DEM LADEN:", select_append.children.length);
     });
 }
 
 function select_sheet_create(sheet, container) {
   const select_button = sheet.querySelector(".select-button");
   const select_append = sheet.querySelector(".select-append");
+  const save_event_btn = sheet.querySelector(".save-event-btn");
+  const close_sheet_btn = sheet.querySelector(".close-sheet-btn");
   const moreInfo = sheet;
 
   select_button.addEventListener("click", (event) => {
     event.stopPropagation();
-
-    console.log("crate_select_sheet");
+    console.log("select_button clicked");
 
     const offsetHeight_div = moreInfo.offsetTop;
-
-    console.log("Höhe:", offsetHeight_div);
 
     select_append.style.display = "block";
     select_append.style.top = -15 + "px";
@@ -335,12 +186,27 @@ function select_sheet_create(sheet, container) {
     upload_kalender_color(sheet, select_append);
   });
 
+  save_event_btn.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    const Event_save = saveDraftKalenderEvent(sheet, draftKalender_event);
+    upload_event(Event_save);
+
+    //! kommt zum schluss
+    //?hidden_sheet(select_append, select_append);
+  });
+
+  close_sheet_btn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    console.log("close_sheet_btn clicked");
+    hidden_sheet(select_append, select_append);
+  });
+
   document.addEventListener("click", (event) => {
     if (
       !select_append.contains(event.target) &&
       !select_button.contains(event.target)
     ) {
-      console.log("Außerhalb geklickt");
       hidden_sheet(select_append, select_append);
     }
   });
@@ -348,7 +214,6 @@ function select_sheet_create(sheet, container) {
 
 add_Event_btn.addEventListener("click", (event) => {
   event.stopPropagation();
-  console.log("neuer add_Event_btn");
   if (!append_Event.hasChildNodes()) {
     const klon = More_Envent_Info.content.cloneNode(true);
     append_Event.appendChild(klon);

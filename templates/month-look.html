@@ -227,8 +227,45 @@
     <template id="More-Envent-Info">
       <div id="more-calender-day">
         <div class="more-trenner">
+          <div class="top-bar">
+            <div class="top-bar-left">
+              <button class="icon-btn close-sheet-btn">
+                <img class="icon-btn-img" src="/static/img/close.svg" alt="" />
+                <!--<svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#fff"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                      </svg>
+                    -->
+              </button>
+            </div>
+
+            <h1>Event hinzufügen</h1>
+
+            <button class="icon-btn check-btn save-event-btn" id="save-btn">
+              <img class="icon-btn-img" src="/static/img/check.svg" alt="" />
+              <!--
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#fff"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  -->
+            </button>
+          </div>
+
           <div class="more-header-top">
-            <input type="text" placeholder="Name" />
+            <input type="text" placeholder="Name" class="title-input" />
             <div class="select-container">
               <div class="circle"></div>
               <button class="select-button">Kalender</button>
@@ -244,26 +281,28 @@
             </div>
           </div>
           <hr class="trenner" />
-          <input type="text" placeholder="Standort" />
+          <input type="text" placeholder="Standort" class="place-input" />
         </div>
         <div class="more-trenner">
           <div class="event-card">
             <div class="row">
               <span class="label">Ganztägig:</span>
-              <label class="switch"><input type="checkbox" /></label>
+              <label class="switch"
+                ><input type="checkbox" class="hole-day-checkbox"
+              /></label>
             </div>
             <div class="row">
               <span class="label">Startet:</span>
               <div class="datetime">
-                <input type="date" value="2026-07-15" />
-                <input type="time" value="15:30" />
+                <input type="date" value="2026-07-15" class="day-start-input" />
+                <input type="time" value="15:30" class="time-start-input" />
               </div>
             </div>
             <div class="row">
               <span class="label">Endet:</span>
               <div class="datetime">
-                <input type="date" value="2026-07-15" />
-                <input type="time" value="16:30" />
+                <input type="date" value="2026-07-15" class="day-end-input" />
+                <input type="time" value="16:30" class="time-end-input" />
               </div>
             </div>
             <div class="row">
@@ -343,8 +382,10 @@
       </div>
     </template>
 
-    <script src="/static/js/calendar-colors.js"></script>
+    <script src="/static/js/main_settings.js"></script>
     <script src="/static/js/month-look.js"></script>
+    <script src="/static/js/time.js"></script>
+    <script src="/static/js/calendar-colors.js"></script>
     <script src="/static/js/nav.js"></script>
     <script src="/static/js/profil.js"></script>
     <script src="/static/js/Kalender-sidbar.js"></script>

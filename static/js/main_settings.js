@@ -12,3 +12,9 @@ function typeText(element, text, speed = 50) {
     }
   }, speed);
 }
+
+function hidden_sheet(append_objekt, objekt) {
+  sheet_out = false;
+  append_objekt.replaceChildren(); // löscht alle Items in sheet
+  objekt.style.opacity = 0;
+}

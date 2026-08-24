@@ -40,12 +40,9 @@ class Event(Base):
     title = Column(String(200), nullable=False)
     place = Column(String(200), nullable=False)     #Standort wo das standfindet
     #* Speicherung der Zeit (mit berücksitigung von mehreren Tagen)
-    hole_day = Column(String(200), nullable=False)
-    day_start = Column(DateTime(200), nullable=False)
-    day_end = Column(DateTime(200), nullable=False)
-    time_start = Column(DateTime(200), nullable=False)
-    time_end = Column(DateTime(200), nullable=False)
-    #
+    hole_day = Column(Boolean, nullable=False)
+    day_start = Column(DateTime, nullable=False)
+    day_end = Column(DateTime, nullable=False)
     content = Column(Text, nullable=False)
     #
 

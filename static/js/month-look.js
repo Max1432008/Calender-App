@@ -1,3 +1,18 @@
+async function upload_kalender_typen() {
+  const response = await fetch("/get-event-typen");
+
+  if (!response.ok) {
+    console.error("Fehler beim Laden der Events:", response.status);
+    return [];
+  }
+
+  const data = await response.json();
+
+  console.log("Events vom Server:", data);
+
+  return data.message ?? [];
+}
+
 function updatePopupPosition(popup, event) {
   const rect = event.getBoundingClientRect();
 
@@ -84,8 +99,7 @@ function create_More(klon_event, container) {
     setupPopup(popup, container);
   });
 }
-
-function createEvent(container) {
+async function createEvent(container, alleEvents) {
   const content = container.querySelector(".content");
 
   const template = document.getElementById("Event");
@@ -94,8 +108,28 @@ function createEvent(container) {
   const event_color = klon.querySelector(".event-color");
   const event_content = klon.querySelector(".event-content");
 
-  event_content.textContent = "Termin";
+  console.log(alleEvents);
+  event_content.textContent = alleEvents.title;
+  const farbe = calendarColors.find(
+    (color) => color.name.trim() === alleEvents.color.trim(),
+  );
+  event_color.style.background = `var(${farbe.var})`;
 
   create_More(klon, container);
   content.appendChild(klon);
+}
+
+async function renderEventsForDay(container, year, month, day, alleEvents) {
+  console.log(alleEvents.length);
+
+  for (let i = 0; i < alleEvents.length; i++) {
+    const eventDate = new Date(alleEvents[i].day_start);
+    const eventYear = eventDate.getFullYear();
+    const eventMonth = eventDate.getMonth() + 1; // +1, weil JS bei 0 startet
+    const eventDay = eventDate.getDate();
+
+    if (eventYear === year && eventMonth === month && eventDay === day) {
+      createEvent(container, alleEvents[i]);
+    }
+  }
 }

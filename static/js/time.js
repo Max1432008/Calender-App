@@ -112,33 +112,46 @@ let month_count = 0;
 updateMonthTitle(JAHR, MONAT);
 let start = 0;
 
+let alleEvents = [];
+
+async function loadEvents() {
+  alleEvents = await upload_kalender_typen();
+  console.log("EVENTS GELADEN:", alleEvents);
+}
+
 async function create_calender_day() {
   start = 0;
   month_count = 0;
-  const alleEvents = await upload_kalender_typen(); // nur 1x laden
 
   let { tage: max_month_days, firstDay } = getDaysInMonth(JAHR, MONAT);
+
   const grid = document.getElementById("grid-container");
+
   while (grid.children.length > 7) {
     grid.removeChild(grid.lastElementChild);
   }
+
   while (start < firstDay) {
     const placeholder = document.createElement("div");
     placeholder.classList.add("empty-day");
-    document.getElementById("grid-container").appendChild(placeholder);
+    grid.appendChild(placeholder);
     start += 1;
   }
+
   while (month_count <= max_month_days - 1) {
-    // -1, da month_count bei 0 startet
     month_count += 1;
 
     const template = document.getElementById("calender-day");
     const klon = template.content.cloneNode(true);
+
     const container_calender = klon.querySelector(".container-calender");
+
     const calender_day = container_calender.querySelector(".date-headline");
+
     calender_day.textContent = month_count;
 
     const WochenendPosition = (firstDay + month_count - 1) % 7;
+
     if (WochenendPosition == 5 || WochenendPosition == 6) {
       container_calender.style.backgroundColor = "var(--border-weekend)";
     }
@@ -147,42 +160,46 @@ async function create_calender_day() {
       container_calender.style.backgroundColor = "var(--today-bg)";
     }
 
-    document.getElementById("grid-container").appendChild(klon);
-    //createEvent(container_calender);
-    //createEvent(container_calender);
+    grid.appendChild(klon);
 
-await renderEventsForDay(
-  container_calender,
-  JAHR,
-  MONAT,
-  month_count,
-  alleEvents,
-);  
+    await renderEventsForDay(
+      container_calender,
+      JAHR,
+      MONAT,
+      month_count,
+      alleEvents,
+    );
+  }
 }
-}
-create_calender_day();
 
-function next_month() {
+async function initCalendar() {
+  await loadEvents();
+  await create_calender_day();
+}
+
+initCalendar();
+
+async function next_month() {
   MONAT += 1;
   if (MONAT > 12) {
     MONAT = 1;
     JAHR += 1;
   }
   updateMonthTitle(JAHR, MONAT);
-  create_calender_day();
+  await create_calender_day();
 }
 
-function prev_month() {
+async function prev_month() {
   MONAT -= 1;
   if (MONAT < 1) {
     MONAT = 12;
     JAHR -= 1;
   }
   updateMonthTitle(JAHR, MONAT);
-  create_calender_day();
+  await create_calender_day();
 }
 
-function today_month() {
+async function today_month() {
   const heute = new Date();
 
   const aktuellerMonat = heute.getMonth() + 1;
@@ -193,7 +210,7 @@ function today_month() {
   console.log(aktuellerMonat);
   console.log(aktuellesJahr);
   updateMonthTitle(JAHR, MONAT);
-  create_calender_day();
+  await create_calender_day();
 }
 
 prevMonthButton.addEventListener("click", () => {

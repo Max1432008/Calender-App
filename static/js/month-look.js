@@ -10,7 +10,7 @@ async function upload_kalender_typen() {
 
   console.log("Events vom Server:", data);
 
-  return data.message ?? [];
+  return data.message || [];
 }
 
 function updatePopupPosition(popup, event) {
@@ -109,19 +109,27 @@ async function createEvent(container, alleEvents) {
   const event_content = klon.querySelector(".event-content");
 
   console.log(alleEvents);
-  event_content.textContent = alleEvents.title;
+  event_content.textContent = alleEvents.title ?? "Ohne Titel";
+
   const farbe = calendarColors.find(
-    (color) => color.name.trim() === alleEvents.color.trim(),
+    (color) => color.name.trim() === (alleEvents.color ?? "").trim(),
   );
-  event_color.style.background = `var(${farbe.var})`;
+
+  if (farbe) {
+    event_color.style.background = `var(${farbe.var})`;
+  }
 
   create_More(klon, container);
   content.appendChild(klon);
 }
 
 async function renderEventsForDay(container, year, month, day, alleEvents) {
-  console.log(alleEvents.length);
+  if (!Array.isArray(alleEvents)) {
+    console.error("alleEvents ist kein Array:", alleEvents);
+    return;
+  }
 
+  console.log(alleEvents.length);
   for (let i = 0; i < alleEvents.length; i++) {
     const eventDate = new Date(alleEvents[i].day_start);
     const eventYear = eventDate.getFullYear();

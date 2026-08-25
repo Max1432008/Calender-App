@@ -112,9 +112,11 @@ let month_count = 0;
 updateMonthTitle(JAHR, MONAT);
 let start = 0;
 
-function create_calender_day() {
+async function create_calender_day() {
   start = 0;
   month_count = 0;
+  const alleEvents = await upload_kalender_typen(); // nur 1x laden
+
   let { tage: max_month_days, firstDay } = getDaysInMonth(JAHR, MONAT);
   const grid = document.getElementById("grid-container");
   while (grid.children.length > 7) {
@@ -146,19 +148,23 @@ function create_calender_day() {
     }
 
     document.getElementById("grid-container").appendChild(klon);
-    createEvent(container_calender);
-    createEvent(container_calender);
-    if (month_count == 5) {
-      createEvent(container_calender);
-      createEvent(container_calender);
-    }
-  }
+    //createEvent(container_calender);
+    //createEvent(container_calender);
+
+await renderEventsForDay(
+  container_calender,
+  JAHR,
+  MONAT,
+  month_count,
+  alleEvents,
+);  
+}
 }
 create_calender_day();
 
 function next_month() {
   MONAT += 1;
-  if (MONAT >= 12) {
+  if (MONAT > 12) {
     MONAT = 1;
     JAHR += 1;
   }
@@ -168,7 +174,7 @@ function next_month() {
 
 function prev_month() {
   MONAT -= 1;
-  if (MONAT <= 1) {
+  if (MONAT < 1) {
     MONAT = 12;
     JAHR -= 1;
   }

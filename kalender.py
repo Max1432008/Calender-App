@@ -131,13 +131,12 @@ def get_events():
             "title": k.title,
             "place": k.place,
             "hole_day": k.hole_day,
-            "day_start": k.day_start,
-            "day_end": k.day_end,
+            "day_start": k.day_start.isoformat(),
+            "day_end": k.day_end.isoformat(),
             "calender_typ_id": k.calender_typ_id,
             "content": k.content,
-
-        })
-
+            "color": k.calender_typ.color if k.calender_typ else None,
+        })    
     db_session.close()
 
 

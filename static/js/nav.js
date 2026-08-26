@@ -166,6 +166,27 @@ function upload_kalender_color(sheet, select_append) {
     });
 }
 
+function differenz_time(start, end) {
+  const [startHours, startMinutes] = start.split(":").map(Number);
+  const [endHours, endMinutes] = end.split(":").map(Number);
+
+  const startTotal = startHours * 60 + startMinutes;
+  const endTotal = endHours * 60 + endMinutes;
+
+  return endTotal - startTotal;
+}
+
+function differenz_day(start, end) {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    return 0;
+  }
+
+  return Math.round((endDate - startDate) / (1000 * 60 * 60 * 24));
+}
+
 function change_time(hours, minutes, time_end_input) {
   const date = new Date();
   date.setHours(hours, minutes);
@@ -177,11 +198,22 @@ function change_time(hours, minutes, time_end_input) {
     String(date.getMinutes()).padStart(2, "0");
 }
 
-function change_day(dateString, time_end_input) {
-  const date = new Date(dateString);
-  date.setDate(date.getDate() + 1);
+function change_day(day_start_input, day_end_input, change) {
+  const differenz = differenz_day(day_start_input.value, day_end_input.value);
 
-  time_end_input.value = date.toISOString().split("T")[0];
+  console.log(differenz, "Differenz");
+
+  if (change) {
+    const start = new Date(day_start_input.value);
+    start.setDate(start.getDate() + differenz);
+
+    day_start_input.value = start.toISOString().split("T")[0];
+  } else {
+    const end = new Date(day_end_input.value);
+    end.setDate(end.getDate() + differenz);
+
+    day_end_input.value = end.toISOString().split("T")[0];
+  }
 }
 
 function select_sheet_create(sheet, container) {
@@ -200,9 +232,42 @@ function select_sheet_create(sheet, container) {
     change_time(hours, minutes, time_end_input);
   });
 
+  // Anfangsdatum setzen
+  const heute = new Date();
+  const heuteString = heute.toISOString().split("T")[0];
+  let event_day_difference = 0;
+
+  day_start_input.value = heuteString;
+  day_end_input.value = heuteString;
+
+  // Anfangsdifferenz speichern
+  event_day_difference = differenz_day(
+    day_start_input.value,
+    day_end_input.value,
+  );
+
+  // Startdatum geändert
   day_start_input.addEventListener("change", () => {
-    change_day(day_start_input.value, day_end_input);
+    const start = new Date(day_start_input.value);
+
+    if (Number.isNaN(start.getTime())) {
+      return;
+    }
+
+    const end = new Date(start);
+    end.setDate(end.getDate() + event_day_difference);
+
+    day_end_input.value = end.toISOString().split("T")[0];
   });
+
+  // Enddatum geändert
+  day_end_input.addEventListener("change", () => {
+    event_day_difference = differenz_day(
+      day_start_input.value,
+      day_end_input.value,
+    );
+  });
+
   select_button.addEventListener("click", (event) => {
     event.stopPropagation();
     console.log("select_button clicked");

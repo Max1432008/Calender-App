@@ -182,7 +182,8 @@ function createCalenderItem(name, colorId) {
   const item = klon.querySelector(".sidebar-item");
   const text = klon.querySelector(".text");
 
-  item.dataset.color = colorId; // setzt data-color="..."
+  item.style.setProperty("--item-bg", `var(--entry-${colorId})`);
+  item.style.setProperty("--item-border", `var(--entry-${colorId})`);
   text.textContent = name;
 
   calendar_list.appendChild(klon);

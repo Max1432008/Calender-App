@@ -1,3 +1,7 @@
+function sortEventsByTime(events) {
+  return events.sort((a, b) => new Date(a.day_start) - new Date(b.day_start));
+}
+
 async function upload_kalender_typen() {
   const response = await fetch("/get-event-typen");
 
@@ -6,11 +10,11 @@ async function upload_kalender_typen() {
     return [];
   }
 
-  const data = await response.json();
+  const data_event = await response.json();
 
-  console.log("Events vom Server:", data);
-
-  return data.message || [];
+  console.log("Events vom Server:", data_event);
+  let data = sortEventsByTime(data_event.message);
+  return data || [];
 }
 
 function updatePopupPosition(popup, event) {
@@ -65,7 +69,7 @@ function setupPopup(popup, container) {
 
 let openPopup = null;
 let openContainer = null;
-function create_More(klon_event, container) {
+function create_More(klon_event, container, alleEvents) {
   const append_more = klon_event.querySelector(".append-more");
   const event = klon_event.querySelector(".event");
 
@@ -73,16 +77,20 @@ function create_More(klon_event, container) {
     e.stopPropagation();
 
     // Falls schon ein Popup offen ist
-    if (openPopup) {
-      openPopup.style.display = "none";
-      openContainer.classList.remove("active");
-    }
 
-    append_more.innerHTML = "";
+    const vorhandenePopups = document.querySelectorAll("#more-calender-day");
+    console.log("Anzahl:", vorhandenePopups.length);
+    vorhandenePopups.forEach((popup) => {
+      popup.remove();
+    });
+
     container.classList.add("active");
 
     const template = document.getElementById("More-Envent-Info");
     const klon = template.content.cloneNode(true);
+
+    const title = klon.querySelector(".title-input");
+    title.value = alleEvents.title;
 
     append_more.appendChild(klon);
 
@@ -127,7 +135,7 @@ async function createEvent(container, alleEvents) {
     event_color.style.background = `var(${farbe.var})`;
   }
 
-  create_More(klon, container);
+  create_More(klon, container, alleEvents);
   content.appendChild(klon);
 }
 

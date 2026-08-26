@@ -41,26 +41,47 @@ body {
 
 .grid-container {
   display: grid;
+  overflow-y: scroll;
   grid-template-columns: repeat(var(--spalten-grid), 1fr);
+  grid-template-rows: repeat(6, 1fr);
   gap: 10px;
+  height: calc(
+    100vh - 210px
+  ); /* Platz für Nav/Header abziehen, ggf. Wert anpassen */
 }
 
 .container-calender {
-  padding: 5px;
+  height: 90%;
+  padding: 7px;
   border-radius: 10px;
-  background-color: var(--calender-day);
-  box-shadow: 0px 0px 10px var(--shadow);
-  position: relative;
-  transition: transform 0.3s ease-in-out;
-}
 
-.container-calender.active {
-  z-index: 100;
+  background-color: var(--calender-day);
+
+  border: 1px solid rgba(78, 78, 78, 0.08);
+
+  box-shadow:
+    0 0 10px var(--shadow),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+
+  position: relative;
+  transition:
+    transform 0.3s ease-in-out,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .container-calender:hover {
   cursor: pointer;
   transform: scale(1.05);
+
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 0 15px rgba(86, 86, 86, 0.08),
+    0 0 30px rgba(0, 0, 0, 0.25);
+}
+
+.container-calender.active {
+  z-index: 100;
 }
 
 .calender-day-button {
@@ -90,18 +111,18 @@ body {
   /*button settings*/
   border: none;
   background: none;
-
+  width: 100%;
   color: var(--text-primary);
   display: flex;
-  justify-content: center;
-  align-items: start;
+  justify-content: flex-start;
+  align-items: stretch;
   flex-direction: row;
-  margin-bottom: 5px;
+  gap: 5px;
 }
 
 .event-color {
   width: 5px;
-  height: 20px;
+  align-self: stretch; /* statt height: 100% */
   border-radius: 15px;
   display: inline-block;
   font-family: "Roboto", sans-serif;
@@ -111,12 +132,15 @@ body {
 
 .event-content {
   padding: 4px;
-  font-size: 14px;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+  text-align: left;
+  flex: 1;
 }
 
-.event-content:hover {
-  background-color: var(--entry-1);
-  border-radius: 5px;
+.event:hover {
+  background-color: var(--surface-hover);
+  border-radius: 7px;
 }
 
 /**!  Darstellung von den Kalender Settings **/
@@ -149,6 +173,7 @@ body {
   z-index: 999;
   font-size: 1rem;
   color: var(--text-muted);
+  /*position: absolute;*/
   position: absolute;
 
   padding: 10px;

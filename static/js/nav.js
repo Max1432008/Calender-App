@@ -117,7 +117,7 @@ function update_selet_btn(sheet, draftKalender_event) {
   );
   circle.style.background = `var(${farbe.var})`;
   circle.dataset.color = farbe.id;
-  hole_day_checkbox.style.backgroundColor = `var(${farbe.var})`;
+  hole_day_checkbox.style.background = `var(${farbe.var})`;
 }
 
 function color_button_click(sheet, kalender_btn, kalender) {
@@ -166,13 +166,43 @@ function upload_kalender_color(sheet, select_append) {
     });
 }
 
+function change_time(hours, minutes, time_end_input) {
+  const date = new Date();
+  date.setHours(hours, minutes);
+  date.setHours(date.getHours() + 1);
+
+  time_end_input.value =
+    String(date.getHours()).padStart(2, "0") +
+    ":" +
+    String(date.getMinutes()).padStart(2, "0");
+}
+
+function change_day(dateString, time_end_input) {
+  const date = new Date(dateString);
+  date.setDate(date.getDate() + 1);
+
+  time_end_input.value = date.toISOString().split("T")[0];
+}
+
 function select_sheet_create(sheet, container) {
   const select_button = sheet.querySelector(".select-button");
   const select_append = sheet.querySelector(".select-append");
   const save_event_btn = sheet.querySelector(".save-event-btn");
   const close_sheet_btn = sheet.querySelector(".close-sheet-btn");
+  const day_start_input = sheet.querySelector(".day-start-input");
+  const day_end_input = sheet.querySelector(".day-end-input");
+  const time_start_input = sheet.querySelector(".time-start-input");
+  const time_end_input = sheet.querySelector(".time-end-input");
   const moreInfo = sheet;
 
+  time_start_input.addEventListener("change", () => {
+    const [hours, minutes] = time_start_input.value.split(":").map(Number);
+    change_time(hours, minutes, time_end_input);
+  });
+
+  day_start_input.addEventListener("change", () => {
+    change_day(day_start_input.value, day_end_input);
+  });
   select_button.addEventListener("click", (event) => {
     event.stopPropagation();
     console.log("select_button clicked");

@@ -117,6 +117,7 @@ let alleEvents = [];
 async function loadEvents() {
   alleEvents = await upload_kalender_typen();
   console.log("EVENTS GELADEN:", alleEvents);
+  console.log("Anfang:", alleEvents[4].time_start);
 }
 
 async function create_calender_day() {
@@ -158,6 +159,7 @@ async function create_calender_day() {
 
     if (month_count == DAY && MONAT == TODAY_MONAT && JAHR == TODAY_JAHR) {
       container_calender.style.backgroundColor = "var(--today-bg)";
+      container_calender.style.border = "1px solid var(--today-border)";
     }
 
     grid.appendChild(klon);

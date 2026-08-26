@@ -107,9 +107,17 @@ async function createEvent(container, alleEvents) {
 
   const event_color = klon.querySelector(".event-color");
   const event_content = klon.querySelector(".event-content");
+  const event_time = klon.querySelector(".event-time");
 
   console.log(alleEvents);
   event_content.textContent = alleEvents.title ?? "Ohne Titel";
+
+  event_time.textContent = alleEvents.day_start
+    ? new Date(alleEvents.day_start).toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "Keine Zeit";
 
   const farbe = calendarColors.find(
     (color) => color.name.trim() === (alleEvents.color ?? "").trim(),

@@ -17,6 +17,8 @@ async function upload_kalender_typen() {
   return data || [];
 }
 
+async function save_event_() {}
+
 function updatePopupPosition(popup, event) {
   const rect = event.getBoundingClientRect();
 
@@ -56,6 +58,7 @@ function setupPopup(popup, container) {
   document.addEventListener("click", function closePopup(event) {
     if (!popup.contains(event.target)) {
       popup.style.display = "none";
+      popup.remove();
 
       container.classList.remove("active");
 
@@ -136,6 +139,16 @@ function create_More(klon_event, container, alleEvents) {
 
     textareaMore.value = alleEvents.content ?? "";
 
+    selectButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+
+      selectAppend.style.display = "block";
+      selectAppend.style.top = -15 + "px";
+      selectAppend.style.opacity = 1;
+
+      upload_kalender_color(popup, selectAppend);
+    });
+
     const farbe = calendarColors.find(
       (color) => color.name.trim() === (alleEvents.color ?? "").trim(),
     );
@@ -145,13 +158,26 @@ function create_More(klon_event, container, alleEvents) {
       circle.style.backgroundColor = `var(${farbe.var})`;
     }
 
-    append_more.appendChild(klon);
+    const popup = klon.querySelector("#more-calender-day");
 
-    selectButton;
+    closeSheetBtn.addEventListener("click", () => {
+      popup.remove();
+    });
 
-    const popup = append_more.querySelector("#more-calender-day");
+    saveEventBtn.addEventListener("click", () => {
+      console.log("speichern");
+    });
+    const delete_event = document.createElement("button");
+    delete_event.classList.add("delete-event-btn");
+    delete_event.innerText = "Löschen";
+
+    popup.appendChild(delete_event);
+
+    document.body.appendChild(popup);
 
     const rect = e.currentTarget.getBoundingClientRect();
+    popup.style.left = rect.left + "px";
+    popup.style.top = rect.bottom + "px";
 
     updatePopupPosition(popup, event);
 

@@ -139,6 +139,8 @@ function upload_kalender_color(sheet, select_append) {
     .then((data) => {
       select_append.innerHTML = "";
       data.message.forEach((kalender) => {
+        const new_kalender_color =
+          document.getElementById("new-kalender-color");
         const color_klon = new_kalender_color.content.cloneNode(true);
 
         color_klon.querySelector(".color-name").textContent = kalender.titel;
@@ -270,13 +272,19 @@ function select_sheet_create(sheet, container) {
 
   select_button.addEventListener("click", (event) => {
     event.stopPropagation();
-    console.log("select_button clicked");
 
-    const offsetHeight_div = moreInfo.offsetTop;
+    if (select_append.parentElement !== document.body) {
+      document.body.appendChild(select_append);
+    }
 
+    const rect = select_button.getBoundingClientRect();
+
+    select_append.style.position = "fixed";
+    select_append.style.left = rect.left - 120 + "px";
+    select_append.style.top = rect.bottom - 100 + "px";
     select_append.style.display = "block";
-    select_append.style.top = -15 + "px";
-    select_append.style.opacity = 1;
+    select_append.style.opacity = "1";
+    select_append.style.zIndex = "99999";
 
     upload_kalender_color(sheet, select_append);
   });
@@ -309,22 +317,27 @@ function select_sheet_create(sheet, container) {
 
 add_Event_btn.addEventListener("click", (event) => {
   event.stopPropagation();
-  if (!append_Event.hasChildNodes()) {
+  if (!document.getElementById("more-calender-day")) {
     const klon = More_Envent_Info.content.cloneNode(true);
-    append_Event.appendChild(klon);
+    const popup = klon.querySelector("#more-calender-day");
 
-    const echtesElement = append_Event.querySelector("#more-calender-day"); // dann das echte Element im DOM holen
-    select_sheet_create(echtesElement, append_Event);
+    document.body.appendChild(klon);
+
+    const rect = add_Event_btn.getBoundingClientRect();
+    popup.style.left = rect.left + "px";
+    popup.style.top = rect.bottom + "px";
+
+    select_sheet_create(popup, append_Event);
   }
-
-  append_Event.style.opacity = 1;
 });
 
 document.addEventListener("click", (event) => {
+  const popup = document.getElementById("more-calender-day");
   if (
-    !append_Event.contains(event.target) &&
+    popup &&
+    !popup.contains(event.target) &&
     !add_Event_btn.contains(event.target)
   ) {
-    hidden_sheet(append_Event, append_Event);
+    popup.remove();
   }
 });

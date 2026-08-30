@@ -2,10 +2,14 @@
 nav {
   display: flex;
   justify-content: space-between;
+  background-color: transparent;
   align-items: center;
   padding: 10px;
   margin-top: -20px;
   border-radius: 10px;
+  z-index: 0;
+  position: relative;
+  font-family: "Oswald", sans-serif;
 }
 
 .nav-left {
@@ -48,7 +52,8 @@ nav button > img {
 
 .calender-look {
   position: relative;
-  font-family: "Roboto", sans-serif;
+  font-family: "Oswald", sans-serif;
+
   background-color: var(--border);
   padding: 8px 10px;
   border-radius: 25px;

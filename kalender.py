@@ -117,6 +117,67 @@ def save_event():
         "message": "Event gespeichert"
     })
 
+
+
+
+@kalender.route("/update_event_data", methods=["POST"])
+def update_event_data():
+    user_id = flask_session.get("user_id")
+    db_session = Session()
+
+
+    data = request.get_json(silent=True) or {}
+
+    print("REGISTER:", data)
+
+    event_data = data
+
+    if not event_data:
+        return jsonify({
+            "success": False,
+            "error": "Keine Eventdaten"
+        })
+
+
+    date_str = event_data["day_start"]   # "2026-07-15"
+    time_str = event_data["time_start"]  # "15:30"
+
+    day_start = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
+
+    date_str_end = event_data["day_end"]   # "2026-07-15"
+    time_str_end = event_data["time_end"]  # "15:30"
+
+    day_end = datetime.strptime(f"{date_str_end} {time_str_end}", "%Y-%m-%d %H:%M")
+
+    event = db_session.query(Event).filter_by(
+    id=event_data["eventId"],
+    user_id=user_id
+    ).first()
+
+    event.title = event_data["title"]
+    event.place = event_data["place"]
+    event.hole_day = event_data["hole_day"]
+    event.day_start = day_start
+    event.day_end=day_end
+    event.content=event_data["content"]
+    event.calender_typ_id=event_data["calender_typ_id"]
+    
+
+
+    db_session.add(event)
+    db_session.commit()
+    db_session.close()
+
+
+    return jsonify({
+        "success": True,
+        "message": "Event gespeichert"
+    })
+
+
+
+
+
 @kalender.route("/get-event-typen")
 def get_events():
     user_id = flask_session.get("user_id")

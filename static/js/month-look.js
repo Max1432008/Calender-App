@@ -1,6 +1,7 @@
 let Event_update = {
   title: "",
   place: "",
+  eventId: "",
   hole_day: false,
   day_start: "",
   day_end: "",
@@ -10,9 +11,19 @@ let Event_update = {
   color: "",
 };
 
-function Update_Event_GET_Data(klon) {
+function Update_Event_GET_Data(popup, alleEvents) {
+  const titleInput = popup.querySelector(".title-input");
+  const placeInput = popup.querySelector(".place-input");
+  const holeDayCheckbox = popup.querySelector(".hole-day-checkbox");
+  const dayStartInput = popup.querySelector(".day-start-input");
+  const dayEndInput = popup.querySelector(".day-end-input");
+  const timeStartInput = popup.querySelector(".time-start-input");
+  const timeEndInput = popup.querySelector(".time-end-input");
+  const contentTextarea = popup.querySelector(".textarea-more");
+
   Event_update.title = titleInput.value;
   Event_update.place = placeInput.value;
+  Event_update.eventId = alleEvents.id;
   Event_update.hole_day = holeDayCheckbox.checked;
   Event_update.day_start = dayStartInput.value;
   Event_update.day_end = dayEndInput.value;
@@ -25,9 +36,9 @@ function Update_Event_GET_Data(klon) {
   return Event_update;
 }
 
-function Update_Event_Data(klon) {
-  const data = Update_Event_GET_Data(klon);
-  console.log("updaten bhier");
+function Update_Event_Data(popup, alleEvents) {
+  const data = Update_Event_GET_Data(popup, alleEvents);
+  console.log("updaten bhier", data);
   fetch("/update_event_data", {
     method: "POST",
     headers: {
@@ -209,7 +220,7 @@ function create_More(klon_event, container, alleEvents) {
     });
 
     saveEventBtn.addEventListener("click", () => {
-      Update_Event_Data(klon);
+      Update_Event_Data(popup, alleEvents);
     });
 
     const delete_event = document.createElement("button");

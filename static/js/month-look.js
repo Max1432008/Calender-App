@@ -1,3 +1,49 @@
+let Event_update = {
+  title: "",
+  place: "",
+  hole_day: false,
+  day_start: "",
+  day_end: "",
+  time_start: "",
+  time_end: "",
+  content: "",
+  color: "",
+};
+
+function Update_Event_GET_Data(klon) {
+  Event_update.title = titleInput.value;
+  Event_update.place = placeInput.value;
+  Event_update.hole_day = holeDayCheckbox.checked;
+  Event_update.day_start = dayStartInput.value;
+  Event_update.day_end = dayEndInput.value;
+  Event_update.time_start = timeStartInput.value;
+  Event_update.time_end = timeEndInput.value;
+  Event_update.calender_typ_id = draftKalender_event.calender_typ_id;
+  Event_update.content = contentTextarea.value;
+  Event_update.color = draftKalender_event.name;
+
+  return Event_update;
+}
+
+function Update_Event_Data(klon) {
+  const data = Update_Event_GET_Data(klon);
+  console.log("updaten bhier");
+  fetch("/update_event_data", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Erfolgreich gespeichert:", data);
+    })
+    .catch((error) => {
+      console.error("Fehler beim Speichern:", error);
+    });
+}
+
 function sortEventsByTime(events) {
   return events.sort((a, b) => new Date(a.day_start) - new Date(b.day_start));
 }
@@ -11,22 +57,14 @@ async function upload_kalender_typen() {
   }
 
   const data_event = await response.json();
-
-  console.log("Events vom Server:", data_event);
-  let data = sortEventsByTime(data_event.message);
-  return data || [];
+  return sortEventsByTime(data_event.message) || [];
 }
-
-async function save_event_() {}
 
 function updatePopupPosition(popup, event) {
   const rect = event.getBoundingClientRect();
 
-  // Platz unter dem Event
   const spaceBottom = window.innerHeight - rect.bottom;
   const spaceRight = window.innerWidth - rect.right;
-
-  // Platz über dem Event
   const spaceTop = rect.top;
   const spaceLeft = rect.left;
 
@@ -72,29 +110,23 @@ function setupPopup(popup, container) {
 
 function get_time(day) {
   const date = new Date(day);
-
   const tag = date.toISOString().slice(0, 10);
   const uhrzeit = date.toTimeString().slice(0, 5);
-
   return [tag, uhrzeit];
 }
 
 let openPopup = null;
 let openContainer = null;
+
 function create_More(klon_event, container, alleEvents) {
-  const append_more = klon_event.querySelector(".append-more");
   const event = klon_event.querySelector(".event");
 
   event.addEventListener("click", (e) => {
     e.stopPropagation();
 
-    // Falls schon ein Popup offen ist
-
-    const vorhandenePopups = document.querySelectorAll("#more-calender-day");
-    console.log("Anzahl:", vorhandenePopups.length);
-    vorhandenePopups.forEach((popup) => {
-      popup.remove();
-    });
+    document
+      .querySelectorAll("#more-calender-day")
+      .forEach((popup) => popup.remove());
 
     container.classList.add("active");
 
@@ -104,7 +136,6 @@ function create_More(klon_event, container, alleEvents) {
     const title = klon.querySelector(".title-input");
     const place = klon.querySelector(".place-input");
 
-    const selectContainer = klon.querySelector(".select-container");
     const selectButton = klon.querySelector(".select-button");
     const selectAppend = klon.querySelector(".select-append");
     const circle = klon.querySelector(".circle");
@@ -118,7 +149,6 @@ function create_More(klon_event, container, alleEvents) {
     const timeEndInput = klon.querySelector(".time-end-input");
 
     const repeatSelect = klon.querySelector(".repeat-select");
-
     const textareaMore = klon.querySelector(".textarea-more");
 
     const closeSheetBtn = klon.querySelector(".close-sheet-btn");
@@ -136,18 +166,34 @@ function create_More(klon_event, container, alleEvents) {
     timeEndInput.value = get_time(alleEvents.day_end)[1] ?? "";
 
     repeatSelect.value = alleEvents.repeat ?? "Nie";
-
     textareaMore.value = alleEvents.content ?? "";
 
-    selectButton.addEventListener("click", (event) => {
-      event.stopPropagation();
+    const popup = klon.querySelector("#more-calender-day");
 
+    function closeColorPicker(ev) {
+      if (!selectAppend.contains(ev.target) && ev.target !== selectButton) {
+        selectAppend.style.display = "none";
+      }
+    }
+
+    selectButton.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+
+      if (selectAppend.parentElement !== document.body) {
+        document.body.appendChild(selectAppend);
+      }
+      const rect = selectButton.getBoundingClientRect();
+      selectAppend.style.position = "fixed";
+      selectAppend.style.left = rect.left - 120 + "px";
+      selectAppend.style.top = rect.bottom - 100 + "px";
       selectAppend.style.display = "block";
-      selectAppend.style.top = -15 + "px";
-      selectAppend.style.opacity = 1;
+      selectAppend.style.opacity = "1";
+      selectAppend.style.zIndex = "99999";
 
       upload_kalender_color(popup, selectAppend);
     });
+
+    document.addEventListener("click", closeColorPicker);
 
     const farbe = calendarColors.find(
       (color) => color.name.trim() === (alleEvents.color ?? "").trim(),
@@ -158,19 +204,17 @@ function create_More(klon_event, container, alleEvents) {
       circle.style.backgroundColor = `var(${farbe.var})`;
     }
 
-    const popup = klon.querySelector("#more-calender-day");
-
     closeSheetBtn.addEventListener("click", () => {
       popup.remove();
     });
 
     saveEventBtn.addEventListener("click", () => {
-      console.log("speichern");
+      Update_Event_Data(klon);
     });
+
     const delete_event = document.createElement("button");
     delete_event.classList.add("delete-event-btn");
     delete_event.innerText = "Löschen";
-
     popup.appendChild(delete_event);
 
     document.body.appendChild(popup);
@@ -181,26 +225,24 @@ function create_More(klon_event, container, alleEvents) {
 
     updatePopupPosition(popup, event);
 
-    // Aktuelles Popup merken
     openPopup = popup;
     openContainer = container;
 
     setupPopup(popup, container);
   });
 }
+
 async function createEvent(container, alleEvents) {
   const content = container.querySelector(".content");
 
   const template = document.getElementById("Event");
+  //! template klon
   const klon = template.content.cloneNode(true);
 
-  const event = klon.querySelector(".event");
   const event_color = klon.querySelector(".event-color");
   const event_content = klon.querySelector(".event-content");
   const event_time = klon.querySelector(".event-time");
-  const append_more = klon.querySelector(".append-more");
 
-  console.log(alleEvents);
   event_content.textContent = alleEvents.title ?? "Ohne Titel";
 
   event_time.textContent = alleEvents.day_start
@@ -228,16 +270,14 @@ async function renderEventsForDay(container, year, month, day, alleEvents) {
     return;
   }
 
-  console.log(alleEvents.length);
   for (let i = 0; i < alleEvents.length; i++) {
-    const eventDate = new Date(alleEvents[i].day_start);
-
     const eventStart = new Date(alleEvents[i].day_start);
     const eventEnd = new Date(alleEvents[i].day_end);
     const currentDay = new Date(year, month - 1, day);
 
     eventStart.setHours(0, 0, 0, 0);
     eventEnd.setHours(0, 0, 0, 0);
+
     if (currentDay >= eventStart && currentDay <= eventEnd) {
       createEvent(container, alleEvents[i]);
     }

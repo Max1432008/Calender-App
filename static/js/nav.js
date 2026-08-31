@@ -12,6 +12,7 @@ let draftKalender_event = {
   shared_with: "",
   color: "",
 };
+
 let Event_save = {
   title: "",
   place: "",
@@ -35,18 +36,13 @@ function upload_event(Event_save) {
     .then((response) => response.json())
     .then((data) => {
       console.log("Erfolgreich gespeichert:", data);
-      // Hier können Sie weitere Aktionen durchführen, z.B. eine Erfolgsmeldung anzeigen
     })
     .catch((error) => {
       console.error("Fehler beim Speichern:", error);
-      // Hier können Sie Fehlerbehandlung durchführen, z.B. eine Fehlermeldung anzeigen
     });
 }
 
 function saveDraftKalenderEvent(sheet, draftKalender_event) {
-  console.log("saveDraftKalenderEvent");
-  // Hier können Sie den Code hinzufügen, um das draftKalender_event zu speichern
-
   const titleInput = sheet.querySelector(".title-input");
   const placeInput = sheet.querySelector(".place-input");
   const holeDayCheckbox = sheet.querySelector(".hole-day-checkbox");
@@ -78,7 +74,6 @@ function saveDraftKalenderEvent(sheet, draftKalender_event) {
   Event_save.content = contentTextarea.value;
   Event_save.color = draftKalender_event.name;
 
-  console.log("Event_save:", Event_save);
   return Event_save;
 }
 
@@ -103,7 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const add_Event_btn = document.getElementById("add-Event");
 const append_Event = document.getElementById("append-Event");
-
 const More_Envent_Info = document.getElementById("More-Envent-Info");
 
 function update_selet_btn(sheet, draftKalender_event) {
@@ -121,14 +115,12 @@ function update_selet_btn(sheet, draftKalender_event) {
 }
 
 function color_button_click(sheet, kalender_btn, kalender) {
-  // Implementation for color button click
   kalender_btn.addEventListener("click", (event) => {
     event.stopPropagation();
     draftKalender_event.calender_typ_id = kalender.id;
     draftKalender_event.color = kalender.color;
     draftKalender_event.name = kalender.titel;
     draftKalender_event.shared_with = kalender.shared_with;
-    // Additional logic for handling the color button click can be added here
     update_selet_btn(sheet, draftKalender_event);
   });
 }
@@ -150,7 +142,6 @@ function upload_kalender_color(sheet, select_append) {
         );
 
         const circle = color_klon.querySelector(".circle");
-
         circle.dataset.color = farbe.id;
         circle.style.background = `var(${farbe.var})`;
 
@@ -158,24 +149,11 @@ function upload_kalender_color(sheet, select_append) {
         color_hr.style.display = "none";
         const kalender_btn = color_klon.querySelector(".kalender-btn");
 
-        kalender_btn.style.margin_left = 20 + "px";
-
         color_button_click(sheet, kalender_btn, kalender);
 
         select_append.appendChild(color_klon);
       });
-      console.log("NACH DEM LADEN:", select_append.children.length);
     });
-}
-
-function differenz_time(start, end) {
-  const [startHours, startMinutes] = start.split(":").map(Number);
-  const [endHours, endMinutes] = end.split(":").map(Number);
-
-  const startTotal = startHours * 60 + startMinutes;
-  const endTotal = endHours * 60 + endMinutes;
-
-  return endTotal - startTotal;
 }
 
 function differenz_day(start, end) {
@@ -200,24 +178,6 @@ function change_time(hours, minutes, time_end_input) {
     String(date.getMinutes()).padStart(2, "0");
 }
 
-function change_day(day_start_input, day_end_input, change) {
-  const differenz = differenz_day(day_start_input.value, day_end_input.value);
-
-  console.log(differenz, "Differenz");
-
-  if (change) {
-    const start = new Date(day_start_input.value);
-    start.setDate(start.getDate() + differenz);
-
-    day_start_input.value = start.toISOString().split("T")[0];
-  } else {
-    const end = new Date(day_end_input.value);
-    end.setDate(end.getDate() + differenz);
-
-    day_end_input.value = end.toISOString().split("T")[0];
-  }
-}
-
 function select_sheet_create(sheet, container) {
   const select_button = sheet.querySelector(".select-button");
   const select_append = sheet.querySelector(".select-append");
@@ -227,7 +187,6 @@ function select_sheet_create(sheet, container) {
   const day_end_input = sheet.querySelector(".day-end-input");
   const time_start_input = sheet.querySelector(".time-start-input");
   const time_end_input = sheet.querySelector(".time-end-input");
-  const moreInfo = sheet;
 
   time_start_input.addEventListener("change", () => {
     const [hours, minutes] = time_start_input.value.split(":").map(Number);
@@ -242,13 +201,11 @@ function select_sheet_create(sheet, container) {
   day_start_input.value = heuteString;
   day_end_input.value = heuteString;
 
-  // Anfangsdifferenz speichern
   event_day_difference = differenz_day(
     day_start_input.value,
     day_end_input.value,
   );
 
-  // Startdatum geändert
   day_start_input.addEventListener("change", () => {
     const start = new Date(day_start_input.value);
 
@@ -262,7 +219,6 @@ function select_sheet_create(sheet, container) {
     day_end_input.value = end.toISOString().split("T")[0];
   });
 
-  // Enddatum geändert
   day_end_input.addEventListener("change", () => {
     event_day_difference = differenz_day(
       day_start_input.value,
@@ -301,7 +257,6 @@ function select_sheet_create(sheet, container) {
 
   close_sheet_btn.addEventListener("click", (event) => {
     event.stopPropagation();
-    console.log("close_sheet_btn clicked");
     hidden_sheet(select_append, select_append);
   });
 

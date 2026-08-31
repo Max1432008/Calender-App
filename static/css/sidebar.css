@@ -358,6 +358,11 @@
   width: 100%;
 }
 
+.color-btn:hover {
+  background-color: var(--surface-hover);
+  border-radius: 10px;
+}
+
 .hr-container {
   display: flex;
   justify-content: flex-end;

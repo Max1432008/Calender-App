@@ -104,8 +104,8 @@ function updateMonthTitle(jahr, month) {
   ];
 
   const monthName = document.querySelector(".month-name");
-
-  monthName.textContent = `${monthNames[month - 1]} ${JAHR}`;
+  typeText(monthName, `${monthNames[month - 1]} ${JAHR}`);
+  //monthName.textContent = `${monthNames[month - 1]} ${JAHR}`;
 }
 
 let month_count = 0;

@@ -6,14 +6,16 @@ const viewContent = document.getElementById("view-content");
 const calenderLook = document.querySelector(".calender-look");
 const viewButtons = document.querySelectorAll(".calender-look > button");
 
-let draftKalender_event = {
-  name: "",
-  calender_typ_id: null,
-  shared_with: "",
+// aktuell im Formular ausgewählter Kalender (Farbe/Name/ID)
+let draftCalendar = {
+  calendarTitle: "",
+  calendarTypeId: null,
+  sharedWith: "",
   color: "",
 };
 
-let Event_save = {
+// Daten zum Erstellen eines neuen Events (Feldnamen = Backend-Feldnamen)
+let eventCreatePayload = {
   title: "",
   place: "",
   hole_day: false,
@@ -23,15 +25,16 @@ let Event_save = {
   time_end: "",
   content: "",
   color: "",
+  calender_typ_id: null,
 };
 
-function upload_event(Event_save) {
+function upload_event(eventCreatePayload) {
   fetch("/save-event", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(Event_save),
+    body: JSON.stringify(eventCreatePayload),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -42,7 +45,7 @@ function upload_event(Event_save) {
     });
 }
 
-function saveDraftKalenderEvent(sheet, draftKalender_event) {
+function saveDraftCalendarEvent(sheet, draftCalendar) {
   const titleInput = sheet.querySelector(".title-input");
   const placeInput = sheet.querySelector(".place-input");
   const holeDayCheckbox = sheet.querySelector(".hole-day-checkbox");
@@ -63,18 +66,18 @@ function saveDraftKalenderEvent(sheet, draftKalender_event) {
     return;
   }
 
-  Event_save.title = titleInput.value;
-  Event_save.place = placeInput.value;
-  Event_save.hole_day = holeDayCheckbox.checked;
-  Event_save.day_start = dayStartInput.value;
-  Event_save.day_end = dayEndInput.value;
-  Event_save.time_start = timeStartInput.value;
-  Event_save.time_end = timeEndInput.value;
-  Event_save.calender_typ_id = draftKalender_event.calender_typ_id;
-  Event_save.content = contentTextarea.value;
-  Event_save.color = draftKalender_event.name;
+  eventCreatePayload.title = titleInput.value;
+  eventCreatePayload.place = placeInput.value;
+  eventCreatePayload.hole_day = holeDayCheckbox.checked;
+  eventCreatePayload.day_start = dayStartInput.value;
+  eventCreatePayload.day_end = dayEndInput.value;
+  eventCreatePayload.time_start = timeStartInput.value;
+  eventCreatePayload.time_end = timeEndInput.value;
+  eventCreatePayload.calender_typ_id = draftCalendar.calendarTypeId;
+  eventCreatePayload.content = contentTextarea.value;
+  eventCreatePayload.color = draftCalendar.color;
 
-  return Event_save;
+  return eventCreatePayload;
 }
 
 function moveViewContent(button) {
@@ -100,14 +103,14 @@ const add_Event_btn = document.getElementById("add-Event");
 const append_Event = document.getElementById("append-Event");
 const More_Envent_Info = document.getElementById("More-Envent-Info");
 
-function update_selet_btn(sheet, draftKalender_event) {
+function update_selet_btn(sheet, draftCalendar) {
   const select_button = sheet.querySelector(".select-button");
   const circle = sheet.querySelector(".circle");
   const hole_day_checkbox = sheet.querySelector(".hole-day-checkbox");
 
-  select_button.textContent = draftKalender_event.name;
+  select_button.textContent = draftCalendar.calendarTitle;
   const farbe = calendarColors.find(
-    (color) => color.name.trim() === draftKalender_event.color.trim(),
+    (color) => color.name.trim() === draftCalendar.color.trim(),
   );
   circle.style.background = `var(${farbe.var})`;
   circle.dataset.color = farbe.id;
@@ -117,11 +120,11 @@ function update_selet_btn(sheet, draftKalender_event) {
 function color_button_click(sheet, kalender_btn, kalender) {
   kalender_btn.addEventListener("click", (event) => {
     event.stopPropagation();
-    draftKalender_event.calender_typ_id = kalender.id;
-    draftKalender_event.color = kalender.color;
-    draftKalender_event.name = kalender.titel;
-    draftKalender_event.shared_with = kalender.shared_with;
-    update_selet_btn(sheet, draftKalender_event);
+    draftCalendar.calendarTypeId = kalender.id;
+    draftCalendar.color = kalender.color;
+    draftCalendar.calendarTitle = kalender.titel;
+    draftCalendar.sharedWith = kalender.shared_with;
+    update_selet_btn(sheet, draftCalendar);
   });
 }
 
@@ -248,8 +251,8 @@ function select_sheet_create(sheet, container) {
   save_event_btn.addEventListener("click", (event) => {
     event.stopPropagation();
 
-    const Event_save = saveDraftKalenderEvent(sheet, draftKalender_event);
-    upload_event(Event_save);
+    const payload = saveDraftCalendarEvent(sheet, draftCalendar);
+    upload_event(payload);
 
     //! kommt zum schluss
     //?hidden_sheet(select_append, select_append);

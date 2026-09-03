@@ -112,12 +112,12 @@ let month_count = 0;
 updateMonthTitle(JAHR, MONAT);
 let start = 0;
 
-let alleEvents = [];
+let events = [];
 
 async function loadEvents() {
-  alleEvents = await upload_kalender_typen();
-  console.log("EVENTS GELADEN:", alleEvents);
-  console.log("Anfang:", alleEvents[4].time_start);
+  events = await upload_kalender_typen();
+  console.log("EVENTS GELADEN:", events);
+  console.log("Anfang:", events[4].time_start);
 }
 
 async function create_calender_day() {
@@ -169,7 +169,7 @@ async function create_calender_day() {
       JAHR,
       MONAT,
       month_count,
-      alleEvents,
+      events,
     );
   }
 }

@@ -44,6 +44,23 @@ def Calender_app():
     return render_template("month-look.html")
 
 
+@app.route("/week-look")
+def Week_look():
+    db_session = Session()
+
+    user_id = session.get("user_id")
+
+    if user_id is None:
+        return redirect(url_for("index"))
+    user = db_session.query(User).filter_by(id=user_id).first()
+
+    if user is None:
+        session.clear()
+        return redirect(url_for("index"))
+
+    return render_template("week-look.html")
+
+
 
 @app.route("/logout")
 def logout():

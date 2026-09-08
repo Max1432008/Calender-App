@@ -19,6 +19,7 @@ body {
 .Week-day {
   font-optical-sizing: auto;
   font-style: normal;
+
   font-variation-settings: "wdth" 300;
 
   display: flex;
@@ -39,6 +40,12 @@ body {
 
 /** Grid – Calender-body */
 
+.grid-container-weekDays {
+  display: grid;
+  grid-template-columns: repeat(var(--spalten-grid), minmax(180px, 1fr));
+  gap: 10px;
+}
+
 .grid-container {
   display: grid;
   overflow-y: auto;
@@ -58,15 +65,13 @@ body {
 
 .container-calender {
   min-height: 170px; /* statt 92% */
-  height: auto; /* NEU */
-  overflow: hidden;
+  height: 170px; /* NEU */
+  overflow: scroll;
   padding: 7px;
   border-radius: 10px;
 
   background-color: var(--calender-day);
-
   border: 1px solid rgba(78, 78, 78, 0.08);
-
   box-shadow:
     0 0 10px var(--shadow),
     inset 0 0 0 1px rgba(255, 255, 255, 0.02);
@@ -110,7 +115,7 @@ body {
   font-style: normal;
   font-variation-settings: "wdth" 100;
 
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   display: flex;
   justify-content: end;
   margin-top: -1px;

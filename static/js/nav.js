@@ -88,15 +88,11 @@ function moveViewContent(button) {
   viewContent.style.height = btnRect.height + "px";
   viewContent.style.left = btnRect.left - parentRect.left + "px";
   viewContent.style.top = btnRect.top - parentRect.top + "px";
+  viewContent.style.transition = "all 0.3s ease";
 }
 
 viewButtons.forEach((btn) => {
   btn.addEventListener("click", () => moveViewContent(btn));
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const month_view = document.getElementById("month-view");
-  moveViewContent(month_view);
 });
 
 const add_Event_btn = document.getElementById("add-Event");

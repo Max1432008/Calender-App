@@ -1,27 +1,29 @@
 const siebar_btn = document.getElementById("Kalender-siebar-btn");
 const Kalender_siedbar = document.getElementById("Kalender-sidbar");
+let sidebar_out;
 
 // Siebar aufahren
 function Sidbar_out() {
   Kalender_siedbar.classList.add("sidebar-out");
   Kalender_siedbar.classList.remove("sidebar-in");
+  localStorage.setItem("sidebar_out", "true");
 }
 
 // Siebar enfahren
 function Seibar_in() {
   Kalender_siedbar.classList.add("sidebar-in");
   Kalender_siedbar.classList.remove("sidebar-out");
+  localStorage.setItem("sidebar_out", "false");
 }
 
-let sidebar_out = false;
 siebar_btn.addEventListener("click", () => {
+  sidebar_out = sidebar_out ? false : true;
   if (sidebar_out) {
     Sidbar_out();
   } else {
     Seibar_in();
   }
-
-  sidebar_out = sidebar_out ? false : true;
+  console.log("sidebar_out:", sidebar_out);
 });
 
 //*      ______   Kalender Typen    ________       */
@@ -246,4 +248,15 @@ document.addEventListener("click", (event) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   upload_kalender_typen();
+
+  const sidebarOut = localStorage.getItem("sidebar_out");
+
+  if (sidebarOut === "true") {
+    sidebar_out = true;
+    hidden_sheet(sheet_append, sheet);
+    Sidbar_out();
+  } else {
+    sidebar_out = false;
+    Seibar_in();
+  }
 });

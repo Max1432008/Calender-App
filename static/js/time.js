@@ -128,7 +128,7 @@ async function create_calender_day() {
 
   const grid = document.getElementById("grid-container");
 
-  while (grid.children.length > 7) {
+  while (grid.children.length > 0) {
     grid.removeChild(grid.lastElementChild);
   }
 

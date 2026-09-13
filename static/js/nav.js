@@ -251,12 +251,13 @@ function select_sheet_create(sheet, container) {
     upload_event(payload);
 
     //! kommt zum schluss
-    //?hidden_sheet(select_append, select_append);
+    hidden_sheet(select_append, sheet);
   });
 
   close_sheet_btn.addEventListener("click", (event) => {
     event.stopPropagation();
-    hidden_sheet(select_append, select_append);
+    console.log("close sheet");
+    hidden_sheet(select_append, sheet);
   });
 
   document.addEventListener("click", (event) => {

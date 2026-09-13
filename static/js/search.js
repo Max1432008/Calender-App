@@ -6,33 +6,6 @@ const search_append_container = document.getElementById(
   "search-append-container",
 );
 
-// --- Event Listener: Input ---
-
-searchInput.addEventListener("focus", () => {
-  searchButtonShow();
-  searchButtonClickAnimation();
-});
-
-/*
-searchInput.addEventListener("focusout", () => {
-  if (clickingButton) {
-    // Klick auf den Button war der Grund für den Fokusverlust -> nicht verstecken
-    clickingButton = false;
-    return;
-  }
-  searchButtonHide();
-});*/
-
-document.addEventListener("click", (event) => {
-  if (
-    !search_append_container.contains(event.target) &&
-    !searchButton.contains(event.target) &&
-    !searchInput.contains(event.target)
-  ) {
-    searchButtonHide();
-  }
-});
-
 let clickingButton = false;
 
 // --- Sichtbarkeit des Such-Buttons ---
@@ -111,7 +84,7 @@ searchButton.addEventListener("click", () => {
 
 async function searchButtonShow() {
   searchButton.classList.add("search-input-focus");
-  search_append.classList.toggle("search-append-out");
+  search_append.classList.add("search-append-out");
 }
 
 async function searchButtonHide() {
@@ -124,3 +97,52 @@ async function searchButtonHide() {
 function searchButtonClickAnimation() {
   searchButton.classList.add("search-click-animation");
 }
+
+/*
+searchButton.addEventListener("mousedown", () => {
+  clickingButton = true;
+});
+
+searchButton.addEventListener("click", () => {
+  searchButtonShow();
+  searchButtonClickAnimation();
+  searchInput.focus(); // optional: Fokus zurück ins Suchfeld
+});
+*/
+
+searchInput.addEventListener("focus", () => {
+  searchButtonClickAnimation();
+
+  if (searchInput.value.trim() !== "") {
+    searchButtonShow();
+    find_search();
+  }
+});
+
+searchInput.addEventListener("input", () => {
+  if (searchInput.value.trim() !== "") {
+    searchButtonShow();
+  } else {
+    searchButtonHide();
+  }
+});
+
+/*
+searchInput.addEventListener("focusout", () => {
+  if (clickingButton) {
+    // Klick auf den Button war der Grund für den Fokusverlust -> nicht verstecken
+    clickingButton = false;
+    return;
+  }
+  searchButtonHide();
+});*/
+
+document.addEventListener("click", (event) => {
+  if (
+    !search_append_container.contains(event.target) &&
+    !searchButton.contains(event.target) &&
+    !searchInput.contains(event.target)
+  ) {
+    searchButtonHide();
+  }
+});

@@ -27,17 +27,6 @@ todayButton.addEventListener("animationend", () => {
 
 // --- Event Listener: Button ---
 
-// mousedown feuert VOR focusout, deshalb setzen wir hier das Flag
-searchButton.addEventListener("mousedown", () => {
-  clickingButton = true;
-});
-
-searchButton.addEventListener("click", () => {
-  searchButtonShow();
-  searchButtonClickAnimation();
-  searchInput.focus(); // optional: Fokus zurück ins Suchfeld
-});
-
 //!!!       ––––––––
 function getDaysInMonth(jahr, month) {
   const tage = new Date(jahr, month, 0).getDate();

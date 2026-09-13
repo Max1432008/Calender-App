@@ -137,24 +137,10 @@
           </div>
 
           <div class="calender-look">
-            <button id="day-view" onclick="window.location.href = '/day-look'">
-              Tag</button
-            ><button
-              id="week-view"
-              onclick="window.location.href = '/week-look'"
-            >
-              Woche</button
-            ><button
-              id="month-view"
-              onclick="window.location.href = '/month-look'"
-            >
-              Monat</button
-            ><button
-              id="year-view"
-              onclick="window.location.href = '/year-look'"
-            >
-              Jahr
-            </button>
+            <button id="day-view">Tag</button
+            ><button id="week-view">Woche</button
+            ><button id="month-view">Monat</button
+            ><button id="year-view">Jahr</button>
             <div id="view-content"></div>
           </div>
 
@@ -164,7 +150,9 @@
                 <img class="search-icon" src="/static/img/search.svg" alt="" />
               </button>
               <input id="search-input" type="search" placeholder="Suche..." />
-              <div id="search-append"></div>
+              <div id="search-append">
+                <div id="search-append-container"></div>
+              </div>
             </div>
             <button id="profil-button">
               <span class="profile-name">Benutzer Name </span>
@@ -404,8 +392,17 @@
       </div>
     </template>
 
+    <!-- Templates SEARCH ERGEBNISSE -->
+    <template id="search-result-template">
+      <div class="search-result">
+        <h3 class="search-result-title"></h3>
+        <p class="search-result-description"></p>
+      </div>
+    </template>
+
     <script src="/static/js/calendar-colors.js"></script>
     <script src="/static/js/main_settings.js"></script>
+    <script src="/static/js/search.js"></script>
     <script src="/static/js/event-details.js"></script>
     <script src="/static/js/update-event.js"></script>
     <script src="/static/js/month-look.js"></script>

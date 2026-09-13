@@ -24,46 +24,6 @@ todayButton.addEventListener("animationend", () => {
 
 //*
 //*
-//*    Search input      */
-const searchInput = document.getElementById("search-input");
-const searchButton = document.getElementById("search-button");
-const search_append = document.getElementById("search-append");
-
-let clickingButton = false;
-
-// --- Sichtbarkeit des Such-Buttons ---
-
-function searchButtonShow() {
-  searchButton.classList.add("search-input-focus");
-  search_append.classList.toggle("search-append-out");
-}
-
-function searchButtonHide() {
-  searchButton.classList.remove("search-input-focus");
-  searchButton.classList.remove("search-click-animation");
-  search_append.classList.remove("search-append-out");
-  search_append.innerHTML = "";
-}
-
-function searchButtonClickAnimation() {
-  searchButton.classList.add("search-click-animation");
-}
-
-// --- Event Listener: Input ---
-
-searchInput.addEventListener("focus", () => {
-  searchButtonShow();
-  searchButtonClickAnimation();
-});
-
-searchInput.addEventListener("focusout", () => {
-  if (clickingButton) {
-    // Klick auf den Button war der Grund für den Fokusverlust -> nicht verstecken
-    clickingButton = false;
-    return;
-  }
-  searchButtonHide();
-});
 
 // --- Event Listener: Button ---
 

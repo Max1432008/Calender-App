@@ -295,3 +295,36 @@ document.addEventListener("click", (event) => {
     popup.remove();
   }
 });
+
+const month_view = document.getElementById("month-view");
+const week_view = document.getElementById("week-view");
+const day_view = document.getElementById("day-view");
+const year_view = document.getElementById("year-view");
+
+month_view.addEventListener("click", () => {
+  moveViewContent(month_view);
+  setTimeout(() => {
+    window.location.href = "/month-look";
+  }, 300);
+});
+
+week_view.addEventListener("click", () => {
+  moveViewContent(week_view);
+  setTimeout(() => {
+    window.location.href = "/week-look";
+  }, 300);
+});
+
+day_view.addEventListener("click", () => {
+  moveViewContent(day_view);
+  setTimeout(() => {
+    window.location.href = "/day-look";
+  }, 300);
+});
+
+year_view.addEventListener("click", () => {
+  moveViewContent(year_view);
+  setTimeout(() => {
+    window.location.href = "/year-look";
+  }, 300);
+});

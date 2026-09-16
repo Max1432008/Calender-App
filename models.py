@@ -45,7 +45,6 @@ class Event(Base):
     day_end = Column(DateTime, nullable=False)
     content = Column(Text, nullable=False)
     #
-
     calender_typ_id = Column(Integer, ForeignKey("Calender_typ.id"))
     calender_typ = relationship("Calender_typ", back_populates="events")
 

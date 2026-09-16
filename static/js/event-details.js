@@ -175,11 +175,6 @@ function create_More(klon_event, container, Events) {
       });
     });
 
-    const delete_event = document.createElement("button");
-    delete_event.classList.add("delete-event-btn");
-    delete_event.innerText = "Löschen";
-    popup.appendChild(delete_event);
-
     document.body.appendChild(popup);
 
     const rect = e.currentTarget.getBoundingClientRect();

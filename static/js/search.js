@@ -31,27 +31,17 @@ async function find_search() {
   for (let i = 0; i < events.length; i++) {
     const event = events[i];
     const eventTitle = event.title.toLowerCase();
+    const eventPlace = event.place.toLowerCase();
     const eventDescription = event.content.toLowerCase();
 
     const searchResultTemplate = document.getElementById(
       "search-result-template",
     );
 
-    console.log("Suchbegriff:", searchTerm);
-    console.log("Titel:", event.title);
-    console.log("Beschreibung:", event.content);
-    console.log(
-      "Titel Treffer:",
-      event.title.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-    console.log(
-      "Beschreibung Treffer:",
-      event.content.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-
     if (
       eventTitle.includes(searchTerm.toLowerCase()) ||
-      eventDescription.includes(searchTerm.toLowerCase())
+      eventDescription.includes(searchTerm.toLowerCase()) ||
+      eventPlace.includes(searchTerm.toLowerCase())
     ) {
       const searchResultClone = searchResultTemplate.content.cloneNode(true);
       const titleElement = searchResultClone.querySelector(
@@ -60,12 +50,72 @@ async function find_search() {
       const descriptionElement = searchResultClone.querySelector(
         ".search-result-description",
       );
+      const dateElement = searchResultClone.querySelector(
+        ".search-result-date",
+      );
+      const timeStartElement = searchResultClone.querySelector(
+        ".search-result-time-start",
+      );
+      const timeEndElement = searchResultClone.querySelector(
+        ".search-result-time-end",
+      );
+      const search_button_event =
+        searchResultClone.querySelector(".search-result");
 
       foundEvent = true;
-      console.log("Gefundenes Event:", event);
+      const timeStart = event.day_start.split("T")[1].slice(0, 5);
+      const timeEnd = event.day_end.split("T")[1].slice(0, 5);
+      const date = event.day_start.split("T")[0];
 
       titleElement.textContent = event.title;
-      descriptionElement.textContent = event.content;
+      if (eventDescription.includes(searchTerm.toLowerCase())) {
+        descriptionElement.textContent = event.content;
+      } else {
+        descriptionElement.textContent = event.place;
+      }
+      dateElement.textContent = date;
+      timeStartElement.textContent = `${timeStart}`;
+      timeEndElement.textContent = `${timeEnd}`;
+
+      search_button_event.addEventListener("click", async () => {
+        console.log("Clicked on event:", event.title);
+
+        const date = event.day_start.split("T")[0];
+        const [year, month] = date.split("-");
+
+        if (JAHR !== Number(year) || MONAT !== Number(month)) {
+          JAHR = Number(year);
+          MONAT = Number(month);
+          updateMonthTitle(JAHR, MONAT);
+          await create_calender_day();
+        }
+
+        const gefundenesEvent = events.find(
+          (eventAusArray) => eventAusArray.id === event.id,
+        );
+        if (gefundenesEvent) {
+          const eventElement = document.querySelector(
+            `.event[data-event-id="${gefundenesEvent.id}"]`,
+          );
+          if (eventElement) {
+            const scrollY = window.scrollY;
+
+            eventElement.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+
+            window.scrollTo({
+              top: scrollY,
+            });
+            eventElement.classList.add("highlight");
+            setTimeout(() => {
+              eventElement.classList.remove("highlight");
+            }, 2000);
+          }
+        }
+      });
+
       search_append_container.appendChild(searchResultClone);
     }
   }
@@ -120,6 +170,8 @@ searchInput.addEventListener("focus", () => {
 });
 
 searchInput.addEventListener("input", () => {
+  searchButtonClickAnimation();
+
   if (searchInput.value.trim() !== "") {
     searchButtonShow();
   } else {

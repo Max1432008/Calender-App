@@ -251,6 +251,13 @@
                       </svg>
                     -->
               </button>
+              <button class="icon-btn delete-sheet-btn">
+                <img
+                  class="icon-btn-img"
+                  src="/static/img/delete_icon.svg"
+                  alt=""
+                />
+              </button>
             </div>
 
             <h1>Event hinzufügen</h1>
@@ -394,10 +401,19 @@
 
     <!-- Templates SEARCH ERGEBNISSE -->
     <template id="search-result-template">
-      <div class="search-result">
-        <h3 class="search-result-title"></h3>
-        <p class="search-result-description"></p>
-      </div>
+      <button class="search-result">
+        <div class="left-search-result">
+          <p class="search-result-date"></p>
+          <div class="search-result-title"></div>
+        </div>
+        <div class="middle-search-result">
+          <div class="search-result-description"></div>
+        </div>
+        <div class="right-search-result">
+          <div class="search-result-time-start"></div>
+          <div class="search-result-time-end"></div>
+        </div>
+      </button>
     </template>
 
     <script src="/static/js/calendar-colors.js"></script>

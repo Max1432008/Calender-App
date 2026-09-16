@@ -15,7 +15,10 @@ function typeText(element, text, speed = 50) {
 
 function hidden_sheet(append_objekt, objekt) {
   sheet_out = false;
+  sheet_visible = false;
+
   append_objekt.replaceChildren();
+
   objekt.style.display = "none";
-  objekt.style.opacity = 0;
+  objekt.style.opacity = "0";
 }

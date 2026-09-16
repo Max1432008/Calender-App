@@ -47,6 +47,7 @@ const Back_button = document.getElementById("back-button");
 const Save_button = document.getElementById("save-btn");
 
 let sheet_out = false;
+let sheet_visible = false;
 let draftKalender = { name: "", shared_with: "", color: "" };
 
 const close_sheet_btn = document.querySelector(".close-sheet-btn");
@@ -74,9 +75,11 @@ check_btn.addEventListener("click", () => {
 });
 
 function give_save_data() {
-  const name_input = document.querySelector(".kalender-name");
-  const write_color = document.querySelector(".write-color");
-  const shared_with = document.querySelector(".shared-with");
+  const name_input = document.querySelector(".kalender-name") || { value: "" };
+  const write_color = document.querySelector(".write-color") || {
+    textContent: "",
+  };
+  const shared_with = document.querySelector(".shared-with") || { value: "" };
 
   return {
     name: name_input.value,
@@ -146,14 +149,14 @@ function color_kalender() {
 }
 
 function create_tmp_kalender_side() {
-  sheet_append.innerHTML = "";
-  const klon = template_new_calender.content.cloneNode(true);
-
   Back_button.style.display = "none";
   Save_button.style.opacity = "1";
+  sheet_append.innerHTML = "";
+  const klon = template_new_calender.content.cloneNode(true);
   const button_color = klon.querySelector(".button-color");
   const name_input = klon.querySelector(".kalender-name");
   const shared_with = klon.querySelector(".shared-with");
+
   button_color.addEventListener("click", (event) => {
     event.stopPropagation();
     color_kalender();
@@ -220,18 +223,21 @@ function save_Kalender() {
 }
 
 function see_sheet() {
-  sheet.style.opacity = 1;
+  sheet.style.display = "block";
+  sheet.style.opacity = "1";
+  sheet_visible = true;
+
   create_tmp_kalender_side();
 }
 
-add_kalender.addEventListener("click", () => {
-  if (!sheet_out || !sheet_append.hasChildNodes()) {
+add_kalender.addEventListener("click", (event) => {
+  event.stopPropagation();
+
+  if (!sheet_visible) {
     see_sheet();
   } else {
     hidden_sheet(sheet_append, sheet);
   }
-
-  sheet_out = sheet_out ? false : true;
 });
 
 document.addEventListener("click", (event) => {

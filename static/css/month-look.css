@@ -10,6 +10,7 @@ body {
   font-optical-sizing: auto;
   font-style: normal;
   font-variation-settings: "wdth" 150;
+  font-wight: 500; /* dünn */
 }
 
 :root {
@@ -19,13 +20,12 @@ body {
 .Week-day {
   font-optical-sizing: auto;
   font-style: normal;
-
-  font-variation-settings: "wdth" 300;
+  font-weight: 500; /* dünn */
 
   display: flex;
   align-items: center;
   margin-left: 10px;
-  font-size: 30px;
+  font-size: 35px;
 
   padding: 5px;
   border-radius: 10px;

@@ -124,22 +124,83 @@ async function createEvent(container, Events) {
   content.appendChild(klon);
 }
 
-async function renderEventsForDay(container, year, month, day, Events) {
-  if (!Array.isArray(Events)) {
-    console.error("Events ist kein Array:", Events);
+async function renderEventsForDay(container, year, month, day, eventList) {
+  if (!Array.isArray(eventList)) {
+    console.error("eventList ist kein Array:", eventList);
     return;
   }
 
-  for (let i = 0; i < Events.length; i++) {
-    const eventStart = new Date(Events[i].day_start);
-    const eventEnd = new Date(Events[i].day_end);
+  for (let i = 0; i < eventList.length; i++) {
+    const eventStart = new Date(eventList[i].day_start);
+    const eventEnd = new Date(eventList[i].day_end);
     const currentDay = new Date(year, month - 1, day);
 
+    // Uhrzeit entfernen, damit nur das Datum verglichen wird
     eventStart.setHours(0, 0, 0, 0);
     eventEnd.setHours(0, 0, 0, 0);
+    currentDay.setHours(0, 0, 0, 0);
 
-    if (currentDay >= eventStart && currentDay <= eventEnd) {
-      createEvent(container, Events[i]);
+    const repeat = eventList[i].repeat;
+
+    // =========================
+    // Keine Wiederholung
+    // =========================
+    if (repeat === "Nie") {
+      if (currentDay >= eventStart && currentDay <= eventEnd) {
+        createEvent(container, eventList[i]);
+      }
+    }
+
+    // =========================
+    // Wöchentliche Wiederholung
+    // =========================
+    else if (repeat === "Wöchentlich") {
+      const diffMs = currentDay.getTime() - eventStart.getTime();
+      console.log(repeat);
+      const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+      console.log("Event:", eventList[i].title, "diffDays:", diffDays);
+
+      if (diffDays >= 0 && diffDays % 7 === 0) {
+        createEvent(container, eventList[i]);
+      }
+    }
+
+    // =========================
+    // Tägliche Wiederholung
+    // =========================
+    else if (repeat === "Täglich") {
+      const diffMs = currentDay.getTime() - eventStart.getTime();
+      const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+      if (diffDays >= 0) {
+        createEvent(container, eventList[i]);
+      }
+    }
+
+    // =========================
+    // Monatliche Wiederholung
+    // =========================
+    else if (repeat === "Monatlich") {
+      if (
+        currentDay.getDate() === eventStart.getDate() &&
+        currentDay >= eventStart
+      ) {
+        createEvent(container, eventList[i]);
+      }
+    }
+
+    // =========================
+    // Jährliche Wiederholung
+    // =========================
+    else if (repeat === "Jährlich") {
+      if (
+        currentDay.getDate() === eventStart.getDate() &&
+        currentDay.getMonth() === eventStart.getMonth() &&
+        currentDay >= eventStart
+      ) {
+        createEvent(container, eventList[i]);
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ const TODAY_JAHR = DATE.getFullYear();
 
 let JAHR = DATE.getFullYear();
 let MONAT = DATE.getMonth() + 1;
+let events = [];
 
 const prevMonthButton = document.getElementById("prev-month");
 const nextMonthButton = document.getElementById("next-month");
@@ -61,12 +62,9 @@ let month_count = 0;
 updateMonthTitle(JAHR, MONAT);
 let start = 0;
 
-let events = [];
-
 async function loadEvents() {
   events = await upload_kalender_typen();
   console.log("EVENTS GELADEN:", events);
-  console.log("Anfang:", events[4].time_start);
 }
 
 async function create_calender_day() {

@@ -25,7 +25,7 @@ let eventCreatePayload = {
   time_end: "",
   content: "",
   color: "",
-  calender_typ_id: null,
+  calender_typ_id: "",
 };
 
 function upload_event(eventCreatePayload) {
@@ -54,6 +54,7 @@ function saveDraftCalendarEvent(sheet, draftCalendar) {
   const timeStartInput = sheet.querySelector(".time-start-input");
   const timeEndInput = sheet.querySelector(".time-end-input");
   const contentTextarea = sheet.querySelector(".textarea-more");
+  const repeatSelect = sheet.querySelector(".repeat-select");
 
   if (
     titleInput.value === "" ||
@@ -75,6 +76,7 @@ function saveDraftCalendarEvent(sheet, draftCalendar) {
   eventCreatePayload.time_end = timeEndInput.value;
   eventCreatePayload.calender_typ_id = draftCalendar.calendarTypeId;
   eventCreatePayload.content = contentTextarea.value;
+  eventCreatePayload.repeat = repeatSelect.value;
   eventCreatePayload.color = draftCalendar.color;
 
   return eventCreatePayload;

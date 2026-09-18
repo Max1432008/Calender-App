@@ -20,6 +20,9 @@ function Update_Event_GET_Data(popup, eventData) {
   const timeStartInput = popup.querySelector(".time-start-input");
   const timeEndInput = popup.querySelector(".time-end-input");
   const contentTextarea = popup.querySelector(".textarea-more");
+  const repeatSelect = popup.querySelector(".repeat-select");
+
+  console.log(repeatSelect.value);
 
   return {
     eventId: eventData.id,
@@ -36,6 +39,7 @@ function Update_Event_GET_Data(popup, eventData) {
     calender_typ_id: draftCalendar.calendarTypeId,
     color: draftCalendar.color,
     content: contentTextarea.value,
+    repeat: repeatSelect.value,
   };
 }
 
@@ -118,6 +122,7 @@ function update_Event(container, payload, eventData) {
     day_end: combineDateAndTime(payload.day_end, payload.time_end),
     calender_typ_id: payload.calender_typ_id,
     content: payload.content,
+    repeat: payload.repeat,
     color: payload.color,
   };
 

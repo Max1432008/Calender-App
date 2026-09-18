@@ -43,6 +43,7 @@ class Event(Base):
     hole_day = Column(Boolean, nullable=False)
     day_start = Column(DateTime, nullable=False)
     day_end = Column(DateTime, nullable=False)
+    repeat = Column(String(200), nullable=False)
     content = Column(Text, nullable=False)
     #
     calender_typ_id = Column(Integer, ForeignKey("Calender_typ.id"))

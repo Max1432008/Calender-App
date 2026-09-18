@@ -93,7 +93,7 @@ def save_event():
     time_str_end = event_data["time_end"]  # "15:30"
 
     day_end = datetime.strptime(f"{date_str_end} {time_str_end}", "%Y-%m-%d %H:%M")
-    
+
 
     neues_event = Event(
         user_id = user_id,
@@ -103,6 +103,7 @@ def save_event():
         day_start=day_start,
         day_end=day_end,
         content=event_data["content"],
+        repeat=event_data["repeat"],
         calender_typ_id=event_data["calender_typ_id"],
     )
 
@@ -160,6 +161,7 @@ def update_event_data():
     event.day_start = day_start
     event.day_end=day_end
     event.content=event_data["content"]
+    event.repeat=event_data["repeat"]
     event.calender_typ_id=event_data["calender_typ_id"]
     
 
@@ -196,6 +198,7 @@ def get_events():
             "day_end": k.day_end.isoformat(),
             "calender_typ_id": k.calender_typ_id,
             "content": k.content,
+            "repeat": k.repeat,
             "color": k.calender_typ.color if k.calender_typ else None,
         })    
     db_session.close()
@@ -208,4 +211,49 @@ def get_events():
 
 
 
+
+
+
+
+
+
+
+@kalender.route("/delete-event", methods=["POST"])
+def delete_event():
+    user_id = flask_session.get("user_id")
+    db_session = Session()
+
+    data = request.get_json(silent=True) or {}
+
+    print("REGISTER:", data)
+
+    event_id = data.get("eventId")
+
+    if not event_id:
+        db_session.close()
+        return jsonify({
+            "success": False,
+            "error": "Keine Event-ID"
+        })
+
+    event = db_session.query(Event).filter_by(
+        id=event_id,
+        user_id=user_id
+    ).first()
+
+    if not event:
+        db_session.close()
+        return jsonify({
+            "success": False,
+            "error": "Event nicht gefunden"
+        })
+
+    db_session.delete(event)
+    db_session.commit()
+    db_session.close()
+
+    return jsonify({
+        "success": True,
+        "message": "Event gelöscht"
+    })
 

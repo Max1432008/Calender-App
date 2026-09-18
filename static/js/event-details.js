@@ -68,6 +68,31 @@ function create_More(klon_event, container, Events) {
 
     const closeSheetBtn = klon.querySelector(".close-sheet-btn");
     const saveEventBtn = klon.querySelector(".save-event-btn");
+    const deleteBtn = klon.querySelector(".delete-sheet-btn");
+
+    deleteBtn.addEventListener("click", async () => {
+      console.log("DELETE BUTTON");
+      console.log("Event-ID:", Events.id);
+
+      const response = await fetch("/delete-event", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          eventId: Events.id,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+      console.log(data);
+
+      if (data.success) {
+        await loadEvents();
+        await create_calender_day();
+      }
+    });
 
     timeStartInput.addEventListener("change", () => {
       const [hours, minutes] = timeStartInput.value.split(":").map(Number);

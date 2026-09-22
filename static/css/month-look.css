@@ -65,7 +65,7 @@ body {
 
 .container-calender {
   min-height: 170px; /* statt 92% */
-  height: 170px; /* NEU */
+  height: 70px; /* NEU */
   overflow: scroll;
   padding: 7px;
   border-radius: 10px;

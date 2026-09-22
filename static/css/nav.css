@@ -110,8 +110,8 @@ nav button > img {
   overflow-y: auto;
   height: 85%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  align-items: start;
   flex-direction: column;
 }
 

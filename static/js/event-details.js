@@ -90,7 +90,8 @@ function create_More(klon_event, container, Events) {
 
       if (data.success) {
         await loadEvents();
-        await create_calender_day();
+        await create_calender_day(events);
+        popup.remove();
       }
     });
 

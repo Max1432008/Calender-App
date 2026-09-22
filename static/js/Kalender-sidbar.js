@@ -68,7 +68,7 @@ check_btn.addEventListener("click", () => {
     return;
   } else {
     save_Kalender().then(() => {
-      upload_kalender_typen();
+      upload_kalender_liste();
       hidden_sheet(sheet_append, sheet);
     });
   }
@@ -194,7 +194,7 @@ function createCalenderItem(name, colorId) {
   calendar_list.appendChild(klon);
 }
 
-function upload_kalender_typen() {
+function upload_kalender_liste() {
   fetch("/get-kalneder-typen")
     .then((response) => response.json())
     .then((data) => {
@@ -253,7 +253,7 @@ document.addEventListener("click", (event) => {
 //*
 
 document.addEventListener("DOMContentLoaded", () => {
-  upload_kalender_typen();
+  upload_kalender_liste();
 
   const sidebarOut = localStorage.getItem("sidebar_out");
 

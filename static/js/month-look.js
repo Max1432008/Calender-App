@@ -29,7 +29,16 @@ async function upload_kalender_typen() {
   }
 
   const data_event = await response.json();
-  return sortEventsByTime(data_event.message) || [];
+
+  console.log("ANTWORT VON /get-event-typen:", data_event);
+  console.log("MESSAGE:", data_event.message);
+
+  if (!Array.isArray(data_event.message)) {
+    console.error("/get-event-typen liefert kein Array:", data_event);
+    return [];
+  }
+
+  return sortEventsByTime(data_event.message);
 }
 
 function updatePopupPosition(popup, event) {

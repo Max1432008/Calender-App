@@ -63,7 +63,12 @@ updateMonthTitle(JAHR, MONAT);
 let start = 0;
 
 async function loadEvents() {
-  events = await upload_kalender_typen();
+  const neueEvents = await upload_kalender_typen();
+
+  console.log("NEUE EVENTS:", neueEvents);
+  console.log("IST ARRAY:", Array.isArray(neueEvents));
+
+  events = neueEvents;
   console.log("EVENTS GELADEN:", events);
 }
 

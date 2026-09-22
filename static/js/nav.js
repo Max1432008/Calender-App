@@ -246,11 +246,13 @@ function select_sheet_create(sheet, container) {
     upload_kalender_color(sheet, select_append);
   });
 
-  save_event_btn.addEventListener("click", (event) => {
+  save_event_btn.addEventListener("click", async (event) => {
     event.stopPropagation();
 
     const payload = saveDraftCalendarEvent(sheet, draftCalendar);
     upload_event(payload);
+    await loadEvents();
+    await create_calender_day(events);
 
     //! kommt zum schluss
     hidden_sheet(select_append, sheet);

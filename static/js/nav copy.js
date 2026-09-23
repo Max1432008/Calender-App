@@ -179,30 +179,35 @@ function change_time(hours, minutes, time_end_input) {
     String(date.getMinutes()).padStart(2, "0");
 }
 
-function create_Kard(ort, placeMap, state) {
+function create_Kard(ort, placeMap, map, marker) {
   const latitude = Number(ort.latitude);
   const longitude = Number(ort.longitude);
 
   placeMap.style.display = "block";
 
-  if (!state.map) {
-    state.map = L.map(placeMap).setView([latitude, longitude], 15);
+  if (!map) {
+    map = L.map(placeMap).setView([latitude, longitude], 15);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap",
-    }).addTo(state.map);
+    }).addTo(map);
   } else {
-    state.map.setView([latitude, longitude], 15);
+    map.setView([latitude, longitude], 15);
   }
 
-  if (state.marker) {
-    state.marker.remove();
+  if (marker) {
+    marker.remove();
   }
 
-  state.marker = L.marker([latitude, longitude])
-    .addTo(state.map)
+  marker = L.marker([latitude, longitude])
+    .addTo(map)
     .bindPopup(ort.name)
     .openPopup();
+
+  return {
+    map: map,
+    marker: marker,
+  };
 }
 
 async function place_data(placeInput) {
@@ -227,7 +232,7 @@ function button_place_click(placeInput, ort) {
   placeInput.value = ort.name;
 }
 
-async function find_place(placeInput, sheet, kartenState) {
+async function find_place(placeInput, sheet, map, marker) {
   console.log("focus out", placeInput.value);
 
   document.querySelectorAll(".place-result-container").forEach((container) => {
@@ -240,29 +245,31 @@ async function find_place(placeInput, sheet, kartenState) {
 
   const rect = placeInput.getBoundingClientRect();
 
-  container_places.style.left = `${rect.left + 420}px`;
+  container_places.style.left = `${rect.left + 450}px`;
   container_places.style.top = `${rect.bottom + 5}px`;
   container_places.style.width = `${rect.width}px`;
 
   const Standort_daten = await place_data(placeInput);
 
   for (let i = 0; i < Standort_daten.message.length; i++) {
+    console.log(i);
     const button_place = document.createElement("button");
     button_place.classList.add("place-result-button");
 
-    const ortDaten = Standort_daten.message[i];
+    let ort = Standort_daten.message[i];
 
-    const ortName = ortDaten.name
+    ort = ort.name
       .replace(/\b\d{5}\b/, "")
       .replace(", Deutschland", "")
       .trim();
 
-    button_place.innerText = ortName;
+    button_place.innerText = ort;
+
     container_places.appendChild(button_place);
 
     button_place.addEventListener("click", () => {
-      button_place_click(placeInput, ortDaten);
-      create_Kard(ortDaten, placeMap, kartenState);
+      button_place_click(placeInput, Standort_daten.message[i]);
+      create_Kard(ort, placeMap, map, marker);
     });
   }
   document.body.appendChild(container_places);
@@ -274,8 +281,8 @@ function select_sheet_create(sheet, container) {
   const placeInput = sheet.querySelector(".place-input");
   const placeMap = sheet.querySelector("#place-map");
 
-  const kartenState = { map: null, marker: null };
-  // let map = null; und let marker = null; löschen
+  let map = null;
+  let marker = null;
 
   const save_event_btn = sheet.querySelector(".save-event-btn");
   const close_sheet_btn = sheet.querySelector(".close-sheet-btn");
@@ -290,8 +297,9 @@ function select_sheet_create(sheet, container) {
   });
 
   placeInput.addEventListener("input", async () => {
-    await find_place(placeInput, sheet, kartenState);
+    await find_place(placeInput, sheet, map, marker);
   });
+
   placeInput.addEventListener("change", async () => {
     const place = placeInput.value.trim();
 
@@ -313,7 +321,7 @@ function select_sheet_create(sheet, container) {
     const Standort_daten = await place_data(placeInput);
 
     const ort = Standort_daten.message[0];
-    create_Kard(ort, placeMap, kartenState);
+    create_Kard(ort, placeMap, map, marker);
   });
 
   // Anfangsdatum setzen
@@ -395,11 +403,6 @@ function select_sheet_create(sheet, container) {
       !placeResult
     ) {
       hidden_sheet(select_append, select_append);
-      document
-        .querySelectorAll(".place-result-container")
-        .forEach((container) => {
-          container.remove();
-        });
     }
   });
 }

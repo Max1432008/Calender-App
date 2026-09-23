@@ -19,6 +19,11 @@
       href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
   </head>
   <body>
     <div class="app-layout">
@@ -297,6 +302,7 @@
           </div>
           <hr class="trenner" />
           <input type="text" placeholder="Standort" class="place-input" />
+          <div id="place-map"></div>
         </div>
         <div class="more-trenner">
           <div class="event-card">
@@ -340,6 +346,7 @@
             placeholder="Notizen hinzufügen..."
           ></textarea>
         </div>
+        <div class="container-places"></div>
       </div>
     </template>
 
@@ -416,6 +423,7 @@
       </button>
     </template>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="/static/js/calendar-colors.js"></script>
     <script src="/static/js/main_settings.js"></script>
     <script src="/static/js/search.js"></script>

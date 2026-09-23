@@ -179,9 +179,78 @@ function change_time(hours, minutes, time_end_input) {
     String(date.getMinutes()).padStart(2, "0");
 }
 
+async function place_data(placeInput) {
+  const response = await fetch("/search-place", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      kalender_data: placeInput.value,
+    }),
+  });
+
+  const data = await response.json();
+
+  console.log("Erfolgreich angekommen", data);
+
+  return data;
+}
+
+function button_place_click(placeInput, ort) {
+  placeInput.value = ort.name;
+}
+
+async function find_place(placeInput, sheet) {
+  console.log("focus out", placeInput.value);
+
+  document.querySelectorAll(".place-result-container").forEach((container) => {
+    container.remove();
+  });
+
+  const container_places = document.createElement("div");
+  container_places.classList.add("place-result-container");
+
+  const rect = placeInput.getBoundingClientRect();
+
+  container_places.style.left = `${rect.left + 400}px`;
+  container_places.style.top = `${rect.bottom + 5}px`;
+  container_places.style.width = `${rect.width}px`;
+
+  const Standort_daten = await place_data(placeInput);
+
+  for (let i = 0; i < Standort_daten.message.length; i++) {
+    console.log(i);
+    const button_place = document.createElement("button");
+    button_place.classList.add("place-result-button");
+
+    let ort = Standort_daten.message[i];
+
+    ort = ort.name
+      .replace(/\b\d{5}\b/, "")
+      .replace(", Deutschland", "")
+      .trim();
+
+    button_place.innerText = ort;
+
+    container_places.appendChild(button_place);
+
+    button_place.addEventListener("click", () => {
+      button_place_click(placeInput, i);
+    });
+  }
+  document.body.appendChild(container_places);
+}
+
 function select_sheet_create(sheet, container) {
   const select_button = sheet.querySelector(".select-button");
   const select_append = sheet.querySelector(".select-append");
+  const placeInput = sheet.querySelector(".place-input");
+  const placeMap = sheet.querySelector("#place-map");
+
+  let map = null;
+  let marker = null;
+
   const save_event_btn = sheet.querySelector(".save-event-btn");
   const close_sheet_btn = sheet.querySelector(".close-sheet-btn");
   const day_start_input = sheet.querySelector(".day-start-input");
@@ -192,6 +261,53 @@ function select_sheet_create(sheet, container) {
   time_start_input.addEventListener("change", () => {
     const [hours, minutes] = time_start_input.value.split(":").map(Number);
     change_time(hours, minutes, time_end_input);
+  });
+
+  placeInput.addEventListener("input", async () => {
+    await find_place(placeInput, sheet);
+  });
+
+  placeInput.addEventListener("change", async () => {
+    const place = placeInput.value.trim();
+
+    if (place === "") {
+      return;
+    }
+
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(place)}`,
+    );
+
+    const data = await response.json();
+
+    if (data.length === 0) {
+      console.log("Ort nicht gefunden");
+      return;
+    }
+
+    const latitude = Number(data[0].lat);
+    const longitude = Number(data[0].lon);
+
+    placeMap.style.display = "block";
+
+    if (!map) {
+      map = L.map(placeMap).setView([latitude, longitude], 15);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap",
+      }).addTo(map);
+    } else {
+      map.setView([latitude, longitude], 15);
+    }
+
+    if (marker) {
+      marker.remove();
+    }
+
+    marker = L.marker([latitude, longitude])
+      .addTo(map)
+      .bindPopup(place)
+      .openPopup();
   });
 
   // Anfangsdatum setzen

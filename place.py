@@ -1,38 +1,89 @@
+from flask import Blueprint, request, jsonify, session as flask_session
+from models import Session, Calender_typ, Event
+from datetime import datetime
+
 import requests
 requests.packages.urllib3.util.connection.HAS_IPV6 = False
 
+place = Blueprint("place", __name__)
 
 
-params = {
-    "q": "25832",
-    "format": "json",
-    "countrycodes": "de",
-    "limit": 10,
-    "addressdetails": 1
-}
+@place.route("/search-place", methods=["POST"])
+def search_place():
+    data = request.get_json(silent=True) or {}
+    place_data = data.get("kalender_data")
 
+    if not place_data:
+        return jsonify({
+            "success": False,
+            "error": "Keine Kalenderdaten"
+        })
 
-response = requests.get("https://nominatim.openstreetmap.org/search", params=params, timeout=5, headers={"User-Agent": "meine-kalender-app"})
-print(response.json())
+    params = {
+        "q": place_data,
+        "format": "json",
+        "countrycodes": "de",
+        "limit": 10,
+        "addressdetails": 1
+    }
 
-data = response.json()
-prioritaet = {
-    "city": 1,
-    "town": 2,
-    "village": 3,
-    "municipality": 4,
-    "suburb": 5,
-    "road": 6,
-    "residential": 7,
-    "house": 8,
-}
+    try:
+        response = requests.get(
+            "https://nominatim.openstreetmap.org/search",
+            params=params,
+            timeout=5,
+            headers={
+                "User-Agent": "meine-kalender-app"
+            }
+        )
 
-data.sort(key=lambda x: prioritaet.get(x.get("type"), 99))
+        response.raise_for_status()
+        data = response.json()
 
-print("Das ist der Display name")
-if data:
-    for data in data:
-        print(data["display_name"])
+    except requests.RequestException as error:
+        print("Fehler bei Nominatim:", error)
 
-else:
-    print("Kein Treffer gefunden")
+        return jsonify({
+            "success": False,
+            "error": "Ortssuche momentan nicht erreichbar"
+        }), 502
+
+    except ValueError as error:
+        print("Ungültige Antwort von Nominatim:", error)
+
+        return jsonify({
+            "success": False,
+            "error": "Ungültige Antwort der Ortssuche"
+        }), 502
+
+    prioritaet = {
+        "city": 1,
+        "town": 2,
+        "village": 3,
+        "municipality": 4,
+        "suburb": 5,
+        "road": 6,
+        "residential": 7,
+        "house": 8,
+    }
+
+    data.sort(
+        key=lambda x: prioritaet.get(
+            x.get("type"),
+            99
+        )
+    )
+
+    place_list = []
+
+    for ort in data:
+        place_list.append({
+            "name": ort.get("display_name", ""),
+            "latitude": ort.get("lat"),
+            "longitude": ort.get("lon")
+        })
+
+    return jsonify({
+        "success": True,
+        "message": place_list
+    })

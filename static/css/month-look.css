@@ -37,6 +37,7 @@ body {
   top: -20px;
   width: auto;
   height: 400px;
+  backdrop-filter: blur(15px);
 
   background-color: var(--more-calender-day);
 
@@ -57,14 +58,101 @@ body {
   border-radius: 8px;
   padding: 10px;
   font-size: 1rem;
-
+  position: relative;
   color: var(--text-primary);
   background-color: transparent;
   text-align: left;
+
+  gap: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .place-result-button:hover {
   background-color: var(--surface-hover);
+}
+
+/** Place Icon **/
+
+.place-icon-rectaround {
+  --place-icon-size: 40px;
+
+  --place-icon-border: calc(var(--place-icon-size) * 0.1);
+  --place-icon-border-color: #362477;
+
+  --place-icon-border-circle: calc(var(--place-icon-size) * 0.3);
+
+  --place-icon-height: calc(var(--place-icon-size) / 3);
+
+  --place-icon-dreieck: calc(var(--place-icon-size) / 5);
+
+  --place-icon-radius: calc(var(--place-icon-size) * 0.02);
+
+  position: relative;
+  display: flex;
+
+  flex-shrink: 0;
+
+  width: var(--place-icon-size);
+  height: var(--place-icon-size);
+
+  border-radius: 50%;
+
+  background: linear-gradient(#9988d5, #6246c9);
+
+  border: calc(var(--place-icon-border) / 2) solid
+    var(--place-icon-border-color);
+
+  box-sizing: border-box;
+}
+
+.place-icon-circle {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: var(--place-icon-border-circle);
+  height: var(--place-icon-border-circle);
+
+  border-radius: 50%;
+
+  background-color: var(--place-icon-border-color);
+
+  transform: translate(-50%, -120%);
+}
+
+.place-icon-rechteck {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: calc(var(--place-icon-border-circle) / 2.5);
+  height: var(--place-icon-height);
+
+  border-radius: var(--place-icon-radius);
+
+  background-color: var(--place-icon-border-color);
+
+  transform: translate(-50%, 0%);
+}
+
+.place-icon-dreieck {
+  position: absolute;
+
+  top: 100%;
+  left: 50%;
+
+  width: 0;
+  height: 0;
+
+  transform: translate(-50%, 20%);
+
+  border-left: var(--place-icon-dreieck) solid transparent;
+  border-right: var(--place-icon-dreieck) solid transparent;
+  border-top: var(--place-icon-dreieck) solid var(--place-icon-border-color);
 }
 
 .Week-day {
@@ -121,7 +209,7 @@ body {
   border-radius: 10px;
 
   background-color: var(--calender-day);
-  border: 1px solid rgba(78, 78, 78, 0.08);
+  border: 1px solid rgba(212, 56, 226, 0.08);
   box-shadow:
     0 0 10px var(--shadow),
     inset 0 0 0 1px rgba(255, 255, 255, 0.02);

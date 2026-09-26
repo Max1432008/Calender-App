@@ -190,7 +190,11 @@ function create_More(klon_event, container, Events) {
     });
 
     closeSheetBtn.addEventListener("click", () => {
+      popup.style.display = "none";
       popup.remove();
+
+      openPopup = null;
+      openContainer = null;
     });
 
     saveEventBtn.addEventListener("click", () => {
@@ -202,6 +206,12 @@ function create_More(klon_event, container, Events) {
     });
 
     document.body.appendChild(popup);
+
+    if (Events.place) {
+      const placeInput = popup.querySelector(".place-input");
+      placeInput.value = Events.place;
+    }
+    Kard_and_List(popup);
 
     const rect = e.currentTarget.getBoundingClientRect();
     popup.style.left = rect.left + "px";

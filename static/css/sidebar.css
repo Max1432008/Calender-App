@@ -225,6 +225,11 @@
   cursor: pointer;
 }
 
+.icon-btn:hover {
+  background: #69696c;
+  transition: all 0.5s ease;
+}
+
 .icon-btn-img {
   width: 25px;
   height: 25px;

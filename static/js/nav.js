@@ -179,103 +179,11 @@ function change_time(hours, minutes, time_end_input) {
     String(date.getMinutes()).padStart(2, "0");
 }
 
-function create_Kard(ort, placeMap, state) {
-  const latitude = Number(ort.latitude);
-  const longitude = Number(ort.longitude);
-
-  placeMap.style.display = "block";
-
-  if (!state.map) {
-    state.map = L.map(placeMap).setView([latitude, longitude], 15);
-
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap",
-    }).addTo(state.map);
-  } else {
-    state.map.setView([latitude, longitude], 15);
-  }
-
-  if (state.marker) {
-    state.marker.remove();
-  }
-
-  state.marker = L.marker([latitude, longitude])
-    .addTo(state.map)
-    .bindPopup(ort.name)
-    .openPopup();
-}
-
-async function place_data(placeInput) {
-  const response = await fetch("/search-place", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      kalender_data: placeInput.value,
-    }),
-  });
-
-  const data = await response.json();
-
-  console.log("Erfolgreich angekommen", data);
-
-  return data;
-}
-
-function button_place_click(placeInput, ort) {
-  placeInput.value = ort.name;
-}
-
-async function find_place(placeInput, sheet, kartenState) {
-  console.log("focus out", placeInput.value);
-
-  document.querySelectorAll(".place-result-container").forEach((container) => {
-    container.remove();
-  });
-
-  const container_places = document.createElement("div");
-  container_places.classList.add("place-result-container");
-  const placeMap = sheet.querySelector("#place-map");
-
-  const rect = placeInput.getBoundingClientRect();
-
-  container_places.style.left = `${rect.left + 420}px`;
-  container_places.style.top = `${rect.bottom + 5}px`;
-  container_places.style.width = `${rect.width}px`;
-
-  const Standort_daten = await place_data(placeInput);
-
-  for (let i = 0; i < Standort_daten.message.length; i++) {
-    const button_place = document.createElement("button");
-    button_place.classList.add("place-result-button");
-
-    const ortDaten = Standort_daten.message[i];
-
-    const ortName = ortDaten.name
-      .replace(/\b\d{5}\b/, "")
-      .replace(", Deutschland", "")
-      .trim();
-
-    button_place.innerText = ortName;
-    container_places.appendChild(button_place);
-
-    button_place.addEventListener("click", () => {
-      button_place_click(placeInput, ortDaten);
-      create_Kard(ortDaten, placeMap, kartenState);
-    });
-  }
-  document.body.appendChild(container_places);
-}
-
 function select_sheet_create(sheet, container) {
   const select_button = sheet.querySelector(".select-button");
   const select_append = sheet.querySelector(".select-append");
   const placeInput = sheet.querySelector(".place-input");
   const placeMap = sheet.querySelector("#place-map");
-
-  const kartenState = { map: null, marker: null };
-  // let map = null; und let marker = null; löschen
 
   const save_event_btn = sheet.querySelector(".save-event-btn");
   const close_sheet_btn = sheet.querySelector(".close-sheet-btn");
@@ -289,32 +197,8 @@ function select_sheet_create(sheet, container) {
     change_time(hours, minutes, time_end_input);
   });
 
-  placeInput.addEventListener("input", async () => {
-    await find_place(placeInput, sheet, kartenState);
-  });
-  placeInput.addEventListener("change", async () => {
-    const place = placeInput.value.trim();
-
-    if (place === "") {
-      return;
-    }
-
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(place)}`,
-    );
-
-    const data = await response.json();
-
-    if (data.length === 0) {
-      console.log("Ort nicht gefunden");
-      return;
-    }
-
-    const Standort_daten = await place_data(placeInput);
-
-    const ort = Standort_daten.message[0];
-    create_Kard(ort, placeMap, kartenState);
-  });
+  //!   hier wird die Funktion aufgerufen
+  Kard_and_List(sheet);
 
   // Anfangsdatum setzen
   const heute = new Date();
@@ -373,7 +257,6 @@ function select_sheet_create(sheet, container) {
 
     const payload = saveDraftCalendarEvent(sheet, draftCalendar);
     upload_event(payload);
-    await loadEvents();
     await create_calender_day(events);
 
     //! kommt zum schluss
@@ -405,10 +288,17 @@ function select_sheet_create(sheet, container) {
 }
 
 add_Event_btn.addEventListener("click", (event) => {
+  console.log("hier klick");
   event.stopPropagation();
   if (!document.getElementById("more-calender-day")) {
     const klon = More_Envent_Info.content.cloneNode(true);
     const popup = klon.querySelector("#more-calender-day");
+
+    const delete_button = klon.querySelector(".delete-sheet-btn");
+    delete_button.style.opacity = "0";
+
+    popup.style.display = "block";
+    popup.style.opacity = "1";
 
     document.body.appendChild(klon);
 
@@ -417,6 +307,9 @@ add_Event_btn.addEventListener("click", (event) => {
     popup.style.top = rect.bottom + "px";
 
     select_sheet_create(popup, append_Event);
+  } else {
+    document.getElementById("more-calender-day").remove();
+    return;
   }
 });
 

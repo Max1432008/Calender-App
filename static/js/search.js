@@ -69,9 +69,19 @@ async function find_search() {
 
       titleElement.textContent = event.title;
       if (eventDescription.includes(searchTerm.toLowerCase())) {
-        descriptionElement.textContent = event.content;
+        const eventContent = event.content
+          .toLowerCase()
+          .split(" ")
+          .slice(0, 5)
+          .join(" ");
+        descriptionElement.textContent = eventContent;
       } else {
-        descriptionElement.textContent = event.place;
+        const eventPlace = event.place
+          .toLowerCase()
+          .split(" ")
+          .slice(0, 5)
+          .join(" ");
+        descriptionElement.textContent = eventPlace;
       }
       dateElement.textContent = date;
       timeStartElement.textContent = `${timeStart}`;

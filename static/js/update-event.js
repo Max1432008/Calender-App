@@ -64,6 +64,11 @@ function Update_Event_Data(popup, eventData) {
     })
     .then((result) => {
       console.log("Erfolgreich gespeichert:", result);
+      popup.style.display = "none";
+      popup.remove();
+
+      openPopup = null;
+      openContainer = null;
       return payload;
     })
     .catch((error) => {

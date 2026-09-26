@@ -75,7 +75,9 @@ function updatePopupPosition(popup, event) {
 
 function setupPopup(popup, container) {
   document.addEventListener("click", function closePopup(event) {
-    if (!popup.contains(event.target)) {
+    const placeResult = event.target.closest(".place-result-container");
+
+    if (!popup.contains(event.target) && !placeResult) {
       popup.style.display = "none";
       popup.remove();
 

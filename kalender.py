@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, session as flask_session
-from models import Session, Calender_typ, Event
+from models import Session, Calender_typ, Event, User
 from datetime import datetime
 
 kalender = Blueprint("kalender", __name__)
@@ -255,5 +255,48 @@ def delete_event():
     return jsonify({
         "success": True,
         "message": "Event gelöscht"
+    })
+
+
+
+
+@kalender.route("/share-kalender", methods=["POST"])
+def share_kalender():
+    user_id = flask_session.get("user_id")
+    db_session = Session()
+
+    data = request.get_json(silent=True) or {}
+
+    print("REGISTER:", data)
+    kalender_id = data.get("kalender_id")
+    other_user_email = data.get("email")
+
+    if not kalender_id:
+        db_session.close()
+        return jsonify({"success": False, "error": "Keine Kalender-ID"})
+
+    kalender = db_session.query(Calender_typ).filter_by(id=kalender_id, user_id=user_id).first()
+    shared_user = db_session.query(User).filter_by(email=other_user_email).first()
+
+    print("Gesuchte Email:", repr(other_user_email))
+    print("Gefundener User:", shared_user)  
+    if kalender and shared_user:
+        kalender.shared_with.append(shared_user)
+
+
+        db_session.commit()
+        db_session.close()    
+
+
+
+        return jsonify({
+            "success": True,
+            "message": "Kalender geteilt"
+        })
+
+    db_session.close()
+    return jsonify({
+        "success": False,
+        "message": "Kalender PROBLEM"
     })
 

@@ -47,11 +47,10 @@ function button_place_click(placeInput, ort) {
 }
 
 async function find_place(placeInput, sheet, kartenState) {
-  console.log("focus out", placeInput.value);
+  let aktuelleSuche = 0;
+  const meineSuche = ++aktuelleSuche;
 
-  document.querySelectorAll(".place-result-container").forEach((container) => {
-    container.remove();
-  });
+  console.log("focus out", placeInput.value);
 
   const container_places = document.createElement("div");
   container_places.replaceChildren();
@@ -67,11 +66,17 @@ async function find_place(placeInput, sheet, kartenState) {
 
   const Standort_daten = await place_data(placeInput);
 
-  if (!Standort_daten || !Array.isArray(Standort_daten.message)) {
-    console.error("Keine gültigen Ortsdaten erhalten:", Standort_daten);
-
+  // Diese Suche ist inzwischen veraltet
+  if (meineSuche !== aktuelleSuche) {
     return;
   }
+
+  if (!Standort_daten || !Array.isArray(Standort_daten.message)) {
+    console.error("Keine gültigen Ortsdaten erhalten:", Standort_daten);
+    return;
+  }
+
+  // ...
 
   const bereitsAngezeigt = new Set();
   for (let i = 0; i < Standort_daten.message.length; i++) {
@@ -123,6 +128,11 @@ async function find_place(placeInput, sheet, kartenState) {
       create_Kard(ortDaten, placeMap, kartenState);
     });
   }
+
+  document.querySelectorAll(".place-result-container").forEach((container) => {
+    console.log(container, "das sind die Container");
+    container.remove();
+  });
 
   document.body.appendChild(container_places);
 }

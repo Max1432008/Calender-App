@@ -195,6 +195,12 @@ function create_More(klon_event, container, Events) {
 
       openPopup = null;
       openContainer = null;
+
+      document
+        .querySelectorAll(".place-result-container")
+        .forEach((container) => {
+          container.remove();
+        });
     });
 
     saveEventBtn.addEventListener("click", () => {

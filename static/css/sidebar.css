@@ -73,7 +73,10 @@
 }
 
 .sidebar-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   width: 100%;
   text-align: left;
   background: none;
@@ -132,13 +135,49 @@
   border: solid white;
   border-width: 0 3px 3px 0;
   transform: rotate(45deg) scale(0);
-  transition: transform 0.2s ease;
+  transition: transform 0.1s ease;
 }
 
 .custom-checkbox:hover .checkmark {
   border-color: var(--item-border, var(--profile-2));
   outline: none;
-  transform: scale(1.05);
+  transform: scale(1.1);
+}
+
+.details-around {
+  --size-details-around: 25px;
+  background-color: red;
+  margin-left: 10px;
+  width: var(--size-details-around);
+  height: var(--size-details-around);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1px;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.details-circle {
+  width: calc(var(--size-details-around) / 3.5);
+  height: calc(var(--size-details-around) / 3.5);
+  background-color: #20242d;
+  border-radius: 10px;
+}
+
+/*.sidebar-item:hover {
+  background-color: #ff3a3058;
+  transition: all 0.2 ease;
+}*/
+
+.sidebar-item:hover .details-around {
+  opacity: 1;
+}
+
+.details-around:hover {
+  transform: scale(1.1);
 }
 
 .custom-checkbox input:checked + .checkmark {

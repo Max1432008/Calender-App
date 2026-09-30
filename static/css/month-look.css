@@ -79,7 +79,7 @@ body {
   --place-icon-size: 40px;
 
   --place-icon-border: calc(var(--place-icon-size) * 0.1);
-  --place-icon-border-color: #362477;
+  --place-icon-border-color: #1c3f66;
 
   --place-icon-border-circle: calc(var(--place-icon-size) * 0.3);
 
@@ -99,8 +99,7 @@ body {
 
   border-radius: 50%;
 
-  background: linear-gradient(#9988d5, #6246c9);
-
+  background: linear-gradient(var(--accent), #2d6ef0);
   border: calc(var(--place-icon-border) / 2) solid
     var(--place-icon-border-color);
 
@@ -148,7 +147,7 @@ body {
   width: 0;
   height: 0;
 
-  transform: translate(-50%, 20%);
+  transform: translate(-50%, 10%);
 
   border-left: var(--place-icon-dreieck) solid transparent;
   border-right: var(--place-icon-dreieck) solid transparent;

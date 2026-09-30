@@ -293,6 +293,7 @@ def delete_event():
 
 
 
+
 @kalender.route("/share-kalender", methods=["POST"])
 def share_kalender():
     user_id = flask_session.get("user_id")
@@ -317,4 +318,12 @@ def share_kalender():
         return jsonify({"success": True, "message": "Kalender geteilt"})
 
     db_session.close()
-    return jsonify({"success": False, "error": "Kalender oder User nicht gefunden"})
+    return jsonify({
+        "success": False,
+        "error": "Kalender oder User nicht gefunden",
+        "message": "Kalender oder User nicht gefunden"
+    })
+
+
+
+

@@ -87,6 +87,12 @@ function setupPopup(popup, container) {
       openContainer = null;
 
       document.removeEventListener("click", closePopup);
+
+      document
+        .querySelectorAll(".place-result-container")
+        .forEach((container) => {
+          container.remove();
+        });
     }
   });
 }

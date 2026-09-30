@@ -48,42 +48,31 @@ const Save_button = document.getElementById("save-btn");
 
 let sheet_out = false;
 let sheet_visible = false;
-let sheet_mode = "create"; //* Ob neu erstellt oder updatet
 let draftKalender = { name: "", shared_with: "", color: "" };
-let currentKalenderId = null;
 
 const close_sheet_btn = document.querySelector(".close-sheet-btn");
 const check_btn = document.querySelector(".check-btn");
 
-function create_container_kalender() {
-  close_sheet_btn.addEventListener("click", () => {
-    hidden_sheet(sheet_append, sheet);
-  });
+close_sheet_btn.addEventListener("click", () => {
+  hidden_sheet(sheet_append, sheet);
+});
 
-  check_btn.addEventListener("click", () => {
-    if (
-      !draftKalender.name ||
-      draftKalender.name.trim() === "" ||
-      !draftKalender.color ||
-      draftKalender.color.trim() === ""
-    ) {
-      alert("Bitte geben Sie einen Namen und eine Farbe für den Kalender ein.");
-      return;
-    } else {
-      if (sheet_mode === "create") {
-        save_Kalender().then(() => {
-          upload_kalender_liste();
-          hidden_sheet(sheet_append, sheet);
-        });
-      } else if (sheet_mode === "update") {
-        update_Kalender().then(() => {
-          upload_kalender_liste();
-          hidden_sheet(sheet_append, sheet);
-        });
-      }
-    }
-  });
-}
+check_btn.addEventListener("click", () => {
+  if (
+    !draftKalender.name ||
+    draftKalender.name.trim() === "" ||
+    !draftKalender.color ||
+    draftKalender.color.trim() === ""
+  ) {
+    alert("Bitte geben Sie einen Namen und eine Farbe für den Kalender ein.");
+    return;
+  } else {
+    save_Kalender().then(() => {
+      upload_kalender_liste();
+      hidden_sheet(sheet_append, sheet);
+    });
+  }
+});
 
 function give_save_data() {
   const name_input = document.querySelector(".kalender-name") || { value: "" };
@@ -93,7 +82,6 @@ function give_save_data() {
   const shared_with = document.querySelector(".shared-with") || { value: "" };
 
   return {
-    id: currentKalenderId,
     name: name_input.value,
     shared_with: shared_with.value,
     color: write_color.textContent,
@@ -202,15 +190,7 @@ function show_details_calender(klon, kalenderId) {
 
   const kalender = kalenderListe.find((kalender) => kalender.id == kalenderId);
 
-  currentKalenderId = kalenderId;
-  sheet_mode = "update";
-
   if (!kalender) {
-    draftKalender = {
-      name: kalender.titel,
-      color: kalender.color,
-      shared_with: (kalender.shared_with || []).map((u) => u.email).join(", "),
-    };
     console.log("Kalender nicht gefunden");
 
     return;
@@ -299,30 +279,6 @@ function save_Kalender() {
   });
 }
 
-function update_Kalender() {
-  const kalender_data = give_save_data();
-
-  console.log("Kalender wird aktualisiert:", kalender_data);
-
-  return fetch("/update-kalender", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ kalender_data }),
-  }).then(async (response) => {
-    const text = await response.text();
-
-    console.log("Server Antwort:", text);
-
-    if (!response.ok) {
-      throw new Error(`Serverfehler ${response.status}: ${text}`);
-    }
-
-    return JSON.parse(text);
-  });
-}
-
 function see_sheet() {
   sheet.style.display = "block";
   sheet.style.opacity = "1";
@@ -357,7 +313,6 @@ document.addEventListener("DOMContentLoaded", () => {
   upload_kalender_liste();
 
   const sidebarOut = localStorage.getItem("sidebar_out");
-  create_container_kalender();
 
   if (sidebarOut === "true") {
     sidebar_out = true;

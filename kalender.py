@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, session as flask_session
-from models import Session, Calender_typ, Event
+from models import Session, Calender_typ, Event, User
 from datetime import datetime
 
 kalender = Blueprint("kalender", __name__)
@@ -24,12 +24,26 @@ def save_new_kalender():
         })
 
 
+    
     neuer_kalender = Calender_typ(
-        user_id = user_id, 
-        titel=kalender_data["name"],
-        color=kalender_data["color"],
-        #shared_with=kalender_data["shared_with"]
-    )
+            user_id=user_id,
+            titel=kalender_data["name"],
+            color=kalender_data["color"]
+        )
+
+    email = kalender_data.get("shared_with")
+
+    if email:
+        shared_user = db_session.query(User).filter_by(email=email).first()
+        if shared_user:
+            neuer_kalender.shared_with.append(shared_user)
+    else:
+        return jsonify({
+            "success": False,
+            "error": "Die Email ist nicht hinterlegt"
+        })
+
+
 
 
     db_session.add(neuer_kalender)
@@ -46,24 +60,37 @@ def save_new_kalender():
 def get_kaender():
     user_id = flask_session.get("user_id")
     db_session = Session()
-    kalender = db_session.query(Calender_typ).filter_by(user_id=user_id).all()
+
+    eigene_kalender = db_session.query(Calender_typ).filter_by(
+        user_id=user_id
+    ).all()
 
     daten = []
 
-    for k in kalender:
+    for k in eigene_kalender:
         daten.append({
             "id": k.id,
             "titel": k.titel,
-            "color": k.color
+            "color": k.color,
+            "shared_with": [
+                {
+                    "id": user.id,
+                    "name": user.name,
+                    "email": user.email
+                }
+                for user in k.shared_with
+            ]
         })
 
     db_session.close()
-
 
     return jsonify({
         "success": True,
         "message": daten
     })
+
+
+
 
 
 @kalender.route("/save-event", methods=["POST"])
@@ -184,7 +211,14 @@ def update_event_data():
 def get_events():
     user_id = flask_session.get("user_id")
     db_session = Session()
-    events = db_session.query(Event).filter_by(user_id=user_id).all()
+
+    user = db_session.query(User).filter_by(id=user_id).first()
+    eigene_kalender = db_session.query(Calender_typ).filter_by(user_id=user_id).all()
+    geteilte_kalender = user.kalender_typen
+
+    alle_ids = [k.id for k in eigene_kalender] + [k.id for k in geteilte_kalender]
+
+    events = db_session.query(Event).filter(Event.calender_typ_id.in_(alle_ids)).all()
 
     daten = []
 
@@ -257,3 +291,30 @@ def delete_event():
         "message": "Event gelöscht"
     })
 
+
+
+@kalender.route("/share-kalender", methods=["POST"])
+def share_kalender():
+    user_id = flask_session.get("user_id")
+    db_session = Session()
+
+    data = request.get_json(silent=True) or {}
+
+    kalender_id = data.get("kalender_id")
+    other_user_email = data.get("email")
+
+    if not kalender_id:
+        db_session.close()
+        return jsonify({"success": False, "error": "Keine Kalender-ID"})
+
+    kalender = db_session.query(Calender_typ).filter_by(id=kalender_id, user_id=user_id).first()
+    shared_user = db_session.query(User).filter_by(email=other_user_email).first()
+
+    if kalender and shared_user:
+        kalender.shared_with.append(shared_user)
+        db_session.commit()
+        db_session.close()
+        return jsonify({"success": True, "message": "Kalender geteilt"})
+
+    db_session.close()
+    return jsonify({"success": False, "error": "Kalender oder User nicht gefunden"})

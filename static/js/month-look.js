@@ -170,8 +170,6 @@ async function renderEventsForDay(container, year, month, day, eventList) {
       console.log(repeat);
       const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
 
-      console.log("Event:", eventList[i].title, "diffDays:", diffDays);
-
       if (diffDays >= 0 && diffDays % 7 === 0) {
         createEvent(container, eventList[i]);
       }

@@ -180,31 +180,75 @@ const calender_item_template = document.getElementById(
   "calender-item-template",
 );
 let calender_rounds = 10;
+let kalenderListe = [];
 
-function createCalenderItem(name, colorId) {
+function show_details_calender(klon, kalenderId) {
+  const name_input = document.querySelector(".kalender-name");
+  const write_color = document.querySelector(".write-color");
+  const shared_with = document.querySelector(".shared-with");
+  const button_color = document.querySelector(".button-color");
+
+  const kalender = kalenderListe.find((kalender) => kalender.id == kalenderId);
+
+  if (!kalender) {
+    console.log("Kalender nicht gefunden");
+
+    return;
+  }
+
+  name_input.value = kalender.titel;
+
+  write_color.textContent = kalender.color;
+  button_color.background = kalender.color;
+
+  shared_with.value = kalender.shared_with || "";
+}
+function createCalenderItem(name, colorId, kalenderId, shared_with) {
   const klon = calender_item_template.content.cloneNode(true);
 
   const item = klon.querySelector(".sidebar-item");
   const text = klon.querySelector(".text");
+  const details = klon.querySelector(".details-around");
+
+  item.dataset.kalenderId = kalenderId;
 
   item.style.setProperty("--item-bg", `var(--entry-${colorId})`);
   item.style.setProperty("--item-border", `var(--entry-${colorId})`);
   text.textContent = name;
+  details.style.background = `var(--entry-${colorId})`;
 
   calendar_list.appendChild(klon);
+
+  details.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    const kalenderId = item.dataset.kalenderId;
+
+    console.log("Kalender:", kalenderId);
+
+    see_sheet();
+    show_details_calender(klon, kalenderId);
+  });
 }
 
 function upload_kalender_liste() {
   fetch("/get-kalneder-typen")
     .then((response) => response.json())
     .then((data) => {
+      kalenderListe = data.message;
       calendar_list.innerHTML = "";
+
       data.message.forEach((kalender) => {
         const farbe = calendarColors.find(
           (color) => color.name.trim() === kalender.color.trim(),
         );
 
-        createCalenderItem(kalender.titel, farbe.id);
+        createCalenderItem(
+          kalender.titel,
+          farbe.id,
+          kalender.id,
+          kalender.shared_with,
+        );
       });
     });
 }
@@ -212,14 +256,25 @@ function upload_kalender_liste() {
 function save_Kalender() {
   const kalender_data = give_save_data();
 
+  console.log("kalneder daten", kalender_data);
+
   return fetch("/save-new-kalender", {
-    // <- return hinzugefügt
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({ kalender_data }),
-  })
-    .then((response) => response.json())
-    .then((data) => {});
+  }).then(async (response) => {
+    const text = await response.text();
+
+    console.log("Server Antwort:", text);
+
+    if (!response.ok) {
+      throw new Error(`Serverfehler ${response.status}: ${text}`);
+    }
+
+    return JSON.parse(text);
+  });
 }
 
 function see_sheet() {

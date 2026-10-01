@@ -343,6 +343,13 @@ body {
   width: 400px;
   height: 48vh;
   overflow-y: auto;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.35),
+    0 8px 20px rgba(0, 0, 0, 0.25),
+    0 0 30px color-mix(in srgb, var(--kalender-farbe) 20%, transparent);
+
+  border-left: 5px solid var(--kalender-farbe);
 }
 
 #more-calender-day {
@@ -517,11 +524,15 @@ textarea {
   background-color: var(--surface-hover);
 }
 
-.circle {
+.select-container .circle {
   width: 20px;
   height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  flex-shrink: 0;
   border-radius: 50%;
-  background-color: var(--entry-1);
+  display: block;
+  background-color: var(--kalender-farbe, var(--profile-2));
 }
 
 .select-button {

@@ -35,7 +35,6 @@ function change_time(hours, minutes, time_end_input) {
 
 function create_More(klon_event, container, Events) {
   const event = klon_event.querySelector(".event");
-
   event.addEventListener("click", (e) => {
     e.stopPropagation();
 
@@ -180,12 +179,27 @@ function create_More(klon_event, container, Events) {
 
     if (farbe) {
       circle.style.backgroundColor = `var(${farbe.var})`;
+      circle.style.display = "block";
+      popup.style.setProperty("--kalender-farbe", `var(${farbe.var})`);
     }
 
     get_color(Events.calender_typ_id).then((kalender) => {
       if (kalender) {
         console.log(kalender);
         selectButton.textContent = kalender.titel;
+
+        const kalenderFarbe = calendarColors.find(
+          (color) => color.name.trim() === (kalender.color ?? "").trim(),
+        );
+
+        if (kalenderFarbe) {
+          circle.style.backgroundColor = `var(${kalenderFarbe.var})`;
+
+          popup.style.setProperty(
+            "--kalender-farbe",
+            `var(${kalenderFarbe.var})`,
+          );
+        }
       }
     });
 

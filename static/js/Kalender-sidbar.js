@@ -151,9 +151,8 @@ function color_kalender() {
         write_color.textContent = color.name;
       }
 
-      if (dot) {
-        dot.style.background = `var(${color.var})`;
-      }
+      console.log(dot, color.var);
+      dot.style.backgroundColor = `var(${color.var})`;
     });
 
     sheet_append.appendChild(klon);

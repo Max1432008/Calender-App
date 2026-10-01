@@ -115,7 +115,7 @@ function update_selet_btn(sheet, draftCalendar) {
   hole_day_checkbox.style.background = `var(${farbe.var})`;
 }
 
-function color_button_click(sheet, kalender_btn, kalender) {
+function color_button_click(sheet, kalender_btn, kalender, farbe) {
   kalender_btn.addEventListener("click", (event) => {
     event.stopPropagation();
     draftCalendar.calendarTypeId = kalender.id;
@@ -123,6 +123,9 @@ function color_button_click(sheet, kalender_btn, kalender) {
     draftCalendar.calendarTitle = kalender.titel;
     draftCalendar.sharedWith = kalender.shared_with;
     update_selet_btn(sheet, draftCalendar);
+
+    sheet.style.setProperty("--kalender-farbe", `var(${farbe.var})`);
+    console.log("sheeeeet", sheet);
   });
 }
 
@@ -145,12 +148,11 @@ function upload_kalender_color(sheet, select_append) {
         const circle = color_klon.querySelector(".circle");
         circle.dataset.color = farbe.id;
         circle.style.background = `var(${farbe.var})`;
-
         const color_hr = color_klon.querySelector(".color-hr");
         color_hr.style.display = "none";
         const kalender_btn = color_klon.querySelector(".kalender-btn");
 
-        color_button_click(sheet, kalender_btn, kalender);
+        color_button_click(sheet, kalender_btn, kalender, farbe);
 
         select_append.appendChild(color_klon);
       });

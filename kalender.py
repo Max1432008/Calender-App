@@ -142,13 +142,25 @@ def get_kaender():
     user_id = flask_session.get("user_id")
     db_session = Session()
 
-    eigene_kalender = db_session.query(Calender_typ).filter_by(
-        user_id=user_id
-    ).all()
+    user = db_session.query(User).filter_by(id=user_id).first()
+    eigene_kalender = db_session.query(Calender_typ).filter_by(user_id=user_id).all()
+    geteilte_kalender = user.kalender_typen if user else []
+
+    alle_kalender = eigene_kalender + [
+        k for k in geteilte_kalender
+        if k not in eigene_kalender
+    ]
+
 
     daten = []
 
-    for k in eigene_kalender:
+    print("USER:", user.email if user else None)
+    print("EIGENE:", [(k.id, k.titel) for k in eigene_kalender])
+    print("GETEILT:", [(k.id, k.titel) for k in geteilte_kalender])
+    print("ALLE:", [(k.id, k.titel) for k in alle_kalender])
+
+
+    for k in alle_kalender:
         daten.append({
             "id": k.id,
             "titel": k.titel,

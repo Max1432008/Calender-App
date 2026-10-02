@@ -6,8 +6,6 @@ const search_append_container = document.getElementById(
   "search-append-container",
 );
 
-let clickingButton = false;
-
 // --- Sichtbarkeit des Such-Buttons ---
 
 async function give_db_Events() {
@@ -15,6 +13,24 @@ async function give_db_Events() {
   const data = await response.json();
   const events = data.message;
   return events;
+}
+
+async function ai_search(searchTerm) {
+  console.log("AI wurde Aktiviert");
+
+  const response = await fetch("/ai-event", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      text: searchTerm,
+    }),
+  });
+
+  const data = await response.json();
+
+  console.log("Antwort vom Backend:", data);
 }
 
 async function find_search() {
@@ -130,7 +146,17 @@ async function find_search() {
     }
   }
   if (!foundEvent) {
-    search_append_container.innerHTML = "<p>Keine Ergebnisse gefunden</p>";
+    search_append_container.innerHTML = "<p>Keine Ergebnisse gefunden</p><hr>";
+    const button_ai = document.createElement("button");
+    button_ai.innerText = " „Soll ich daraus einen Termin machen?“ ";
+    button_ai.innerHTML =
+      "<p>Kalender AI</p>  <p>„Soll ich daraus einen Termin machen?“</p> ";
+    search_append_container.appendChild(button_ai);
+    button_ai.classList.add("button-ai");
+
+    button_ai.addEventListener("click", () => {
+      ai_search(searchTerm);
+    });
   }
 }
 

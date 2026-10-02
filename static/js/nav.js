@@ -89,7 +89,7 @@ function moveViewContent(button) {
   viewContent.style.width = btnRect.width + "px";
   viewContent.style.height = btnRect.height + "px";
   viewContent.style.left = btnRect.left - parentRect.left + "px";
-  viewContent.style.top = btnRect.top - parentRect.top + "px";
+  viewContent.style.top = btnRect.top - parentRect.top - 2 + "px";
   viewContent.style.transition = "all 0.3s ease";
 }
 

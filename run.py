@@ -5,8 +5,11 @@ from kalender import kalender
 from send_mail import send_mail
 from place import place
 from profil import profil
+from ai_chat import ai_chat
 from sqlalchemy.orm import sessionmaker
 from datetime import timedelta
+
+
 Session = sessionmaker(bind=engine)
 
 app = Flask(__name__)
@@ -18,6 +21,7 @@ app.register_blueprint(kalender)
 app.register_blueprint(profil)
 app.register_blueprint(send_mail)
 app.register_blueprint(place)
+app.register_blueprint(ai_chat)
 
 @app.route("/")
 def index():

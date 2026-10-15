@@ -100,8 +100,8 @@ async function find_search() {
         descriptionElement.textContent = eventPlace;
       }
       dateElement.textContent = date;
-      timeStartElement.textContent = `${timeStart}`;
-      timeEndElement.textContent = `${timeEnd}`;
+      timeStartElement.textContent = event.hole_day ? "Ganztägig" : timeStart;
+      timeEndElement.textContent = event.hole_day ? "" : timeEnd;
 
       search_button_event.addEventListener("click", async () => {
         console.log("Clicked on event:", event.title);

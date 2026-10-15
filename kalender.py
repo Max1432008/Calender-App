@@ -6,6 +6,22 @@ from datetime import datetime
 
 kalender = Blueprint("kalender", __name__)
 
+def _parse_event_datetimes(event_data):
+    all_day = event_data.get("hole_day", False)
+    start_date = event_data.get("day_start")
+    end_date = event_data.get("day_end")
+    start_time = event_data.get("time_start") or ("00:00" if all_day else "")
+    end_time = event_data.get("time_end") or ("00:00" if all_day else "")
+
+    if not start_date or not end_date:
+        raise ValueError("Start- und Enddatum sind erforderlich.")
+    if not start_time or not end_time:
+        raise ValueError("Bei Terminen mit Uhrzeit sind Start- und Endzeit erforderlich.")
+
+    day_start = datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %H:%M")
+    day_end = datetime.strptime(f"{end_date} {end_time}", "%Y-%m-%d %H:%M")
+    return all_day, day_start, day_end
+
 
 @kalender.route("/save-new-kalender", methods=["POST"])
 def save_new_kalender():
@@ -206,22 +222,17 @@ def save_event():
             "error": "Keine Eventdaten"
         })
 
-    date_str = event_data["day_start"]   # "2026-07-15"
-    time_str = event_data["time_start"]  # "15:30"
-
-    day_start = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
-
-    date_str_end = event_data["day_end"]   # "2026-07-15"
-    time_str_end = event_data["time_end"]  # "15:30"
-
-    day_end = datetime.strptime(f"{date_str_end} {time_str_end}", "%Y-%m-%d %H:%M")
+    try:
+        hole_day, day_start, day_end = _parse_event_datetimes(event_data)
+    except (TypeError, ValueError) as error:
+        return jsonify({"success": False, "error": str(error)}), 400
 
 
     neues_event = Event(
         user_id = user_id,
         title=event_data["title"],
         place=event_data["place"],
-        hole_day=event_data["hole_day"],
+        hole_day=hole_day,
         day_start=day_start,
         day_end=day_end,
         content=event_data["content"],
@@ -262,15 +273,10 @@ def update_event_data():
         })
 
 
-    date_str = event_data["day_start"]   # "2026-07-15"
-    time_str = event_data["time_start"]  # "15:30"
-
-    day_start = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
-
-    date_str_end = event_data["day_end"]   # "2026-07-15"
-    time_str_end = event_data["time_end"]  # "15:30"
-
-    day_end = datetime.strptime(f"{date_str_end} {time_str_end}", "%Y-%m-%d %H:%M")
+    try:
+        hole_day, day_start, day_end = _parse_event_datetimes(event_data)
+    except (TypeError, ValueError) as error:
+        return jsonify({"success": False, "error": str(error)}), 400
 
     event = db_session.query(Event).filter_by(
     id=event_data["eventId"],
@@ -279,7 +285,7 @@ def update_event_data():
 
     event.title = event_data["title"]
     event.place = event_data["place"]
-    event.hole_day = event_data["hole_day"]
+    event.hole_day = hole_day
     event.day_start = day_start
     event.day_end=day_end
     event.content=event_data["content"]
@@ -385,7 +391,6 @@ def delete_event():
         "success": True,
         "message": "Event gelöscht"
     })
-
 
 
 

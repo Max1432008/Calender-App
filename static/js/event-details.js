@@ -143,6 +143,8 @@ function create_More(klon_event, container, Events) {
     dayEndInput.value = get_time(Events.day_end)[0] ?? "";
     timeEndInput.value = get_time(Events.day_end)[1] ?? "";
 
+    setupAllDayTimeInputs(klon);
+
     repeatSelect.value = Events.repeat ?? "Nie";
     textareaMore.value = Events.content ?? "";
 

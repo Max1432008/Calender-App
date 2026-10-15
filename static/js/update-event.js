@@ -103,12 +103,14 @@ function update_Event(container, payload, eventData) {
     payload.time_start,
   );
 
-  eventTimeElement.textContent = combinedStart
-    ? new Date(combinedStart).toLocaleTimeString("de-DE", {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : "Keine Zeit";
+  eventTimeElement.textContent = payload.hole_day
+    ? "Ganztägig"
+    : combinedStart
+      ? new Date(combinedStart).toLocaleTimeString("de-DE", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "Keine Zeit";
 
   const farbe = calendarColors.find(
     (color) => color.name.trim() === (payload.color ?? "").trim(),
@@ -123,8 +125,12 @@ function update_Event(container, payload, eventData) {
     title: payload.title,
     place: payload.place,
     hole_day: payload.hole_day,
-    day_start: combineDateAndTime(payload.day_start, payload.time_start),
-    day_end: combineDateAndTime(payload.day_end, payload.time_end),
+    day_start: payload.hole_day
+      ? `${payload.day_start}T00:00:00`
+      : combineDateAndTime(payload.day_start, payload.time_start),
+    day_end: payload.hole_day
+      ? `${payload.day_end}T00:00:00`
+      : combineDateAndTime(payload.day_end, payload.time_end),
     calender_typ_id: payload.calender_typ_id,
     content: payload.content,
     repeat: payload.repeat,

@@ -28,21 +28,25 @@ let eventCreatePayload = {
   calender_typ_id: "",
 };
 
-function upload_event(eventCreatePayload) {
-  fetch("/save-event", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(eventCreatePayload),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Erfolgreich gespeichert:", data);
-    })
-    .catch((error) => {
-      console.error("Fehler beim Speichern:", error);
+async function upload_event(eventCreatePayload) {
+  try {
+    const response = await fetch("/save-event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(eventCreatePayload),
     });
+
+    const data = await response.json();
+
+    console.log("Erfolgreich gespeichert:", data);
+
+    return data;
+  } catch (error) {
+    console.error("Fehler beim Speichern:", error);
+    throw error;
+  }
 }
 
 function saveDraftCalendarEvent(sheet, draftCalendar) {
@@ -60,10 +64,12 @@ function saveDraftCalendarEvent(sheet, draftCalendar) {
     titleInput.value === "" ||
     dayStartInput.value === "" ||
     dayEndInput.value === "" ||
-    timeStartInput.value === "" ||
-    timeEndInput.value === ""
+    (!holeDayCheckbox.checked &&
+      (timeStartInput.value === "" || timeEndInput.value === ""))
   ) {
-    console.error("Ein oder mehrere Eingabefelder wurden nicht gefunden.");
+    console.error(
+      "Bitte Titel und Datum ausfüllen; bei Terminen mit Uhrzeit auch Start- und Endzeit.",
+    );
     return;
   }
 
@@ -82,6 +88,26 @@ function saveDraftCalendarEvent(sheet, draftCalendar) {
   return eventCreatePayload;
 }
 
+function setupAllDayTimeInputs(sheet) {
+  const holeDayCheckbox = sheet.querySelector(".hole-day-checkbox");
+  const timeInputs = [
+    sheet.querySelector(".time-start-input"),
+    sheet.querySelector(".time-end-input"),
+  ];
+
+  function updateTimeInputs() {
+    timeInputs.forEach((input) => {
+      input.disabled = holeDayCheckbox.checked;
+      if (holeDayCheckbox.checked) {
+        input.value = "";
+      }
+    });
+  }
+
+  holeDayCheckbox.addEventListener("change", updateTimeInputs);
+  updateTimeInputs();
+}
+
 function moveViewContent(button) {
   const btnRect = button.getBoundingClientRect();
   const parentRect = calenderLook.getBoundingClientRect();
@@ -89,7 +115,7 @@ function moveViewContent(button) {
   viewContent.style.width = btnRect.width + "px";
   viewContent.style.height = btnRect.height + "px";
   viewContent.style.left = btnRect.left - parentRect.left + "px";
-  viewContent.style.top = btnRect.top - parentRect.top + "px";
+  viewContent.style.top = btnRect.top - parentRect.top - 2 + "px";
   viewContent.style.transition = "all 0.3s ease";
 }
 
@@ -193,6 +219,8 @@ function select_sheet_create(sheet, container) {
   const day_end_input = sheet.querySelector(".day-end-input");
   const time_start_input = sheet.querySelector(".time-start-input");
   const time_end_input = sheet.querySelector(".time-end-input");
+
+  setupAllDayTimeInputs(sheet);
 
   time_start_input.addEventListener("change", () => {
     const [hours, minutes] = time_start_input.value.split(":").map(Number);

@@ -122,12 +122,14 @@ async function createEvent(container, Events) {
   event.dataset.eventId = Events.id;
   eventTitleElement.textContent = Events.title ?? "Ohne Titel";
 
-  eventTimeElement.textContent = Events.day_start
-    ? new Date(Events.day_start).toLocaleTimeString("de-DE", {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : "Keine Zeit";
+  eventTimeElement.textContent = Events.hole_day
+    ? "Ganztägig"
+    : Events.day_start
+      ? new Date(Events.day_start).toLocaleTimeString("de-DE", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "Keine Zeit";
 
   const farbe = calendarColors.find(
     (color) => color.name.trim() === (Events.color ?? "").trim(),

@@ -1,4 +1,5 @@
 from flask import Blueprint
+import os
 from flask import Flask, render_template, url_for, session, redirect
 
 from models import User, engine
@@ -57,5 +58,5 @@ Deine Kalender-Team Max.Oldehus""")
 
     with smtplib.SMTP("smtp.mail.me.com", 587) as smtp:        
         smtp.starttls()
-        smtp.login("Max.Oldehus@icloud.com", "uvex-dbpe-lvph-xojg")
+        smtp.login("Max.Oldehus@icloud.com", os.environ["MAIL_PASSWORT"])  # Use environment variable for password
         smtp.send_message(msg)

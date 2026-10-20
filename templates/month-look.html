@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='img/app-icon.png') }}"
+    />
     <link rel="stylesheet" href="/static/css/color.css" />
     <link rel="stylesheet" href="/static/css/month-look.css" />
     <link rel="stylesheet" href="/static/css/nav.css" />
@@ -30,6 +35,8 @@
       <aside class="sidebar" id="Kalender-sidbar">
         <div class="sidebar-section">
           <h3>Navigation</h3>
+
+          <button id="Mitteilungen">Ich erlaube Mitteilungen</button>
 
           <button class="sidebar-item">📅 Kalender</button>
           <button class="sidebar-item">📝 Aufgaben</button>
@@ -453,5 +460,6 @@
     <script src="/static/js/nav-month.js"></script>
     <script src="/static/js/profil.js"></script>
     <script src="/static/js/Kalender-sidbar.js"></script>
+    <script src="/static/js/push.js"></script>
   </body>
 </html>

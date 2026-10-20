@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, session, redirect
+from flask import Flask, render_template, url_for, session, redirect, send_from_directory
 from auth import auth
 from models import User, engine
 from kalender import kalender
@@ -67,6 +67,10 @@ def Week_look():
     return render_template("week-look.html")
 
 
+@app.route("/service-worker.js")
+def service_worker():
+    return send_from_directory("static/js", "service-worker.js")
+
 
 @app.route("/logout")
 def logout():
@@ -74,6 +78,8 @@ def logout():
     session.pop("user_id", None)  # Löscht die user_id aus der Session
 
     return redirect(url_for("index"))
+
+
 
 
 

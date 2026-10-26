@@ -72,6 +72,7 @@ class Calender_typ(Base):
     events = relationship("Event", back_populates="calender_typ")
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="kalender_typen")
+    aktiv = Column(Boolean, default=True)  # Neue Spalte für den Aktivitätsstatus
 
 
 

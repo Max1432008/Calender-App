@@ -201,7 +201,7 @@
   opacity: 0;
   z-index: 200;
   position: absolute;
-  height: 400px;
+  height: 450px;
   width: 375px;
   background: var(--more-calender-day);
   backdrop-filter: blur(14px);
@@ -314,6 +314,7 @@
   border-radius: 12px;
   padding: 14px 16px;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
@@ -330,7 +331,7 @@
 
 .row.link .left {
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: 10px;
 }
 
@@ -374,6 +375,13 @@
 }
 
 .dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #30ff37;
+}
+
+.circle {
   width: 18px;
   height: 18px;
   border-radius: 50%;

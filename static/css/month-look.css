@@ -218,10 +218,15 @@ body {
   gap: 10px;
 }
 
+.scroll-calender-day {
+  overflow: scroll;
+  scroll-behavior: smooth;
+}
+
 .grid-container {
   display: grid;
-  overflow-y: auto;
-  scroll-behavior: smooth;
+  /*! hier wurde was geändert
+  /*overflow-y: auto;*/
   font-family: "Oswald", sans-serif;
 
   grid-template-columns: repeat(var(--spalten-grid), minmax(180px, 1fr));
@@ -230,7 +235,7 @@ body {
 
   gap: 10px;
   height: calc(
-    100vh - 210px
+    100vh - 310px
   ); /* Platz für Nav/Header abziehen, ggf. Wert anpassen */
   align-items: stretch;
 }
@@ -330,6 +335,7 @@ body {
 .event-time {
   font-family: "Courier New", Courier, monospace;
   color: var(--text-secondary);
+  font-size: 16px;
 }
 
 .event:hover {

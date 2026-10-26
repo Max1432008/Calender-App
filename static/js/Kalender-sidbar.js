@@ -60,7 +60,7 @@ function create_container_kalender() {
     hidden_sheet(sheet_append, sheet);
   });
 
-  check_btn.addEventListener("click", () => {
+  check_btn.addEventListener("click", async () => {
     if (
       !draftKalender.name ||
       draftKalender.name.trim() === "" ||
@@ -71,13 +71,15 @@ function create_container_kalender() {
       return;
     } else {
       if (sheet_mode === "create") {
-        save_Kalender().then(() => {
+        save_Kalender().then(async () => {
           upload_kalender_liste();
           hidden_sheet(sheet_append, sheet);
+          await update_Kalender();
         });
       } else if (sheet_mode === "update") {
-        update_Kalender().then(() => {
+        update_Kalender().then(async () => {
           upload_kalender_liste();
+          await update_Kalender();
           hidden_sheet(sheet_append, sheet);
         });
       }
@@ -129,6 +131,7 @@ function color_kalender() {
     const btn = klon.querySelector(".color-btn");
 
     circle.style.background = `var(${color.var})`;
+
     name.textContent = color.name;
 
     btn.addEventListener("click", (event) => {
@@ -198,6 +201,7 @@ function show_details_calender(klon, kalenderId) {
   const write_color = document.querySelector(".write-color");
   const shared_with = document.querySelector(".shared-with");
   const button_color = document.querySelector(".button-color");
+  const dot = document.querySelector(".dot");
 
   const kalender = kalenderListe.find((kalender) => kalender.id == kalenderId);
 
@@ -219,10 +223,20 @@ function show_details_calender(klon, kalenderId) {
 
   write_color.textContent = kalender.color;
   button_color.background = kalender.color;
+  dot.style.background = `var(${
+    calendarColors.find((color) => color.name.trim() === kalender.color.trim())
+      ?.var
+  })`;
 
   shared_with.value = (kalender.shared_with || [])
     .map((u) => u.email)
     .join(", ");
+
+  draftKalender = {
+    name: kalender.titel,
+    color: kalender.color,
+    shared_with: (kalender.shared_with || []).map((u) => u.email).join(", "),
+  };
 }
 function createCalenderItem(name, colorId, kalenderId, shared_with) {
   const klon = calender_item_template.content.cloneNode(true);

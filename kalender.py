@@ -46,7 +46,8 @@ def save_new_kalender():
     neuer_kalender = Calender_typ(
             user_id=user_id,
             titel=kalender_data["name"],
-            color=kalender_data["color"]
+            color=kalender_data["color"],
+            aktiv=kalender_data["aktiv"]
         )
 
     email = kalender_data.get("shared_with")
@@ -61,9 +62,6 @@ def save_new_kalender():
             "error": "Die Email ist nicht hinterlegt"
         })
 
-
-
-
     db_session.add(neuer_kalender)
     db_session.commit()
     db_session.close()
@@ -71,8 +69,48 @@ def save_new_kalender():
 
     return jsonify({
         "success": True,
-        "message": "Kalender gespeichert"
+        "message": "Kalender gespeichert"+ neuer_kalender
     })
+
+
+
+@kalender.route("/update-kalender-aktiv", methods=["POST"])
+def update_kalender_aktiv():
+    user_id = flask_session.get("user_id")
+    db_session = Session()
+
+    data = request.get_json(silent=True) or {}
+    kalender_id = data.get("kalender_id")
+    aktiv = data.get("aktiv")
+
+    if kalender_id is None or not isinstance(aktiv, bool):
+        db_session.close()
+        return jsonify({
+            "success": False,
+            "error": "Kalender-ID oder Aktiv-Status fehlt"
+
+        }), 400
+
+    kalender = db_session.query(Calender_typ).filter_by(
+    id=kalender_id,
+    user_id=user_id
+    ).first()
+
+    if not kalender:
+        db_session.close()
+        return jsonify({"success": False, "error": "Kalender nicht gefunden"})
+
+    
+    kalender.aktiv = aktiv
+
+    db_session.commit()
+    db_session.close()
+
+    return jsonify({"success": True, "aktiv": aktiv})
+
+
+
+
 
 
 
@@ -190,7 +228,8 @@ def get_kaender():
                     "email": user.email
                 }
                 for user in k.shared_with
-            ]
+            ],
+            "aktiv": k.aktiv
         })
 
     db_session.close()

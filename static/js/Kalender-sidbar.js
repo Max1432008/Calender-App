@@ -49,7 +49,7 @@ const Save_button = document.getElementById("save-btn");
 let sheet_out = false;
 let sheet_visible = false;
 let sheet_mode = "create"; //* Ob neu erstellt oder updatet
-let draftKalender = { name: "", shared_with: "", color: "" };
+let draftKalender = { name: "", shared_with: "", color: "", aktiv: true };
 let currentKalenderId = null;
 
 const close_sheet_btn = document.querySelector(".close-sheet-btn");
@@ -99,6 +99,7 @@ function give_save_data() {
     name: name_input.value,
     shared_with: shared_with.value,
     color: write_color.textContent,
+    aktiv: true,
   };
 }
 
@@ -238,12 +239,14 @@ function show_details_calender(klon, kalenderId) {
     shared_with: (kalender.shared_with || []).map((u) => u.email).join(", "),
   };
 }
-function createCalenderItem(name, colorId, kalenderId, shared_with) {
+function createCalenderItem(name, colorId, kalenderId, shared_with, active) {
   const klon = calender_item_template.content.cloneNode(true);
 
   const item = klon.querySelector(".sidebar-item");
   const text = klon.querySelector(".text");
   const details = klon.querySelector(".details-around");
+  const checkbox = item.querySelector("input[type='checkbox']");
+  checkbox.checked = active;
 
   item.dataset.kalenderId = kalenderId;
 
@@ -266,6 +269,48 @@ function createCalenderItem(name, colorId, kalenderId, shared_with) {
   });
 }
 
+function kalenderItemClick() {
+  const kalenderItems = document.querySelectorAll(
+    "#calendar-list .sidebar-item",
+  );
+
+  kalenderItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      const checkbox = item.querySelector("input[type='checkbox']");
+      const kalenderId = item.dataset.kalenderId;
+
+      const button_aktiv = !checkbox.checked;
+
+      const kalender = kalenderListe.find(
+        (kalender) => kalender.id == kalenderId,
+      );
+
+      console.log("Kalenderdaten:", button_aktiv);
+
+      return fetch("/update-kalender-aktiv", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          kalender_id: kalender.id,
+          aktiv: button_aktiv,
+        }),
+      }).then(async (response) => {
+        const text = await response.text();
+
+        console.log("Server Antwort:", text);
+
+        if (!response.ok) {
+          throw new Error(`Serverfehler ${response.status}: ${text}`);
+        }
+
+        return JSON.parse(text);
+      });
+    });
+  });
+}
+
 function upload_kalender_liste() {
   fetch("/get-kalneder-typen")
     .then((response) => response.json())
@@ -283,8 +328,10 @@ function upload_kalender_liste() {
           farbe.id,
           kalender.id,
           kalender.shared_with,
+          kalender.aktiv,
         );
       });
+      kalenderItemClick();
     });
 }
 

@@ -108,6 +108,11 @@ let openPopup = null;
 let openContainer = null;
 
 async function createEvent(container, Events) {
+  const kalender = await get_color(Events.calender_typ_id);
+  if (kalender && kalender.aktiv === false) {
+    return;
+  }
+
   const content = container.querySelector(".content");
 
   const template = document.getElementById("Event");

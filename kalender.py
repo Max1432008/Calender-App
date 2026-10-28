@@ -190,44 +190,100 @@ def share_kalender():
     })
 
 
-
 @kalender.route("/delete-kalender", methods=["POST"])
 def delete_kalender():
+    from sqlalchemy import text
+
     user_id = flask_session.get("user_id")
     if not user_id:
         return jsonify({"success": False, "error": "Nicht angemeldet"}), 401
 
+    data = request.get_json(silent=True) or {}
+    kalender_id = data.get("kalender_id")
+
+    if not kalender_id:
+        return jsonify({"success": False, "error": "Keine Kalender-ID"}), 400
+
     db_session = Session()
+
     try:
-        data = request.get_json(silent=True) or {}
-        kalender_id = data.get("kalender_id")
+        # Kalenderdaten direkt aus der Datenbank lesen.
+        # Dadurch werden keine SQLAlchemy-Beziehungen geladen.
+        kalender_daten = db_session.execute(
+            text('SELECT id, user_id FROM "Calender_typ" WHERE id = :kalender_id'),
+            {"kalender_id": kalender_id}
+        ).mappings().first()
 
-        if not kalender_id:
-            return jsonify({"success": False, "error": "Keine Kalender-ID"}), 400
+        if kalender_daten is None:
+            return jsonify({
+                "success": False,
+                "error": "Kalender nicht gefunden"
+            }), 404
 
-        kalender = db_session.query(Calender_typ).filter_by(id=kalender_id).first()
-        if not kalender:
-            return jsonify({"success": False, "error": "Kalender nicht gefunden"}), 404
+        if str(kalender_daten["user_id"]) == str(user_id):
+            # Eigentümer: Verknüpfungen löschen.
+            db_session.execute(
+                text("""
+                    DELETE FROM calender_shared
+                    WHERE calender_typ_id = :kalender_id
+                """),
+                {"kalender_id": kalender_id}
+            )
 
-        if kalender.user_id == user_id:
-            # Eigentümer löscht den Kalender selbst
-            db_session.delete(kalender)
+            # Zugehörige Termine löschen.
+            db_session.execute(
+                text("""
+                    DELETE FROM "Event"
+                    WHERE calender_typ_id = :kalender_id
+                """),
+                {"kalender_id": kalender_id}
+            )
+
+            # Kalender löschen.
+            db_session.execute(
+                text("""
+                    DELETE FROM "Calender_typ"
+                    WHERE id = :kalender_id
+                """),
+                {"kalender_id": kalender_id}
+            )
+
             message = "Kalender gelöscht"
-        else:
-            # Geteilter Kalender: nur die Freigabe dieses Nutzers entfernen
-            geteilter_kalender = db_session.query(User).filter_by(id=user_id).first()
-            if not geteilter_kalender or kalender not in geteilter_kalender.kalender_typen:
-                return jsonify({"success": False, "error": "Kalender nicht gefunden"}), 404
 
-            geteilter_kalender.kalender_typen.remove(kalender)
+        else:
+            # Bei geteilten Kalendern nur die eigene Freigabe entfernen.
+            db_session.execute(
+                text("""
+                    DELETE FROM calender_shared
+                    WHERE calender_typ_id = :kalender_id
+                    AND user_id = :user_id
+                """),
+                {
+                    "kalender_id": kalender_id,
+                    "user_id": user_id
+                }
+            )
+
             message = "Kalender aus deiner Liste entfernt"
 
         db_session.commit()
-        return jsonify({"success": True, "message": message})
+
+        return jsonify({
+            "success": True,
+            "message": message
+        })
+
+    except Exception as error:
+        db_session.rollback()
+        print("DELETE-KALENDER: Fehler:", repr(error))
+
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 500
+
     finally:
         db_session.close()
-
-
 
 @kalender.route("/get-kalneder-typen")
 def get_kaender():

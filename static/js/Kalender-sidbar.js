@@ -49,7 +49,14 @@ const Save_button = document.getElementById("save-btn");
 let sheet_out = false;
 let sheet_visible = false;
 let sheet_mode = "create"; //* Ob neu erstellt oder updatet
-let draftKalender = { name: "", shared_with: "", color: "", aktiv: true };
+let draftKalender = {
+  id: null,
+  name: "",
+  color: "",
+  shared_with: "",
+  aktiv: true,
+};
+
 let currentKalenderId = null;
 
 const close_sheet_btn = document.querySelector(".close-sheet-btn");
@@ -78,11 +85,13 @@ function create_container_kalender() {
         });
       } else if (sheet_mode === "update") {
         update_Kalender().then(async () => {
-          upload_kalender_liste();
-          await update_Kalender();
-          hidden_sheet(sheet_append, sheet);
+          await update_Kalender(); // 1. Änderungen speichern
+          await upload_kalender_liste(); // 2. Neue Kalenderdaten laden
+          hidden_sheet(sheet_append, sheet); // 4. Fenster schließen
         });
       }
+      console.log("das wird asugefgaewd");
+      await create_calender_day(); // 3. Kalenderansicht neu erstellen
     }
   });
 }
@@ -130,7 +139,6 @@ function color_kalender() {
     const circle = klon.querySelector(".circle");
     const name = klon.querySelector(".color-name");
     const btn = klon.querySelector(".color-btn");
-
     circle.style.background = `var(${color.var})`;
 
     name.textContent = color.name;
@@ -172,12 +180,44 @@ function create_tmp_kalender_side() {
   const name_input = klon.querySelector(".kalender-name");
   const shared_with = klon.querySelector(".shared-with");
 
+  const delete_button = klon.querySelector(".delete-kalender");
+
+  name_input.value = draftKalender.name;
+  shared_with.value = draftKalender.shared_with;
+
+  delete_button.addEventListener("click", () => {
+    if (draftKalender.id == null) {
+      alert("Bitte öffne zuerst einen bestehenden Kalender.");
+      return;
+    }
+
+    fetch("/delete-kalender", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ kalender_id: draftKalender.id }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || `Serverfehler ${response.status}`);
+        }
+
+        await upload_kalender_liste();
+        hidden_sheet(sheet_append, sheet);
+      })
+      .catch((error) => {
+        console.error("Kalender konnte nicht gelöscht werden:", error);
+        alert(error.message);
+      });
+  });
+
   button_color.addEventListener("click", (event) => {
     event.stopPropagation();
     color_kalender();
   });
-  name_input.value = draftKalender.name;
-  shared_with.value = draftKalender.shared_with;
 
   name_input.addEventListener(
     "input",
@@ -198,47 +238,55 @@ let calender_rounds = 10;
 let kalenderListe = [];
 
 function show_details_calender(klon, kalenderId) {
-  const name_input = document.querySelector(".kalender-name");
-  const write_color = document.querySelector(".write-color");
-  const shared_with = document.querySelector(".shared-with");
-  const button_color = document.querySelector(".button-color");
-  const dot = document.querySelector(".dot");
+  const name_input = sheet_append.querySelector(".kalender-name");
+  const write_color = sheet_append.querySelector(".write-color");
+  const shared_with = sheet_append.querySelector(".shared-with");
+  const button_color = sheet_append.querySelector(".button-color");
+  const dot = sheet_append.querySelector(".dot");
 
-  const kalender = kalenderListe.find((kalender) => kalender.id == kalenderId);
-
-  currentKalenderId = kalenderId;
-  sheet_mode = "update";
+  const kalender = kalenderListe.find(
+    (eintrag) => String(eintrag.id) === String(kalenderId),
+  );
 
   if (!kalender) {
-    draftKalender = {
-      name: kalender.titel,
-      color: kalender.color,
-      shared_with: (kalender.shared_with || []).map((u) => u.email).join(", "),
-    };
-    console.log("Kalender nicht gefunden");
-
+    console.error("Kalender nicht gefunden.", {
+      gesuchteId: kalenderId,
+      verfügbareKalender: kalenderListe.map((eintrag) => ({
+        id: eintrag.id,
+        titel: eintrag.titel,
+      })),
+    });
     return;
   }
 
-  name_input.value = kalender.titel;
+  currentKalenderId = kalender.id;
+  sheet_mode = "update";
 
+  name_input.value = kalender.titel;
   write_color.textContent = kalender.color;
-  button_color.background = kalender.color;
-  dot.style.background = `var(${
-    calendarColors.find((color) => color.name.trim() === kalender.color.trim())
-      ?.var
-  })`;
+  button_color.style.backgroundColor = kalender.color;
+
+  const passendeFarbe = calendarColors.find(
+    (color) => color.name.trim() === kalender.color.trim(),
+  );
+
+  if (passendeFarbe) {
+    dot.style.backgroundColor = `var(${passendeFarbe.var})`;
+  }
 
   shared_with.value = (kalender.shared_with || [])
-    .map((u) => u.email)
+    .map((user) => user.email)
     .join(", ");
 
   draftKalender = {
+    id: kalender.id,
     name: kalender.titel,
     color: kalender.color,
-    shared_with: (kalender.shared_with || []).map((u) => u.email).join(", "),
+    shared_with: shared_with.value,
+    aktiv: kalender.aktiv,
   };
 }
+
 function createCalenderItem(name, colorId, kalenderId, shared_with, active) {
   const klon = calender_item_template.content.cloneNode(true);
 
@@ -285,8 +333,6 @@ function kalenderItemClick() {
         (kalender) => kalender.id == kalenderId,
       );
 
-      console.log("Kalenderdaten:", button_aktiv);
-
       return fetch("/update-kalender-aktiv", {
         method: "POST",
         headers: {
@@ -298,13 +344,11 @@ function kalenderItemClick() {
         }),
       }).then(async (response) => {
         const text = await response.text();
-
-        console.log("Server Antwort:", text);
-
         if (!response.ok) {
           throw new Error(`Serverfehler ${response.status}: ${text}`);
         }
-
+        console.log("Server Antwort:", text);
+        await create_calender_day();
         return JSON.parse(text);
       });
     });
@@ -395,6 +439,13 @@ add_kalender.addEventListener("click", (event) => {
   event.stopPropagation();
 
   if (!sheet_visible) {
+    draftKalender = {
+      name: "",
+      color: "",
+      shared_with: "",
+      aktiv: true,
+    };
+
     see_sheet();
   } else {
     hidden_sheet(sheet_append, sheet);

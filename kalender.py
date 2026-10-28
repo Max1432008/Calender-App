@@ -191,6 +191,42 @@ def share_kalender():
 
 
 
+@kalender.route("/delete-kalender", methods=["POST"])
+def delete_kalender():
+    user_id = flask_session.get("user_id")
+    if not user_id:
+        return jsonify({"success": False, "error": "Nicht angemeldet"}), 401
+
+    db_session = Session()
+    try:
+        data = request.get_json(silent=True) or {}
+        kalender_id = data.get("kalender_id")
+
+        if not kalender_id:
+            return jsonify({"success": False, "error": "Keine Kalender-ID"}), 400
+
+        kalender = db_session.query(Calender_typ).filter_by(id=kalender_id).first()
+        if not kalender:
+            return jsonify({"success": False, "error": "Kalender nicht gefunden"}), 404
+
+        if kalender.user_id == user_id:
+            # Eigentümer löscht den Kalender selbst
+            db_session.delete(kalender)
+            message = "Kalender gelöscht"
+        else:
+            # Geteilter Kalender: nur die Freigabe dieses Nutzers entfernen
+            geteilter_kalender = db_session.query(User).filter_by(id=user_id).first()
+            if not geteilter_kalender or kalender not in geteilter_kalender.kalender_typen:
+                return jsonify({"success": False, "error": "Kalender nicht gefunden"}), 404
+
+            geteilter_kalender.kalender_typen.remove(kalender)
+            message = "Kalender aus deiner Liste entfernt"
+
+        db_session.commit()
+        return jsonify({"success": True, "message": message})
+    finally:
+        db_session.close()
+
 
 
 @kalender.route("/get-kalneder-typen")

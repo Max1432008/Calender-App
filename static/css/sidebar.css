@@ -375,17 +375,17 @@
 }
 
 .dot {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: #30ff37;
+  background: #fb2e00;
 }
 
 .circle {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #30ff37;
+  background: #ff3b30;
 }
 
 .chevron {
@@ -396,6 +396,30 @@
 .person-icon {
   width: 26px;
   height: 26px;
+}
+
+.delete-container {
+  display: flex;
+  justify-content: center;
+}
+
+.delete-kalender {
+  display: flex;
+
+  justify-content: center;
+  background-color: #2c2c2e67;
+  backdrop-filter: blur(15px);
+  border-radius: 10px;
+  border: 1px solid #ff3b30;
+  font-size: var(--text-primary);
+  color: white;
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 15px;
+}
+
+.delete-kalender:hover {
+  background-color: #4f4f5367;
 }
 
 /** Template FARBAUSWAHL*/

@@ -137,9 +137,17 @@ async function createEvent(container, Events) {
       : "Keine Zeit";
 
   const farbe = calendarColors.find(
-    (color) => color.name.trim() === (Events.color ?? "").trim(),
+    (color) => color.name.trim() === (kalender?.color ?? "").trim(),
   );
 
+  console.log(
+    "Event:",
+    Events.id,
+    "Kalenderfarbe:",
+    kalender?.color,
+    "Gefundene Farbe:",
+    farbe,
+  );
   if (farbe) {
     eventColorElement.style.background = `var(${farbe.var})`;
   }

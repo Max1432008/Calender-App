@@ -67,10 +67,14 @@ function saveDraftCalendarEvent(sheet, draftCalendar) {
     (!holeDayCheckbox.checked &&
       (timeStartInput.value === "" || timeEndInput.value === ""))
   ) {
-    console.error(
+    window.alert(
       "Bitte Titel und Datum ausfüllen; bei Terminen mit Uhrzeit auch Start- und Endzeit.",
     );
-    return;
+    return {
+      success: false,
+      error: "REQUIRED_FIELDS_MISSING",
+      message: "Bitte fülle alle Pflichtfelder aus.",
+    };
   }
 
   eventCreatePayload.title = titleInput.value;
@@ -85,7 +89,10 @@ function saveDraftCalendarEvent(sheet, draftCalendar) {
   eventCreatePayload.repeat = repeatSelect.value;
   eventCreatePayload.color = draftCalendar.color;
 
-  return eventCreatePayload;
+  return {
+    success: true,
+    message: eventCreatePayload,
+  };
 }
 
 function setupAllDayTimeInputs(sheet) {
@@ -232,11 +239,15 @@ function select_sheet_create(sheet, container) {
 
   // Anfangsdatum setzen
   const heute = new Date();
-  const heuteString = heute.toISOString().split("T")[0];
+  const heuteStringDay = heute.toISOString().split("T")[0];
+  const heuteStringTime = heute.toTimeString().slice(0, 5);
   let event_day_difference = 0;
 
-  day_start_input.value = heuteString;
-  day_end_input.value = heuteString;
+  day_start_input.value = heuteStringDay;
+  day_end_input.value = heuteStringDay;
+
+  time_start_input.value = heuteStringTime;
+  time_end_input.value = heuteStringTime;
 
   event_day_difference = differenz_day(
     day_start_input.value,
@@ -285,11 +296,25 @@ function select_sheet_create(sheet, container) {
   save_event_btn.addEventListener("click", async (event) => {
     event.stopPropagation();
 
-    const payload = saveDraftCalendarEvent(sheet, draftCalendar);
-    upload_event(payload);
+    const result = saveDraftCalendarEvent(sheet, draftCalendar);
+
+    // Schritt 1: Eingaben überprüfen
+    if (!result.success) {
+      alert(result.message);
+      return;
+    }
+
+    // Schritt 2: Daten an das Backend senden
+    const response = await upload_event(result.message);
+
+    if (!response.success) {
+      alert(response.error || "Speichern fehlgeschlagen.");
+      return;
+    }
+
+    // Schritt 3: Kalender aktualisieren
     await create_calender_day(events);
 
-    //! kommt zum schluss
     hidden_sheet(select_append, sheet);
   });
 
@@ -354,6 +379,41 @@ document.addEventListener("click", (event) => {
     !placeResult
   ) {
     popup.remove();
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  //const heute = new Date();
+  const heute = new Date("2026-10-31");
+
+  const kalenderContainer = document.querySelector(".scroll-calender-day");
+  if (!kalenderContainer) {
+    console.error(".scroll-calender-day wurde nicht gefunden.");
+    return;
+  }
+
+  if (heute.getDay() === 0 || heute.getDay() === 6) {
+    console.log("Es ist Wochenende!");
+
+    kalenderContainer.scrollTo({
+      left: 520,
+      top: kalenderContainer.scrollHeight,
+      behavior: "instant",
+    });
+    console.log({
+      left: kalenderContainer.scrollLeft,
+      overflowX: getComputedStyle(kalenderContainer).overflowX,
+      direction: getComputedStyle(kalenderContainer).direction,
+      width: kalenderContainer.getBoundingClientRect().width,
+      scrollWidth: kalenderContainer.scrollWidth,
+    });
+
+    console.log(
+      kalenderContainer,
+      getComputedStyle(kalenderContainer).overflowX,
+      kalenderContainer.scrollWidth,
+      kalenderContainer.clientWidth,
+    );
   }
 });
 

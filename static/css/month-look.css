@@ -1,14 +1,10 @@
 body {
   background:
+    radial-gradient(circle at 25% 0%, rgba(6, 197, 130, 0.22), transparent 45%),
     radial-gradient(
-      circle at 30% 0%,
-      rgba(78, 142, 247, 0.35),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 70% 0%,
-      rgba(153, 119, 245, 0.3),
-      transparent 40%
+      circle at 75% 0%,
+      rgba(40, 120, 255, 0.28),
+      transparent 45%
     ),
     var(--background);
   color: var(--text-primary);
@@ -205,6 +201,7 @@ body {
 
 .under-nav {
   display: flex;
+  position: relative;
   justify-content: space-between;
   margin-left: 20px;
   margin-right: 20px;
@@ -219,8 +216,15 @@ body {
 }
 
 .scroll-calender-day {
-  overflow: scroll;
+  margin-top: -20px; /* neu */
+  height: calc(100vh - 160px); /* neu */
+  padding-top: 50px; /* neu */
+  overflow-x: scroll;
+  overflow-y: scroll;
+
   scroll-behavior: smooth;
+
+  z-index: 2;
 }
 
 .grid-container {
@@ -234,9 +238,6 @@ body {
   grid-auto-rows: minmax(180px, auto);
 
   gap: 10px;
-  height: calc(
-    100vh - 310px
-  ); /* Platz für Nav/Header abziehen, ggf. Wert anpassen */
   align-items: stretch;
 }
 
@@ -247,7 +248,13 @@ body {
   padding: 7px;
   border-radius: 10px;
 
-  background-color: var(--calender-day);
+  background: color-mix(
+    in srgb,
+
+    var(--calender-day) 82%,
+
+    transparent
+  );
   border: 1px solid rgba(212, 56, 226, 0.08);
   box-shadow:
     0 0 10px var(--shadow),
@@ -379,7 +386,6 @@ body {
 
 #more-calender-day,
 .select-append {
-  z-index: 9999;
   font-size: 1rem;
   color: var(--text-muted);
   position: absolute;

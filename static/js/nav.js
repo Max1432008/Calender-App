@@ -383,8 +383,8 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  //const heute = new Date();
-  const heute = new Date("2026-10-31");
+  const heute = new Date();
+  //const heute = new Date("2026-10-31");
 
   const kalenderContainer = document.querySelector(".scroll-calender-day");
   if (!kalenderContainer) {

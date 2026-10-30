@@ -199,32 +199,26 @@ body {
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.841);
 }
 
-.under-nav {
-  display: flex;
-  position: relative;
-  justify-content: space-between;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
 /** Grid – Calender-body */
 
 .grid-container-weekDays {
   display: grid;
   grid-template-columns: repeat(var(--spalten-grid), minmax(180px, 1fr));
   gap: 10px;
+  padding-top: 80px;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .scroll-calender-day {
-  margin-top: -20px; /* neu */
-  height: calc(100vh - 160px); /* neu */
-  padding-top: 50px; /* neu */
-  overflow-x: scroll;
-  overflow-y: scroll;
-
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
   scroll-behavior: smooth;
-
-  z-index: 2;
 }
 
 .grid-container {

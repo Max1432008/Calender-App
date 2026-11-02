@@ -1,11 +1,7 @@
 body {
   background:
-    radial-gradient(circle at 25% 0%, rgba(6, 197, 130, 0.22), transparent 45%),
-    radial-gradient(
-      circle at 75% 0%,
-      rgba(40, 120, 255, 0.28),
-      transparent 45%
-    ),
+    radial-gradient(circle at 25% 0%, var(--glow-1), transparent 45%),
+    radial-gradient(circle at 75% 0%, var(--glow-2), transparent 45%),
     var(--background);
   color: var(--text-primary);
   overflow: hidden;
@@ -205,7 +201,7 @@ body {
   display: grid;
   grid-template-columns: repeat(var(--spalten-grid), minmax(180px, 1fr));
   gap: 10px;
-  padding-top: 80px;
+  padding-top: 100px;
 }
 
 .main-content {
@@ -406,7 +402,7 @@ body {
 #more-calender-day {
   position: fixed;
 
-  z-index: 10000;
+  z-index: 15;
 
   background-color: var(--more-calender-day);
 
@@ -438,7 +434,7 @@ body {
 }
 
 #more-calender-day:hover {
-  z-index: 2;
+  z-index: 15;
 }
 
 #more-calender-day input[type="text"],

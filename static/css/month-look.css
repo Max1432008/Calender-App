@@ -1,15 +1,7 @@
 body {
   background:
-    radial-gradient(
-      circle at 30% 0%,
-      rgba(78, 142, 247, 0.35),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 70% 0%,
-      rgba(153, 119, 245, 0.3),
-      transparent 40%
-    ),
+    radial-gradient(circle at 25% 0%, var(--glow-1), transparent 45%),
+    radial-gradient(circle at 75% 0%, var(--glow-2), transparent 45%),
     var(--background);
   color: var(--text-primary);
   overflow: hidden;
@@ -203,23 +195,25 @@ body {
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.841);
 }
 
-.under-nav {
-  display: flex;
-  justify-content: space-between;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
 /** Grid – Calender-body */
 
 .grid-container-weekDays {
   display: grid;
   grid-template-columns: repeat(var(--spalten-grid), minmax(180px, 1fr));
   gap: 10px;
+  padding-top: 100px;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .scroll-calender-day {
-  overflow: scroll;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
   scroll-behavior: smooth;
 }
 
@@ -234,9 +228,6 @@ body {
   grid-auto-rows: minmax(180px, auto);
 
   gap: 10px;
-  height: calc(
-    100vh - 310px
-  ); /* Platz für Nav/Header abziehen, ggf. Wert anpassen */
   align-items: stretch;
 }
 
@@ -247,7 +238,13 @@ body {
   padding: 7px;
   border-radius: 10px;
 
-  background-color: var(--calender-day);
+  background: color-mix(
+    in srgb,
+
+    var(--calender-day) 82%,
+
+    transparent
+  );
   border: 1px solid rgba(212, 56, 226, 0.08);
   box-shadow:
     0 0 10px var(--shadow),
@@ -379,7 +376,6 @@ body {
 
 #more-calender-day,
 .select-append {
-  z-index: 9999;
   font-size: 1rem;
   color: var(--text-muted);
   position: absolute;
@@ -406,7 +402,7 @@ body {
 #more-calender-day {
   position: fixed;
 
-  z-index: 10000;
+  z-index: 15;
 
   background-color: var(--more-calender-day);
 
@@ -438,7 +434,7 @@ body {
 }
 
 #more-calender-day:hover {
-  z-index: 2;
+  z-index: 15;
 }
 
 #more-calender-day input[type="text"],

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de" data-theme="dark">
+<html lang="de" data-theme="dark" data-bg="nordlicht">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/static/css/month-look.css" />
     <link rel="stylesheet" href="/static/css/nav.css" />
     <link rel="stylesheet" href="/static/css/sidebar.css" />
+    <link rel="stylesheet" href="/static/css/profil.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
@@ -219,6 +220,45 @@
     <!--*-->
     <!--* hier beginnen die Templates  -->
     <!--*-->
+
+    <!-- Template für die   PROFIL -->
+    <template id="profil-template">
+      <div class="profil-container glass">
+        <div class="button-profil">
+          <button class="delete-button">nicht speichern</button>
+          <button class="save-button-profil">Sichern</button>
+        </div>
+
+        <div class="aufteilung">
+          <div class="profile-avatar-profil glass"></div>
+          <div class="rechts">
+            <input
+              type="text"
+              placeholder="Benutzer Name"
+              class="profil-benutzer-name"
+            />
+            <input
+              type="text"
+              placeholder="Benutzer eMail"
+              class="profil-eMail"
+            />
+          </div>
+        </div>
+        <div class="theme-container">
+          <p>Theme:</p>
+          <p class="text-theme">Dark Mode</p>
+          <button
+            class="button-theme"
+            type="button"
+            aria-label="Theme wechseln"
+            aria-pressed="false"
+          >
+            <span class="theme-switch-knob"></span>
+          </button>
+        </div>
+        <div class="bg-styling"></div>
+      </div>
+    </template>
 
     <!-- Template für die Kalender Typen -->
     <template id="calender-item-template">

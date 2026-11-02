@@ -25,6 +25,7 @@ class User(Base):
 
     password_hash = Column(String(128), nullable=False)
     color_theme = Column(String(20), default="dark")
+    background_color = Column(String(50), default="ozean")
     profil_cover = Column(Text)
 
     # Beziehung zu Events

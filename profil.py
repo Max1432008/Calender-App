@@ -4,7 +4,7 @@ from models import Session, User
 profil = Blueprint("profil", __name__)
 
 
-@profil.route("/get-user-data-header")
+@profil.route("/get-user-data")
 def get_user_data_header():
     user_id = flask_session.get("user_id")
     db_session = Session()
@@ -20,6 +20,7 @@ def get_user_data_header():
         "success": True,
         "data": {
             "name": profil_data.name,
-            "profil_cover": profil_data.profil_cover
+            "profil_cover": profil_data.profil_cover,
+            "email": profil_data.email,
         }
     })

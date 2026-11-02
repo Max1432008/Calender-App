@@ -124,6 +124,7 @@ async function create_calender_day() {
       events,
     );
   }
+  document.querySelector(".scroll-calender-day").scrollTop = 0;
 }
 
 async function initCalendar() {
@@ -154,7 +155,8 @@ async function prev_month() {
 }
 
 async function today_month() {
-  const heute = new Date();
+  //const heute = new Date();
+  const heute = new Date("2026-10-10");
 
   const aktuellerMonat = heute.getMonth() + 1;
   const aktuellesJahr = heute.getFullYear();

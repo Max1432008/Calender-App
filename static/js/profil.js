@@ -2,6 +2,7 @@ const profile_name = document.querySelector(".profile-name");
 const profil_button = document.getElementById("profil-button");
 
 let profil_visible = false; //! Umgestellt für das einstellen
+let dark_theme = true;
 
 async function get_user_data() {
   const response = await fetch("/get-user-data");
@@ -29,6 +30,34 @@ async function user_data_input(profil_container) {
   }
 }
 
+function dark_mode(profil_container) {
+  const text_theme = profil_container.querySelector(".text-theme");
+  document.documentElement.dataset.theme = "dark";
+  typeText(text_theme, "Dark Mode", 50);
+}
+
+function light_mode(profil_container) {
+  const text_theme = profil_container.querySelector(".text-theme");
+  document.documentElement.dataset.theme = "light";
+  typeText(text_theme, "Light Mode", 50);
+}
+
+function theme_button_funktion(profil_container) {
+  const button_theme = profil_container.querySelector(".button-theme");
+  button_theme.addEventListener("click", () => {
+    const aktiv = button_theme.getAttribute("aria-pressed") === "true";
+    if (dark_theme) {
+      dark_mode(profil_container);
+      dark_theme = false;
+    } else {
+      light_mode(profil_container);
+      dark_theme = true;
+    }
+
+    button_theme.setAttribute("aria-pressed", !aktiv);
+  });
+}
+
 function profil_management() {
   const template_profil = document.getElementById("profil-template");
   const existing_profil = document.querySelector(".profil-container");
@@ -41,6 +70,7 @@ function profil_management() {
     profile_name.classList.add("profile-name-visible");
 
     user_data_input(profil_container);
+    theme_button_funktion(profil_container);
   } else {
     existing_profil?.remove();
     profil_visible = false;

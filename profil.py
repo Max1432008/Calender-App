@@ -24,3 +24,49 @@ def get_user_data_header():
             "email": profil_data.email,
         }
     })
+
+
+@profil.route("/update_Prfil_data", methods=["POST"])
+def update_Prfil_data():
+    user_id = flask_session.get("user_id")
+    db_session = Session()
+
+    data = request.get_json(silent=True) or {}
+
+    name = data.get("name")
+    email = data.get("email")
+    background_color = data.get("background_color")
+    color_theme = data.get("color_theme")
+
+
+    user = db_session.query(User).filter_by(
+    id=user_id
+    ).first()
+
+    if User is None:
+        db_session.close()
+        return jsonify({"success": False, "error": "User nicht gefunden"})
+
+    try:
+
+        user.name = name
+        user.email = email
+        user.background_color = background_color
+        user.color_theme = color_theme
+        db_session.commit()
+
+        return jsonify({
+            "success": True,
+            "message": "Profil erfolgreich aktualisiert"
+        })
+    except Exception as error:
+        db_session.rollback()
+        print("hier ist der Fehelr")
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 500
+    finally:
+        db_session.close()
+
+

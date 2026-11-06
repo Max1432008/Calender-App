@@ -20,8 +20,10 @@ def get_user_data_header():
         "success": True,
         "data": {
             "name": profil_data.name,
-            "profil_cover": profil_data.profil_cover,
             "email": profil_data.email,
+            "profil_cover": profil_data.profil_cover,
+            "background_color": profil_data.background_color,
+            "color_theme": profil_data.color_theme
         }
     })
 
@@ -68,5 +70,6 @@ def update_Prfil_data():
         }), 500
     finally:
         db_session.close()
+
 
 

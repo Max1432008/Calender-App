@@ -1,7 +1,7 @@
 const profile_name = document.querySelector(".profile-name");
 const profil_button = document.getElementById("profil-button");
 
-let profil_visible = false; //! Umgestellt für das einstellen
+let profil_visible = true; //! Umgestellt für das einstellen
 let dark_theme = true;
 
 function update_Profil_GET_data(profil_container) {
@@ -70,15 +70,17 @@ async function user_data_input(profil_container) {
   }
 }
 
-function dark_mode(profil_container) {
+function dark_mode(profil_container, theme_button) {
   const text_theme = profil_container.querySelector(".text-theme");
   document.documentElement.dataset.theme = "dark";
+  theme_button.setAttribute("aria-pressed", "false");
   typeText(text_theme, "Dark Mode", 50);
 }
 
-function light_mode(profil_container) {
+function light_mode(profil_container, theme_button) {
   const text_theme = profil_container.querySelector(".text-theme");
   document.documentElement.dataset.theme = "light";
+  theme_button.setAttribute("aria-pressed", "true");
   typeText(text_theme, "Light Mode", 50);
 }
 
@@ -115,11 +117,21 @@ function profil_button_funktion(profil_container) {
 function theme_button_funktion(profil_container) {
   const theme_button = profil_container.querySelector(".button-theme");
 
+  // Anfangszustand einstellen
+
+  if (document.documentElement.dataset.theme === "dark") {
+    theme_button.setAttribute("aria-pressed", "false");
+  } else {
+    theme_button.setAttribute("aria-pressed", "true");
+  }
+
   theme_button.addEventListener("click", () => {
+    const theme_button = profil_container.querySelector(".button-theme");
+
     if (document.documentElement.dataset.theme === "dark") {
-      light_mode(profil_container);
+      light_mode(profil_container, theme_button);
     } else {
-      dark_mode(profil_container);
+      dark_mode(profil_container, theme_button);
     }
   });
 }
@@ -133,8 +145,14 @@ function profil_management() {
       template_profil.content.firstElementChild.cloneNode(true);
     document.body.appendChild(profil_container);
     user_data_input(profil_container);
-    theme_button_funktion(profil_container);
+
     profil_button_funktion(profil_container);
+
+    load_user_settings(profil_container);
+    User_data();
+    createThemePreview();
+    Choose_color();
+
     profil_visible = true;
     profile_name.classList.add("profile-name-visible");
 
@@ -183,7 +201,9 @@ const themesSettings = [
 function createThemePreview() {
   const container = document.querySelector(".bg-styling");
 
-  themesSettings.forEach((theme) => {
+  if (!container) return;
+
+  themesSettings.forEach((theme, index) => {
     const stylingContainer = document.createElement("div");
     stylingContainer.classList.add("styling-container");
 
@@ -213,9 +233,38 @@ function Choose_color() {
   });
 }
 
+async function load_user_settings(profil_container) {
+  const data = await get_user_data();
+
+  if (!data.success) {
+    console.error("Einstellungen konnten nicht geladen werden");
+    return;
+  }
+
+  // Theme aus der Datenbank übernehmen
+
+  document.documentElement.dataset.theme = data.data.color_theme;
+
+  // Hintergrund aus der Datenbank übernehmen
+
+  document.documentElement.dataset.bg = data.data.background_color;
+
+  // Button an das geladene Theme anpassen
+
+  if (profil_container) {
+    const theme_button = profil_container.querySelector(".button-theme");
+
+    if (theme_button) {
+      const is_light = data.data.color_theme === "light";
+
+      theme_button.setAttribute("aria-pressed", String(is_light));
+    }
+  }
+}
 document.addEventListener("DOMContentLoaded", () => {
   User_data();
   profil_management();
   createThemePreview();
   Choose_color();
+  load_user_settings();
 });

@@ -56,6 +56,7 @@ def update_Prfil_data():
         user.background_color = background_color
         user.color_theme = color_theme
         db_session.commit()
+        db_session.refresh(user)
 
         return jsonify({
             "success": True,
